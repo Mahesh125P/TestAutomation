@@ -1,5 +1,5 @@
 Jan 13, 2020 7:41:42 PM com.testautomation.MainTestNG startTest
-INFO: Logger Name: com.testautomation.MainTestNG
+INFO: Logger Name: com.testautomation.MainTestNG 
 Jan 13, 2020 7:41:43 PM com.testautomation.util.ExecuteTestCases setup
 INFO: com.testautomation.util.ExecuteTestCases   setup() method called
 Jan 13, 2020 7:41:44 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
