@@ -1,0 +1,34 @@
+@charset "ISO-8859-1";
+
+body {
+background-color: lightblue;
+}
+
+select.short
+{
+	float: left;
+	width: 150px;
+	background-color: #e9ecf5;
+}
+
+select.long
+{
+	float: left;
+	width: 300px;
+	background-color: #e9ecf5;
+}
+
+input.short
+{
+	float: left;
+	width: 600px;
+	background-color: #e9ecf5;
+
+}
+
+button.short
+{
+	float: left;
+	width: 600px;
+	background-color: #e9ecf5;
+}

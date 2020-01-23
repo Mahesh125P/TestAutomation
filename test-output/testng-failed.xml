@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Sample Suite]">
+  <listeners>
+    <listener class-name="org.uncommons.reportng.HTMLReporter"/>
+    <listener class-name="org.uncommons.reportng.JUnitXMLReporter"/>
+    <listener class-name="com.testautomation.util.TestListener"/>
+  </listeners>
+  <test name="Test Results(failed)">
+    <classes>
+      <class name="com.testautomation.util.ExecuteTestCases">
+        <methods>
+          <include name="testSample1"/>
+          <include name="setup"/>
+        </methods>
+      </class> <!-- com.testautomation.util.ExecuteTestCases -->
+    </classes>
+  </test> <!-- Test Results(failed) -->
+</suite> <!-- Failed suite [Sample Suite] -->
