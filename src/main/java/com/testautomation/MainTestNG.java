@@ -23,6 +23,8 @@ import java.util.logging.SimpleFormatter;
 import javax.servlet.http.HttpSession;
 
 import com.testautomation.util.EmailUtil;
+import com.testautomation.util.ExcelAction;
+import com.testautomation.util.ExecuteTestCases;
 import com.testautomation.util.ReadConfigProperty;
 import com.testautomation.util.Report;
 import com.testautomation.util.SwingTest;
@@ -76,7 +78,7 @@ public class MainTestNG {
 			 * }
 			 */
 
-	public void startTest(String selectedScreen) {
+	public void startTest(String selectedApplication, List<String> selectedScreenList) {
 
 		try {
 			filehandler = new FileHandler("./log.txt");
@@ -102,8 +104,26 @@ public class MainTestNG {
 		/**
 		 * testNG execution starts here
 		 */
-		test.updatePropertyFile(selectedScreen);
-		test.testng();
+		
+		ExecuteTestCases.selectedApplication = selectedApplication;
+		ExcelAction.selectedApplication = selectedApplication;
+		for(String selectedScreen:selectedScreenList) {
+			try {
+			//test.updatePropertyFile(selectedScreen);
+			ExecuteTestCases.selectedScreen = selectedScreen;
+			ExcelAction.selectedScreen = selectedScreen;
+			test.testng();
+			}catch (Exception e) {
+				try {
+					EmailUtil.sendWithAttachment("maheshkumar.p@thirdware.com", null, "Test Automation Error",
+							e.toString(),
+							"");
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
 		try {
 			EmailUtil.sendWithAttachment("maheshkumar.p@thirdware.com", null, "Test Automation Result",
 					"Test Result!!!",

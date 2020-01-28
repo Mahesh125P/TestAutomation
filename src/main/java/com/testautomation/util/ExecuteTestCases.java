@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import com.testautomation.MainTestNG;
+import com.testautomation.service.LoginService;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -46,6 +47,8 @@ public class ExecuteTestCases implements ITest {
 	static String dir = "user.dir";
 	static WebDriver driver = null;
 	static ExcelAction act = new ExcelAction();
+	public static String selectedApplication = null;
+	public static String selectedScreen = null;
 
 
 	static List list;
@@ -71,14 +74,19 @@ public class ExecuteTestCases implements ITest {
 			/**
 			 * Selecting which browser to be executed
 			 **/
-			String browserName = config.getConfigValues(cbrowserName);
-			selectBrowser(browserName);
-	
-			MainTestNG.LOGGER.info(config.getConfigValues(curl));
+			String applicationURL = LoginService.applicationDtlsMap.get(selectedApplication).get("applicationURL");
+			String defaultBrowser = LoginService.applicationDtlsMap.get(selectedApplication).get("applicationBrowser");
+			if(defaultBrowser==null || defaultBrowser.equals("")) {
+				defaultBrowser = config.getConfigValues(cbrowserName);
+			}
+			selectBrowser(defaultBrowser);
+			
+			MainTestNG.LOGGER.info("defaultBrowser: "+defaultBrowser);
+			MainTestNG.LOGGER.info("applicationURL: "+applicationURL);
 			/**
 			 * launching the url
 			 **/
-			driver.get(config.getConfigValues(curl));
+			driver.get(applicationURL);
 			//driver.get(config.getConfigValues("http://localhost:9080/Login.action"));
 			WebDriverClass.setDriver(driver);
 			} catch (Exception e) {

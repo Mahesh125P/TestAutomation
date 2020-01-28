@@ -6,6 +6,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.testautomation.model.Login;
+import com.testautomation.model.Screen;
+
+/**
+ * @author Mahesh Kumar P
+ *
+ */
 
 @Repository
 public interface LoginRepository extends JpaRepository<Login, String>{
@@ -13,8 +19,15 @@ public interface LoginRepository extends JpaRepository<Login, String>{
 	@Query("select applicationName from Application")
 	public ArrayList<String> getAllApplicationNames();
 
-	@Query("select screenName from Screen where application.applicationID = 1")
-	public ArrayList<String> getAllScreenNames();
+	@Query("select screenName from Screen where application.applicationName = ?1")
+	public ArrayList<String> getAllScreenNames(String applicationName);
+	
+	@Query("select screenName || '~' || application.applicationName from Screen where application.applicationName = ?1")
+	public ArrayList<String> getAllScreenDetails(String applicationName);
+	
+	@Query("from Screen")
+	public ArrayList<Screen> getApplicationDetails();	
+	
 	/*
 	 * @Query(value =
 	 * " SELECT * FROM KVDST02_SHIPMENTPLAN SP WHERE IFNULL(SP.VDST02_APPROVE_F,'N') ='N' ORDER BY SP.VDST02_SHIPMENTPLANNUMBER_C "

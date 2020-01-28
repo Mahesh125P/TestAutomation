@@ -1,8 +1,10 @@
 package com.testautomation.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,13 +16,21 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.testautomation.MainTestNG;
 import com.testautomation.model.Login;
+import com.testautomation.model.TestAutomationModel;
 import com.testautomation.service.LoginService;
 import com.testautomation.util.EmailUtil;
 
-@Controller
+
+/**
+ * @author Mahesh Kumar P
+ *
+ */
+
+@RestController
 public class FirstController {
 	
 	@Autowired
@@ -47,22 +57,31 @@ public class FirstController {
 		return "login";
 	}
 	
-	@RequestMapping(value = "/loginSubmit", method = RequestMethod.POST)
-	public String LoginSubmit(ModelMap model,@ModelAttribute("login") Login login) {
+	@RequestMapping(value = "/loginSubmit", method = RequestMethod.GET)
+	public TestAutomationModel LoginSubmit(ModelMap model,@ModelAttribute("login") Login login) {
 		//logger.info(" @LoginController -  showLoginPage()");
 		//model.addAttribute("login", new Login());
 		System.out.println("Started LoginSubmit!!!");
 		System.out.println("Username:"+login.getUserName() + "Password:  "+login.getPassword());
-		if(!loginservice.isaValidUser(login.getUserName())){
-			model.put("errorMessage", "Invalid Credentials");
-			return "login";
-		}
+		/*
+		 * if(!loginservice.isaValidUser(login.getUserName())){
+		 * model.put("errorMessage", "Invalid Credentials"); return null; }
+		 */
 		System.out.println("111");
 		System.out.println(login.getSelectedApplicationName());
 		model.addAttribute("userName", login.getUserName());
+		loginservice.getApplicationDetails();
+		TreeSet<String> applicationList = LoginService.applicationNameList;
+		ArrayList<String> screenNameList = LoginService.screenDetailsMap.get(applicationList.first());
 		
-		ArrayList<String> applicationList = loginservice.getApplicationNames();
-		ArrayList<String> screenNameList = loginservice.getScreenNames(applicationList.get(0));
+		TestAutomationModel tm = new TestAutomationModel();
+		tm.applicationNameList = applicationList;
+		tm.screenDetailsList = screenNameList;
+		/*
+		 * ArrayList<String> applicationList = loginservice.getApplicationNames();
+		 * ArrayList<String> screenNameList = loginservice.getScreenNames(applicationList.get(0));
+		 */
+		//loginservice.getApplicationDetails();
 		//ArrayList<String> testCaseList = loginservice.getTestCaseNames("VDS");		
 		
 		
@@ -82,7 +101,7 @@ public class FirstController {
 		model.addAttribute("login", login);
 		
 		System.out.println("Completed LoginSubmit!!!");
-		return "homePage";
+		return tm;
 	}
 	
 	@RequestMapping(value = "/homeSubmit", method = RequestMethod.GET)
@@ -146,22 +165,26 @@ public class FirstController {
 		model.addAttribute("selectedScreenName",login.getSelectedScreenName());
 		System.out.println("Started executing Test!!!");
 		MainTestNG testStart = new MainTestNG();
-		testStart.startTest(login.getSelectedScreenName());
+		testStart.startTest(login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
 		
 		System.out.println("Completed startTest!!!");
 		return "homePage";
 	}
 	
 	@RequestMapping(value = "/appToTest", method = RequestMethod.GET)
-	public String loadScreensList(ModelMap model,@ModelAttribute("login") Login login) {
+	public TestAutomationModel loadScreensList(ModelMap model,@ModelAttribute("login") Login login) {
 		
 		System.out.println("Selected Application Name: "+login.getSelectedApplicationName());
-		model.addAttribute("applicationList", loginservice.getApplicationNames());
-		ArrayList<String> screenNameList = loginservice.getScreenNames(login.getSelectedApplicationName());
+		model.addAttribute("applicationList", LoginService.applicationNameList);
+		ArrayList<String> screenNameList = LoginService.screenDetailsMap.get(login.getSelectedApplicationName());
 		login.setScreenNameList(screenNameList);
 		model.addAttribute("screenNameList", login.getScreenNameList());
 		
-		return "homePage";
+		TestAutomationModel tm = new TestAutomationModel();
+		tm.applicationNameList = LoginService.applicationNameList;
+		tm.screenDetailsList = screenNameList;
+		
+		return tm;
 	}
 	@RequestMapping(value="/logout", method = RequestMethod.GET)
 	public String logoutPage (HttpServletRequest request, HttpServletResponse response) {

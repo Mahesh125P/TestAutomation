@@ -4,6 +4,10 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+/**
+ * @author Mahesh Kumar P
+ *
+ */
 
 @Entity
 @Table(name="KTAM02_APPLICATION")
@@ -21,6 +25,9 @@ public class Application {
 	
 	@Column(name="TAM02_APPLICATION_URL")
 	private String applicationURL;
+	
+	@Column(name="TAM02_APPLICATION_BROWSER")
+	private String applicationBrowser;
 	
 	@Column(name="TAM02_CREATED_BY")
 	private String createdBy;
@@ -58,6 +65,22 @@ public class Application {
 
 	public void setLastupdatedBy(String lastupdatedBy) {
 		this.lastupdatedBy = lastupdatedBy;
+	}
+
+	public Set<Screen> getScreen() {
+		return screen;
+	}
+
+	public void setScreen(Set<Screen> screen) {
+		this.screen = screen;
+	}
+
+	public String getApplicationBrowser() {
+		return applicationBrowser;
+	}
+
+	public void setApplicationBrowser(String applicationBrowser) {
+		this.applicationBrowser = applicationBrowser;
 	}
 	
 }
