@@ -4,10 +4,6 @@ import java.util.Set;
 
 import javax.persistence.*;
 
-/**
- * @author Mahesh Kumar P
- *
- */
 
 @Entity
 @Table(name="KTAM02_APPLICATION")
@@ -15,7 +11,7 @@ public class Application {
 
 	@Id
 	@Column(name = "TAM02_APPLICATION_ID")
-	private String applicationID;
+	private Integer applicationID;
 	
 	@Column(name="TAM02_APPLICATION_NAME")
 	private String applicationName;
@@ -23,11 +19,11 @@ public class Application {
 	@OneToMany(mappedBy = "application")	
 	private Set<Screen> screen; 
 	
+	@OneToMany(mappedBy = "applicationTestReport")
+	private Set<TestResultsReporting> testResultsReporting;
+	
 	@Column(name="TAM02_APPLICATION_URL")
 	private String applicationURL;
-	
-	@Column(name="TAM02_APPLICATION_BROWSER")
-	private String applicationBrowser;
 	
 	@Column(name="TAM02_CREATED_BY")
 	private String createdBy;
@@ -35,12 +31,36 @@ public class Application {
 	@Column(name="TAM02_LASTUPDATED_BY")
 	private String lastupdatedBy;
 
+	public Integer getApplicationID() {
+		return applicationID;
+	}
+
+	public void setApplicationID(Integer applicationID) {
+		this.applicationID = applicationID;
+	}
+
 	public String getApplicationName() {
 		return applicationName;
 	}
 
 	public void setApplicationName(String applicationName) {
 		this.applicationName = applicationName;
+	}
+
+	public Set<Screen> getScreen() {
+		return screen;
+	}
+
+	public void setScreen(Set<Screen> screen) {
+		this.screen = screen;
+	}
+
+	public Set<TestResultsReporting> getTestResultsReporting() {
+		return testResultsReporting;
+	}
+
+	public void setTestResultsReporting(Set<TestResultsReporting> testResultsReporting) {
+		this.testResultsReporting = testResultsReporting;
 	}
 
 	public String getApplicationURL() {
@@ -67,20 +87,6 @@ public class Application {
 		this.lastupdatedBy = lastupdatedBy;
 	}
 
-	public Set<Screen> getScreen() {
-		return screen;
-	}
-
-	public void setScreen(Set<Screen> screen) {
-		this.screen = screen;
-	}
-
-	public String getApplicationBrowser() {
-		return applicationBrowser;
-	}
-
-	public void setApplicationBrowser(String applicationBrowser) {
-		this.applicationBrowser = applicationBrowser;
-	}
+	
 	
 }
