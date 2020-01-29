@@ -12,6 +12,7 @@ import java.io.FileWriter;
  */
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.FileHandler;
@@ -22,6 +23,7 @@ import java.util.logging.SimpleFormatter;
 
 import javax.servlet.http.HttpSession;
 
+import com.testautomation.service.TestResultsReportingService;
 import com.testautomation.util.EmailUtil;
 import com.testautomation.util.ExcelAction;
 import com.testautomation.util.ExecuteTestCases;
@@ -92,7 +94,7 @@ public class MainTestNG {
 		formatter = new SimpleFormatter();
 		filehandler.setFormatter(formatter);
 		LOGGER.info("Logger Name: " + LOGGER.getName());
-
+		HashMap<String,HashMap<String,String>> testResultMap = new HashMap<String,HashMap<String,String>> ();
 		ReadConfigProperty.configpath = System.getProperty(dir);
 
 		/**
@@ -111,8 +113,12 @@ public class MainTestNG {
 			try {
 			//test.updatePropertyFile(selectedScreen);
 			ExecuteTestCases.selectedScreen = selectedScreen;
-			ExcelAction.selectedScreen = selectedScreen;
+			ExcelAction.selectedScreen = selectedScreen;			
 			test.testng();
+			testResultMap = ExcelAction.testResultMap;
+			TestResultsReportingService testResult = new TestResultsReportingService();
+			testResult.persistTestResult(testResultMap);
+			
 			}catch (Exception e) {
 				try {
 					EmailUtil.sendWithAttachment("maheshkumar.p@thirdware.com", null, "Test Automation Error",
@@ -125,6 +131,7 @@ public class MainTestNG {
 			}
 		}
 		try {
+			
 			EmailUtil.sendWithAttachment("maheshkumar.p@thirdware.com", null, "Test Automation Result",
 					"Test Result!!!",
 					"C:\\Workspace_TestAutomation\\TestAutomation\\test-output\\Sample Suite\\Test Results.html");

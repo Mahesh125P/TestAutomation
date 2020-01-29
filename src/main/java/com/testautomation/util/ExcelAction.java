@@ -49,6 +49,9 @@ public class ExcelAction {
 	
 	public static String selectedApplication = null;
 	public static String selectedScreen = null;
+	HashMap<String,String> tempResultMap = new HashMap<String,String>();
+	public static HashMap<String,HashMap<String,String>> testResultMap = new HashMap<String,HashMap<String,String>>();
+	StringBuffer inputValue = new StringBuffer();
 	
 	/*
 	 * public static void main(String[] args) throws Exception { ExcelAction action
@@ -115,14 +118,15 @@ public class ExcelAction {
 	 */
 	public void testSuiteIterate(String tcName) throws Exception {
 		MainTestNG.LOGGER.info("testSuiteIterate() called  " + tcName);
+		inputValue = new StringBuffer();
+		tempResultMap = new HashMap<String,String>();
 		String key = tcName;
 		fail = null;
 		TestCase temp = (TestCase) testCaseSheet.get(key);
-		try{	
-		HashMap<String,String> tempResultMap = new HashMap<String,String>();
-		HashMap<String,HashMap<String,String>> testResultUpldatMap = new HashMap<String,HashMap<String,String>>();
 		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
 		Calendar calobj = Calendar.getInstance();
+		try{					
+		
 		tempResultMap.put("TestStartDate", df.format(calobj.getTime()));
 		tempResultMap.put("LoggedInUser","Mahesh");
 		List testStepId = temp.getTestStepId();
@@ -156,6 +160,7 @@ public class ExcelAction {
 			for (int execution = 0; execution < noOfExecution; execution++) {
 				for (int i = 0; i < testStepId.size(); i++) {
 
+					String methodTypeTemp = temp.getMethodType().get(i);
 					String methodType = temp.getMethodType().get(i);
 					String objectLocators = temp.getObjectNameFromPropertiesFile().get(i);
 					String actionType = temp.getActionType().get(i);
@@ -172,6 +177,7 @@ public class ExcelAction {
 							//List headerValue = getColumnValue(headerArray);
 							List columnValue = getColumnValue(testDataArray);
 							Reporter.log("column value======" + columnValue.get(execution).toString());
+							inputValue.append("~").append(testDataArray[1]).append(" : ").append(columnValue.get(execution).toString());
 							//Reporter.log("column value size==========="+ columnValue.size());
 							try {
 								//Reporter.log("testCaseExecution======================"+ noOfExecution);
@@ -188,6 +194,11 @@ public class ExcelAction {
 								testCaseStatus.put(temp.getTestCaseName(), statusInfo);*/
 							} catch (Exception e) {
 								Reporter.log("Process failed for this test record : " + columnValue.get(execution).toString());
+								tempResultMap.put("failedTestData", "methodType: "+methodTypeTemp+", actionType: "+actionType + ", InputValue: "+ columnValue.get(execution).toString());
+								tempResultMap.put("TestOutput","Fail");
+								tempResultMap.put("TestEndDate", df.format(calobj.getTime()));
+								tempResultMap.put("inputValue",inputValue.toString());
+								testResultMap.put(tcName, tempResultMap);
 								System.out.println("In Exception....ExcelAction.testSuiteIterate.");
 								fail = "fail";
 								//Assert.fail();
@@ -235,13 +246,21 @@ public class ExcelAction {
 				
 			}
 		}
-		tempResultMap.put("TestEndDate", df.format(calobj.getTime()));
-		testResultUpldatMap.put(tcName, tempResultMap); //ToContinue - 270120
+		
+		if(tempResultMap.get("TestOutput")==null){
+			tempResultMap.put("TestOutput","Pass");
+		}
 		}catch(Exception e){
 			e.printStackTrace();
 			System.out.println("In Exception....ExcelAction.testSuiteIterate2.");
+			tempResultMap.put("Exception",e.getLocalizedMessage());
+			tempResultMap.put("TestOutput","Fail");
 			fail = "fail";
 			throw (e);
+		}finally {
+			tempResultMap.put("TestEndDate", df.format(calobj.getTime()));
+			tempResultMap.put("inputValue",inputValue.toString());
+			testResultMap.put(tcName, tempResultMap);
 		}
 		
 	}
@@ -250,7 +269,7 @@ public class ExcelAction {
 
 		Map<String, Object> dataSheet = (HashMap<String, Object>) testDataSheet
 				.get(testDataArray[0]);
-		List coulmnValue = (ArrayList) dataSheet.get(testDataArray[1]);
+		List coulmnValue = (ArrayList) dataSheet.get(testDataArray[1]);	
 		return coulmnValue;
 	}
 

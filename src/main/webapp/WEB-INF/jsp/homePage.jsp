@@ -18,7 +18,7 @@
 <script type="text/javascript">
 function handleSelect(appName) {
 	//alert (appName.value);
-	var url = '${pageContext.request.contextPath}/appToTest?selectedApplicationName='+appName.value;
+	var url = '${pageContext.request.contextPath}/appToTest1?selectedApplicationName='+appName.value;
 	window.location = url;
 }
 

@@ -19,7 +19,7 @@
   <body>
 
     <div class="container-fluid">
-      <s:form method="POST" action="loginSubmit" class="form-signin" modelAttribute="login">
+      <s:form method="POST" action="loginSubmit1" class="form-signin" modelAttribute="login">
         <h2 class="form-heading">User Login</h2>
 
         <div class="form-group">            
