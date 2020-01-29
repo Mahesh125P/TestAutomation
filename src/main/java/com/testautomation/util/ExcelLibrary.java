@@ -45,9 +45,6 @@ public class ExcelLibrary {
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				MainTestNG.LOGGER.info("FileNotFoundException" + e);
-			} catch (InvalidFormatException e) {
-				e.printStackTrace();
-				MainTestNG.LOGGER.info("InvalidFormatException" + e);
 			} catch (IOException e) {
 				e.printStackTrace();
 				MainTestNG.LOGGER.info("IOException" + e);

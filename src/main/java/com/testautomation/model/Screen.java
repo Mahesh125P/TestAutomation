@@ -1,11 +1,9 @@
 package com.testautomation.model;
 
-import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Set;
 
-/**
- * @author Mahesh Kumar P
- *
- */
+import javax.persistence.*;
 
 @Entity
 @Table(name="KTAM03_SCREEN")
@@ -13,6 +11,9 @@ public class Screen {
 
 	
 	@Id
+	@Column(name = "TAM03_SCREEN_ID")
+	private Integer screenID;
+	
 	@Column(name="TAM03_SCREEN_NAME")
 	private String screenName;
 	
@@ -26,6 +27,17 @@ public class Screen {
 	@JoinColumn(name = "TAM02_APPLICATION_ID", nullable = false)
 	private Application application;
 	
+	@OneToMany(mappedBy = "screenTestReport")	
+	private Set<TestResultsReporting> testResultsReporting;
+
+	public Integer getScreenID() {
+		return screenID;
+	}
+
+	public void setScreenID(Integer screenID) {
+		this.screenID = screenID;
+	}
+
 	public String getScreenName() {
 		return screenName;
 	}
@@ -57,5 +69,15 @@ public class Screen {
 	public void setApplication(Application application) {
 		this.application = application;
 	}
+
+	public Set<TestResultsReporting> getTestResultsReporting() {
+		return testResultsReporting;
+	}
+
+	public void setTestResultsReporting(Set<TestResultsReporting> testResultsReporting) {
+		this.testResultsReporting = testResultsReporting;
+	}
+
+	
 	
 }
