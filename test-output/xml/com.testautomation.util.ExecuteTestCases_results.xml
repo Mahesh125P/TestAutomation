@@ -1,47 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuite name="Test Results"
-           tests="77"
+           tests="32"
            failures="1"
            errors="0"
-           skipped="76"
-           time="0.003">
+           skipped="31"
+           time="0.058">
   <properties />
             <testcase name="" time="0.000" classname="com.testautomation.util.ExecuteTestCases ()">
-                <failure type="org.openqa.selenium.SessionNotCreatedException"
-                  message="session not created exception
-from disconnected: received Inspector.detached event
-  (Session info: chrome=79.0.3945.88)
-  (Driver info: chromedriver=2.35.528161 (5b82f2d2aae0ca24b877009200ced9065a772e73),platform=Windows NT 10.0.17134 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 15.48 seconds
-Build info: version: &apos;2.39.0&apos;, revision: &apos;ff23eac&apos;, time: &apos;2013-12-16 16:12:12&apos;
-System info: host: &apos;TTCHP840003&apos;, ip: &apos;192.168.100.135&apos;, os.name: &apos;Windows 10&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;1.8.0_201&apos;
-Driver info: org.openqa.selenium.chrome.ChromeDriver"
+                <failure type="java.lang.NullPointerException"
+                  message="(null)"
               >
-<![CDATA[org.openqa.selenium.SessionNotCreatedException: session not created exception
-from disconnected: received Inspector.detached event
-  (Session info: chrome=79.0.3945.88)
-  (Driver info: chromedriver=2.35.528161 (5b82f2d2aae0ca24b877009200ced9065a772e73),platform=Windows NT 10.0.17134 x86_64) (WARNING: The server did not provide any stacktrace information)
-Command duration or timeout: 15.48 seconds
-Build info: version: '2.39.0', revision: 'ff23eac', time: '2013-12-16 16:12:12'
-System info: host: 'TTCHP840003', ip: '192.168.100.135', os.name: 'Windows 10', os.arch: 'amd64', os.version: '10.0', java.version: '1.8.0_201'
-Driver info: org.openqa.selenium.chrome.ChromeDriver
-  sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-  sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
-  sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
-  java.lang.reflect.Constructor.newInstance(Unknown Source)
-  org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:193)
-  org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:145)
-  org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:554)
-  org.openqa.selenium.remote.RemoteWebDriver.startSession(RemoteWebDriver.java:216)
-  org.openqa.selenium.chrome.ChromeDriver.startSession(ChromeDriver.java:182)
-  org.openqa.selenium.remote.RemoteWebDriver.<init>(RemoteWebDriver.java:111)
-  org.openqa.selenium.remote.RemoteWebDriver.<init>(RemoteWebDriver.java:115)
-  org.openqa.selenium.chrome.ChromeDriver.<init>(ChromeDriver.java:161)
-  org.openqa.selenium.chrome.ChromeDriver.<init>(ChromeDriver.java:150)
-  org.openqa.selenium.chrome.ChromeDriver.<init>(ChromeDriver.java:107)
-  com.testautomation.util.ExecuteTestCases.chrome(ExecuteTestCases.java:118)
-  com.testautomation.util.ExecuteTestCases.selectBrowser(ExecuteTestCases.java:110)
-  com.testautomation.util.ExecuteTestCases.setup(ExecuteTestCases.java:75)
+<![CDATA[java.lang.NullPointerException
+  com.testautomation.util.ExcelLibrary.getRows(ExcelLibrary.java:104)
+  com.testautomation.util.ExcelAction.readTestCaseInExcel(ExcelAction.java:347)
+  com.testautomation.util.ExecuteTestCases.setup(ExecuteTestCases.java:70)
   sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
   sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
   sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -63,9 +35,9 @@ Driver info: org.openqa.selenium.chrome.ChromeDriver
   org.testng.TestNG.runSuitesSequentially(TestNG.java:1224)
   org.testng.TestNG.runSuitesLocally(TestNG.java:1149)
   org.testng.TestNG.run(TestNG.java:1057)
-  com.testautomation.MainTestNG.testng(MainTestNG.java:146)
-  com.testautomation.MainTestNG.startTest(MainTestNG.java:106)
-  com.testautomation.controller.FirstController.startTest(FirstController.java:149)
+  com.testautomation.MainTestNG.testng(MainTestNG.java:173)
+  com.testautomation.MainTestNG.startTest(MainTestNG.java:117)
+  com.testautomation.controller.FirstController.startTest(FirstController.java:139)
   sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
   sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
   sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -86,6 +58,10 @@ Driver info: org.openqa.selenium.chrome.ChromeDriver
   org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
   org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
   org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+  org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+  org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+  org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:92)
+  org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:119)
   org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
   org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
   org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
@@ -121,141 +97,6 @@ Driver info: org.openqa.selenium.chrome.ChromeDriver
 
           </testcase>
   
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
-            <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
-          <skipped />
-    </testcase>
             <testcase name="" time="0.0" classname="com.testautomation.util.ExecuteTestCases ()">
           <skipped />
     </testcase>

@@ -1,298 +1,382 @@
-Jan 23, 2020 7:30:51 PM com.testautomation.MainTestNG startTest11123
+Jan 31, 2020 1:22:56 PM com.testautomation.MainTestNG startTest
 INFO: Logger Name: com.testautomation.MainTestNG
-Jan 23, 2020 7:30:51 PM com.testautomation.util.ExecuteTestCases setup
+Jan 31, 2020 1:22:56 PM com.testautomation.util.ExecuteTestCases setup
 INFO: com.testautomation.util.ExecuteTestCases   setup() method called
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: testCasePath==C:\Workspace_TestAutomation\TestAutomation\src\main\resources\TestCases_CompoundTransfer.xlsx
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: total rows=35
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: LOGIN  Username  //input[@id='username']  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: LOGIN  Password  //input[@id='password']  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: LOGIN  CLICK  //input[@id='LoginId_0']  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: LOGIN1  AuthOk  //td[@id='buttons']/a  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: LOGIN1  Switch  switchToChildWindow  SWITCH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Homepage  SwitchParent  switchToParentWindow  SWITCH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  Transactions  //*[@id="nav"]/li[2]/a  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  CompoundTransfer  //*[@id="nav"]/li[2]/div/div/ul/li[2]/a  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  DestinationLocation  //*[@id="destinationLocation"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  Route  //*[@id="route"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  SourceLocations  //*[@id="sourceLocations"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  Model  //*[@id="model"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  Status  //*[@id="status"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  TrasferUnit  //*[@id="transferUnit"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  Search  //*[@id="manualSearch"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  SelectVINCheckBox  //*[@id="row"]/tbody  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  Transfer  //*[@id="transferButtion"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  AlertAccept  alertAccept  Alert
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  OfflineFromDate  //*[@id="compoundTranferForm"]/div/table/tbody/tr[2]/td/table/tbody/tr[1]/td[1]/table/tbody/tr[4]/td[8]/img  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  ExcelDownload  //*[@id="compoundTranferForm"]/div/table/tbody/tr[3]/td/table/tbody/tr[5]/td/table/tbody/tr/td[2]/a/img  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  UploadFile  //*[@id="Upload"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  UploadConfirm  //*[@id="compoundTranferForm"]/div/table/tbody/tr[3]/td/table/tbody/tr[2]/td/table/tbody/tr[2]/td[3]/span  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Transfer  SelectCheckBox  //*[@id="listDiv"]/table/tbody/tr/td/div/div[2]/table/thead/tr/th[1]/input  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: TransferApprove  CompoundTransferApproval  //*[@id="nav"]/li[2]/div/div/ul/li[3]/a  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: TransferApprove  TransferPlanNo  //*[@id="transferplanno"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: TransferApprove  Search  //*[@id="compoundtransferApproval"]/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]/td[11]/a[1]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Approve  SelectCheckBox  //*[@id="allbox"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Approve  ApprovalComments  //*[@id="approvalComments"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Approve  SaveApprove  //*[@id="approveButton"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Approve  VerifySave  //*[@id="actionMessageTD1"]/div/span/center/b  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Reject  SelectCheckBox  //*[@id="allbox"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Reject  ApprovalComments  //*[@id="approvalComments"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Reject  Reject  //*[@id="rejectButton"]  XPATH
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Reject  AlertAccept  alertAccept  Alert
-Jan 23, 2020 7:30:52 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
-INFO: Reject  VerifySave  //*[@id="actionMessageTD1"]/div/span/center/b  XPATH
-Jan 23, 2020 7:30:57 PM com.testautomation.util.ExecuteTestCases ie
-INFO: IE launch
-Jan 23, 2020 7:30:57 PM com.testautomation.util.ExecuteTestCases setup
-INFO: http://localhost:9080/Login.action
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExecuteTestCases regression
-INFO: com.testautomation.util.ExecuteTestCases TestCases to be executed    [[Ljava.lang.Object;@12ef48c9
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExecuteTestCases regression
+Jan 31, 2020 1:22:57 PM com.testautomation.util.ExcelLibrary getWorkbook
+INFO: FileNotFoundExceptionjava.io.FileNotFoundException: C:\Workspace_TestAutomation3\TestAutomation\src\main\resources\TestCase\VDS\TestCase_VDS_Transfer Route.xlsx (The process cannot access the file because it is being used by another process)
+Jan 31, 2020 1:22:57 PM com.testautomation.util.ExcelAction readTestCaseInExcel
+INFO: null
+Jan 31, 2020 1:22:57 PM com.testautomation.util.ExecuteTestCases regression
+INFO: com.testautomation.util.ExecuteTestCases TestCases to be executed    [[Ljava.lang.Object;@344ec4e7
+Jan 31, 2020 1:22:57 PM com.testautomation.util.ExecuteTestCases regression
 INFO: ..TC001
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExecuteTestCases regression
+Jan 31, 2020 1:22:57 PM com.testautomation.util.ExecuteTestCases regression
 INFO: ..TC002
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExecuteTestCases regression
+Jan 31, 2020 1:22:57 PM com.testautomation.util.ExecuteTestCases regression
 INFO: ..TC003
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExecuteTestCases regression
+Jan 31, 2020 1:22:57 PM com.testautomation.util.ExecuteTestCases regression
 INFO: ..TC004
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExecuteTestCases regression
+Jan 31, 2020 1:22:57 PM com.testautomation.util.ExecuteTestCases regression
 INFO: ..TC005
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExecuteTestCases testSample1
+Jan 31, 2020 1:24:17 PM com.testautomation.MainTestNG startTest
+INFO: Logger Name: com.testautomation.MainTestNG
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExecuteTestCases setup
+INFO: com.testautomation.util.ExecuteTestCases   setup() method called
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExcelLibrary getWorkbook
+INFO: FileNotFoundExceptionjava.io.FileNotFoundException: C:\Workspace_TestAutomation3\TestAutomation\src\main\resources\TestCase\VDS\TestCase_VDS_Transfer Route.xlsx (The process cannot access the file because it is being used by another process)
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExcelAction readTestCaseInExcel
+INFO: null
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExecuteTestCases regression
+INFO: com.testautomation.util.ExecuteTestCases TestCases to be executed    [[Ljava.lang.Object;@1a04c42f
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC001
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC002
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC003
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC004
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC005
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC001
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC002
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC003
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC004
+Jan 31, 2020 1:24:32 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC005
+Jan 31, 2020 1:25:34 PM com.testautomation.MainTestNG startTest
+INFO: Logger Name: com.testautomation.MainTestNG
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExecuteTestCases setup
+INFO: com.testautomation.util.ExecuteTestCases   setup() method called
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: testCasePath==C:\Workspace_TestAutomation3\TestAutomation\src\main\resources\TestCase\VDS\TestCase_VDS_Transfer Route.xlsx
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: total rows=21
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: LOGIN  Username  //input[@id='username']  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: LOGIN  Password  //input[@id='password']  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: LOGIN  CLICK  //input[@id='LoginId_0']  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: LOGIN1  AuthOk  //td[@id='buttons']/a  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: LOGIN1  Switch  switchToChildWindow  SWITCH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  SwitchParent  switchToParentWindow  SWITCH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  Main  //*[@id="nav"]/li[1]/a  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  CompoundMaintenance  //*[@id="nav"]/li[1]/div/div/ul/li[7]/a  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  SelectTranferType  //*[@id="transferPlanType"]  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  SelectSource  //*[@id="sourceId"]  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  SelectDestination  //*[@id="destinationId"]  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  SelectPreferredVLSP  //*[@id="vlsp"]  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  SelectPreferredMode  //*[@id="transMode"]  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  CheckOnPlanInformDMS  //*[@id="onPlanGenerateInformToDms"]  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  SelectViaLoations  //*[@id="viaLocationId_1"]  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  Save  //*[@id="listDiv"]/a[1]  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  VerifySave  /html/body/table[2]/tbody/tr[2]/td/table/tbody/tr[1]/td/div/div/table/tbody/tr[1]/td/div/span/center/b  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Homepage  Edit  //*[@id="row"]/tbody  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Approve  CheckApproval  //*[@id="listDiv"]/a[5]/u  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Approve  SelectCheckBox  //*[@id="allbox"]  XPATH
+Jan 31, 2020 1:25:37 PM com.testautomation.util.ExcelAction readCapturedObjectProperties
+INFO: Approve  SaveApprove  //*[@id="disablebutton"]/a[1]  XPATH
+Jan 31, 2020 1:25:41 PM com.testautomation.util.ExecuteTestCases setup
+INFO: defaultBrowser: CHROME
+Jan 31, 2020 1:25:41 PM com.testautomation.util.ExecuteTestCases setup
+INFO: applicationURL: http://localhost:9088/Login.action
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: com.testautomation.util.ExecuteTestCases TestCases to be executed    [[Ljava.lang.Object;@154feb2a
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC001
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC002
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC003
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC004
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC005
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC001
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC002
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC003
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC004
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC005
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC001
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC002
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC003
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC004
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases regression
+INFO: ..TC005
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases testSample1
 INFO: com.testautomation.util.ExecuteTestCases  @Test method called    TC001
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExecuteTestCases testSample1
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExecuteTestCases testSample1
 INFO: testSuiteIterate() calling
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: testSuiteIterate() called  TC001
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: columnValue addedd newly numberOfTimesExecution===[xpeng2]
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: testCaseExecution==1
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExcelAction readLocators
 INFO: LOGIN
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExcelAction readLocators
 INFO: Username
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
-INFO: objects{Username=com.testautomation.models.CapturedObjectPropModel@1006de60, CLICK=com.testautomation.models.CapturedObjectPropModel@3b34b327, Password=com.testautomation.models.CapturedObjectPropModel@49489a83}
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
-INFO: namecom.testautomation.models.CapturedObjectPropModel@1006de60
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExcelAction readLocators
+INFO: objects{Username=com.testautomation.models.CapturedObjectPropModel@37de6fbc, CLICK=com.testautomation.models.CapturedObjectPropModel@72c4773e, Password=com.testautomation.models.CapturedObjectPropModel@778f37fb}
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExcelAction readLocators
+INFO: namecom.testautomation.models.CapturedObjectPropModel@37de6fbc
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExcelAction readLocators
 INFO: c.getPage()=LOGIN
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExcelAction readLocators
 INFO: locators[XPATH, //input[@id='username']]
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExcelAction readLocators
 INFO: size2
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: methodType=XPATH
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:25:43 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: objectLocators as name=//input[@id='username']
-Jan 23, 2020 7:31:00 PM com.testautomation.actions.MethodType methodExecutor
-INFO: methodType= XPATH,objectLocators=//input[@id='username'],actionType=enterText,data= xpeng2,header= null
-Jan 23, 2020 7:31:00 PM com.testautomation.actions.MethodType enterText
-INFO:  inside enterText(), data to entered into the text==xpeng2
-Jan 23, 2020 7:31:00 PM com.testautomation.actions.MethodType enterText
-INFO: enterText() exit
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:25:43 PM com.testautomation.actions.MethodType methodExecutor
+INFO: methodType= XPATH,objectLocators=//input[@id='username'],actionType=enterText,data= xpeng2,header= 
+Jan 31, 2020 1:26:13 PM com.testautomation.util.ExcelAction readLocators
 INFO: LOGIN
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:26:13 PM com.testautomation.util.ExcelAction readLocators
 INFO: Password
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
-INFO: objects{Username=com.testautomation.models.CapturedObjectPropModel@1006de60, CLICK=com.testautomation.models.CapturedObjectPropModel@3b34b327, Password=com.testautomation.models.CapturedObjectPropModel@49489a83}
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
-INFO: namecom.testautomation.models.CapturedObjectPropModel@49489a83
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:26:13 PM com.testautomation.util.ExcelAction readLocators
+INFO: objects{Username=com.testautomation.models.CapturedObjectPropModel@37de6fbc, CLICK=com.testautomation.models.CapturedObjectPropModel@72c4773e, Password=com.testautomation.models.CapturedObjectPropModel@778f37fb}
+Jan 31, 2020 1:26:13 PM com.testautomation.util.ExcelAction readLocators
+INFO: namecom.testautomation.models.CapturedObjectPropModel@778f37fb
+Jan 31, 2020 1:26:13 PM com.testautomation.util.ExcelAction readLocators
 INFO: c.getPage()=LOGIN
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:26:13 PM com.testautomation.util.ExcelAction readLocators
 INFO: locators[XPATH, //input[@id='password']]
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:26:13 PM com.testautomation.util.ExcelAction readLocators
 INFO: size2
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:26:13 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: methodType=XPATH
-Jan 23, 2020 7:31:00 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:26:13 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: objectLocators as name=//input[@id='password']
-Jan 23, 2020 7:31:00 PM com.testautomation.actions.MethodType methodExecutor
-INFO: methodType= XPATH,objectLocators=//input[@id='password'],actionType=enterText,data= aa,header= null
-Jan 23, 2020 7:31:01 PM com.testautomation.actions.MethodType enterText
-INFO:  inside enterText(), data to entered into the text==aa
-Jan 23, 2020 7:31:01 PM com.testautomation.actions.MethodType enterText
-INFO: enterText() exit
-Jan 23, 2020 7:31:01 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:26:13 PM com.testautomation.actions.MethodType methodExecutor
+INFO: methodType= XPATH,objectLocators=//input[@id='password'],actionType=enterText,data= aa,header= 
+Jan 31, 2020 1:26:44 PM com.testautomation.util.ExcelAction readLocators
 INFO: LOGIN
-Jan 23, 2020 7:31:01 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:26:44 PM com.testautomation.util.ExcelAction readLocators
 INFO: CLICK
-Jan 23, 2020 7:31:01 PM com.testautomation.util.ExcelAction readLocators
-INFO: objects{Username=com.testautomation.models.CapturedObjectPropModel@1006de60, CLICK=com.testautomation.models.CapturedObjectPropModel@3b34b327, Password=com.testautomation.models.CapturedObjectPropModel@49489a83}
-Jan 23, 2020 7:31:01 PM com.testautomation.util.ExcelAction readLocators
-INFO: namecom.testautomation.models.CapturedObjectPropModel@3b34b327
-Jan 23, 2020 7:31:01 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:26:44 PM com.testautomation.util.ExcelAction readLocators
+INFO: objects{Username=com.testautomation.models.CapturedObjectPropModel@37de6fbc, CLICK=com.testautomation.models.CapturedObjectPropModel@72c4773e, Password=com.testautomation.models.CapturedObjectPropModel@778f37fb}
+Jan 31, 2020 1:26:44 PM com.testautomation.util.ExcelAction readLocators
+INFO: namecom.testautomation.models.CapturedObjectPropModel@72c4773e
+Jan 31, 2020 1:26:44 PM com.testautomation.util.ExcelAction readLocators
 INFO: c.getPage()=LOGIN
-Jan 23, 2020 7:31:01 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:26:44 PM com.testautomation.util.ExcelAction readLocators
 INFO: locators[XPATH, //input[@id='LoginId_0']]
-Jan 23, 2020 7:31:01 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:26:44 PM com.testautomation.util.ExcelAction readLocators
 INFO: size2
-Jan 23, 2020 7:31:01 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:26:44 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: methodType=XPATH
-Jan 23, 2020 7:31:01 PM com.testautomation.actions.MethodType methodExecutor
+Jan 31, 2020 1:26:44 PM com.testautomation.actions.MethodType methodExecutor
 INFO: methodType= XPATH,objectLocators=//input[@id='LoginId_0'],actionType=click,data= null,header= null
-Jan 23, 2020 7:31:19 PM com.testautomation.actions.MethodType click
-INFO: click method started//input[@id='LoginId_0']
-Jan 23, 2020 7:31:19 PM com.testautomation.actions.MethodType click
-INFO: click method completed
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExecuteTestCases testSample1
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExecuteTestCases testSample1
 INFO: com.testautomation.util.ExecuteTestCases  @Test method called    TC002
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExecuteTestCases testSample1
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExecuteTestCases testSample1
 INFO: testSuiteIterate() calling
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: testSuiteIterate() called  TC002
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: columnValue addedd newly numberOfTimesExecution===null
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: testCaseExecution==0
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
 INFO: LOGIN1
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
 INFO: Switch
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExcelAction readLocators
-INFO: objects{Switch=com.testautomation.models.CapturedObjectPropModel@3e490578, AuthOk=com.testautomation.models.CapturedObjectPropModel@43d27806}
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExcelAction readLocators
-INFO: namecom.testautomation.models.CapturedObjectPropModel@3e490578
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
+INFO: objects{Switch=com.testautomation.models.CapturedObjectPropModel@638c670a, AuthOk=com.testautomation.models.CapturedObjectPropModel@3e2bd068}
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
+INFO: namecom.testautomation.models.CapturedObjectPropModel@638c670a
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
 INFO: c.getPage()=LOGIN1
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
 INFO: locators[SWITCH, switchToChildWindow]
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
 INFO: size2
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: methodType=SWITCH
-Jan 23, 2020 7:31:19 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: objectLocators=switchToChildWindow
-Jan 23, 2020 7:31:19 PM com.testautomation.actions.MethodType methodExecutor
+Jan 31, 2020 1:27:15 PM com.testautomation.actions.MethodType methodExecutor
 INFO: methodType= SWITCH,objectLocators=switchToChildWindow,actionType=switchToChildWindow,data= null,header= null
-Jan 23, 2020 7:31:20 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
 INFO: LOGIN1
-Jan 23, 2020 7:31:20 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
 INFO: AuthOk
-Jan 23, 2020 7:31:20 PM com.testautomation.util.ExcelAction readLocators
-INFO: objects{Switch=com.testautomation.models.CapturedObjectPropModel@3e490578, AuthOk=com.testautomation.models.CapturedObjectPropModel@43d27806}
-Jan 23, 2020 7:31:20 PM com.testautomation.util.ExcelAction readLocators
-INFO: namecom.testautomation.models.CapturedObjectPropModel@43d27806
-Jan 23, 2020 7:31:20 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
+INFO: objects{Switch=com.testautomation.models.CapturedObjectPropModel@638c670a, AuthOk=com.testautomation.models.CapturedObjectPropModel@3e2bd068}
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
+INFO: namecom.testautomation.models.CapturedObjectPropModel@3e2bd068
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
 INFO: c.getPage()=LOGIN1
-Jan 23, 2020 7:31:20 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
 INFO: locators[XPATH, //td[@id='buttons']/a]
-Jan 23, 2020 7:31:20 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction readLocators
 INFO: size2
-Jan 23, 2020 7:31:20 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: methodType=XPATH
-Jan 23, 2020 7:31:20 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:27:15 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: objectLocators=//td[@id='buttons']/a
-Jan 23, 2020 7:31:20 PM com.testautomation.actions.MethodType methodExecutor
+Jan 31, 2020 1:27:15 PM com.testautomation.actions.MethodType methodExecutor
 INFO: methodType= XPATH,objectLocators=//td[@id='buttons']/a,actionType=click,data= null,header= null
-Jan 23, 2020 7:31:22 PM com.testautomation.actions.MethodType click
-INFO: click method started//td[@id='buttons']/a
-Jan 23, 2020 7:31:22 PM com.testautomation.actions.MethodType click
-INFO: click method completed
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: Homepage
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: SwitchParent
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: objects{SwitchParent=com.testautomation.models.CapturedObjectPropModel@36440e5f}
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: namecom.testautomation.models.CapturedObjectPropModel@36440e5f
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: c.getPage()=Homepage
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: locators[SWITCH, switchToParentWindow]
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: size2
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction testSuiteIterate
-INFO: methodType=SWITCH
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction testSuiteIterate
-INFO: objectLocators=switchToParentWindow
-Jan 23, 2020 7:31:22 PM com.testautomation.actions.MethodType methodExecutor
-INFO: methodType= SWITCH,objectLocators=switchToParentWindow,actionType=switchToParentWindow,data= null,header= null
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExecuteTestCases testSample1
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExecuteTestCases testSample1
 INFO: com.testautomation.util.ExecuteTestCases  @Test method called    TC003
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExecuteTestCases testSample1
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExecuteTestCases testSample1
 INFO: testSuiteIterate() calling
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: testSuiteIterate() called  TC003
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction testSuiteIterate
-INFO: columnValue addedd newly numberOfTimesExecution===[WUHUVSC]
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExcelAction testSuiteIterate
+INFO: columnValue addedd newly numberOfTimesExecution===[User Generated]
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: testCaseExecution==1
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: Transfer
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: Transactions
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: objects{Status=com.testautomation.models.CapturedObjectPropModel@24f1a110, OfflineFromDate=com.testautomation.models.CapturedObjectPropModel@3a64f640, UploadConfirm=com.testautomation.models.CapturedObjectPropModel@6b90138a, ExcelDownload=com.testautomation.models.CapturedObjectPropModel@2ada93ed, CompoundTransfer=com.testautomation.models.CapturedObjectPropModel@30a5e87, SelectVINCheckBox=com.testautomation.models.CapturedObjectPropModel@1ec16e50, SourceLocations=com.testautomation.models.CapturedObjectPropModel@75263241, Transactions=com.testautomation.models.CapturedObjectPropModel@b1d82f3, UploadFile=com.testautomation.models.CapturedObjectPropModel@5a321b71, AlertAccept=com.testautomation.models.CapturedObjectPropModel@4f145d89, Search=com.testautomation.models.CapturedObjectPropModel@be4da10, Model=com.testautomation.models.CapturedObjectPropModel@6c09cb85, Transfer=com.testautomation.models.CapturedObjectPropModel@26aaace6, SelectCheckBox=com.testautomation.models.CapturedObjectPropModel@4bbf55af, DestinationLocation=com.testautomation.models.CapturedObjectPropModel@66a63292, Route=com.testautomation.models.CapturedObjectPropModel@44518820, TrasferUnit=com.testautomation.models.CapturedObjectPropModel@376fc1d0}
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: namecom.testautomation.models.CapturedObjectPropModel@b1d82f3
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: c.getPage()=Transfer
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
-INFO: locators[XPATH, //*[@id="nav"]/li[2]/a]
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExcelAction readLocators
+INFO: Homepage
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExcelAction readLocators
+INFO: SelectTranferType
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExcelAction readLocators
+INFO: objects{VerifySave=com.testautomation.models.CapturedObjectPropModel@2769ba04, Edit=com.testautomation.models.CapturedObjectPropModel@553e5635, SwitchParent=com.testautomation.models.CapturedObjectPropModel@c9210f0, SelectTranferType=com.testautomation.models.CapturedObjectPropModel@740f2f11, SelectPreferredVLSP=com.testautomation.models.CapturedObjectPropModel@1e5c120e, CompoundMaintenance=com.testautomation.models.CapturedObjectPropModel@39f4600e, SelectViaLoations=com.testautomation.models.CapturedObjectPropModel@25fde250, CheckOnPlanInformDMS=com.testautomation.models.CapturedObjectPropModel@28073659, SelectDestination=com.testautomation.models.CapturedObjectPropModel@56358d35, SelectPreferredMode=com.testautomation.models.CapturedObjectPropModel@4c5b63ed, Save=com.testautomation.models.CapturedObjectPropModel@67ef754, SelectSource=com.testautomation.models.CapturedObjectPropModel@175abc3c, Main=com.testautomation.models.CapturedObjectPropModel@6dfcd7c7}
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExcelAction readLocators
+INFO: namecom.testautomation.models.CapturedObjectPropModel@740f2f11
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExcelAction readLocators
+INFO: c.getPage()=Homepage
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExcelAction readLocators
+INFO: locators[XPATH, //*[@id="transferPlanType"]]
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExcelAction readLocators
 INFO: size2
-Jan 23, 2020 7:31:22 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: methodType=XPATH
-Jan 23, 2020 7:31:22 PM com.testautomation.actions.MethodType methodExecutor
-INFO: methodType= XPATH,objectLocators=//*[@id="nav"]/li[2]/a,actionType=click,data= null,header= null
-Jan 23, 2020 7:31:24 PM com.testautomation.actions.MethodType click
-INFO: click method started//*[@id="nav"]/li[2]/a
-Jan 23, 2020 7:31:24 PM com.testautomation.actions.MethodType click
-INFO: click method completed
-Jan 23, 2020 7:31:24 PM com.testautomation.util.ExcelAction readLocators
-INFO: Transfer
-Jan 23, 2020 7:31:24 PM com.testautomation.util.ExcelAction readLocators
-INFO: CompoundTransfer
-Jan 23, 2020 7:31:24 PM com.testautomation.util.ExcelAction readLocators
-INFO: objects{Status=com.testautomation.models.CapturedObjectPropModel@24f1a110, OfflineFromDate=com.testautomation.models.CapturedObjectPropModel@3a64f640, UploadConfirm=com.testautomation.models.CapturedObjectPropModel@6b90138a, ExcelDownload=com.testautomation.models.CapturedObjectPropModel@2ada93ed, CompoundTransfer=com.testautomation.models.CapturedObjectPropModel@30a5e87, SelectVINCheckBox=com.testautomation.models.CapturedObjectPropModel@1ec16e50, SourceLocations=com.testautomation.models.CapturedObjectPropModel@75263241, Transactions=com.testautomation.models.CapturedObjectPropModel@b1d82f3, UploadFile=com.testautomation.models.CapturedObjectPropModel@5a321b71, AlertAccept=com.testautomation.models.CapturedObjectPropModel@4f145d89, Search=com.testautomation.models.CapturedObjectPropModel@be4da10, Model=com.testautomation.models.CapturedObjectPropModel@6c09cb85, Transfer=com.testautomation.models.CapturedObjectPropModel@26aaace6, SelectCheckBox=com.testautomation.models.CapturedObjectPropModel@4bbf55af, DestinationLocation=com.testautomation.models.CapturedObjectPropModel@66a63292, Route=com.testautomation.models.CapturedObjectPropModel@44518820, TrasferUnit=com.testautomation.models.CapturedObjectPropModel@376fc1d0}
-Jan 23, 2020 7:31:24 PM com.testautomation.util.ExcelAction readLocators
-INFO: namecom.testautomation.models.CapturedObjectPropModel@30a5e87
-Jan 23, 2020 7:31:24 PM com.testautomation.util.ExcelAction readLocators
-INFO: c.getPage()=Transfer
-Jan 23, 2020 7:31:24 PM com.testautomation.util.ExcelAction readLocators
-INFO: locators[XPATH, //*[@id="nav"]/li[2]/div/div/ul/li[2]/a]
-Jan 23, 2020 7:31:24 PM com.testautomation.util.ExcelAction readLocators
+Jan 31, 2020 1:27:45 PM com.testautomation.util.ExcelAction testSuiteIterate
+INFO: objectLocators as name=//*[@id="transferPlanType"]
+Jan 31, 2020 1:27:45 PM com.testautomation.actions.MethodType methodExecutor
+INFO: methodType= XPATH,objectLocators=//*[@id="transferPlanType"],actionType=selectDropDownByVisibleText,data= User Generated,header= 
+Jan 31, 2020 1:27:54 PM com.testautomation.util.ExcelAction readLocators
+INFO: Homepage
+Jan 31, 2020 1:27:54 PM com.testautomation.util.ExcelAction readLocators
+INFO: SelectSource
+Jan 31, 2020 1:27:54 PM com.testautomation.util.ExcelAction readLocators
+INFO: objects{VerifySave=com.testautomation.models.CapturedObjectPropModel@2769ba04, Edit=com.testautomation.models.CapturedObjectPropModel@553e5635, SwitchParent=com.testautomation.models.CapturedObjectPropModel@c9210f0, SelectTranferType=com.testautomation.models.CapturedObjectPropModel@740f2f11, SelectPreferredVLSP=com.testautomation.models.CapturedObjectPropModel@1e5c120e, CompoundMaintenance=com.testautomation.models.CapturedObjectPropModel@39f4600e, SelectViaLoations=com.testautomation.models.CapturedObjectPropModel@25fde250, CheckOnPlanInformDMS=com.testautomation.models.CapturedObjectPropModel@28073659, SelectDestination=com.testautomation.models.CapturedObjectPropModel@56358d35, SelectPreferredMode=com.testautomation.models.CapturedObjectPropModel@4c5b63ed, Save=com.testautomation.models.CapturedObjectPropModel@67ef754, SelectSource=com.testautomation.models.CapturedObjectPropModel@175abc3c, Main=com.testautomation.models.CapturedObjectPropModel@6dfcd7c7}
+Jan 31, 2020 1:27:54 PM com.testautomation.util.ExcelAction readLocators
+INFO: namecom.testautomation.models.CapturedObjectPropModel@175abc3c
+Jan 31, 2020 1:27:54 PM com.testautomation.util.ExcelAction readLocators
+INFO: c.getPage()=Homepage
+Jan 31, 2020 1:27:54 PM com.testautomation.util.ExcelAction readLocators
+INFO: locators[XPATH, //*[@id="sourceId"]]
+Jan 31, 2020 1:27:54 PM com.testautomation.util.ExcelAction readLocators
 INFO: size2
-Jan 23, 2020 7:31:24 PM com.testautomation.util.ExcelAction testSuiteIterate
+Jan 31, 2020 1:27:54 PM com.testautomation.util.ExcelAction testSuiteIterate
 INFO: methodType=XPATH
-Jan 23, 2020 7:31:24 PM com.testautomation.actions.MethodType methodExecutor
-INFO: methodType= XPATH,objectLocators=//*[@id="nav"]/li[2]/div/div/ul/li[2]/a,actionType=click,data= null,header= null
+Jan 31, 2020 1:27:54 PM com.testautomation.util.ExcelAction testSuiteIterate
+INFO: objectLocators as name=//*[@id="sourceId"]
+Jan 31, 2020 1:27:54 PM com.testautomation.actions.MethodType methodExecutor
+INFO: methodType= XPATH,objectLocators=//*[@id="sourceId"],actionType=selectFromListDropDownByVisibleText,data= CQ1VDC1,CQ2VDC1,header= 
+Jan 31, 2020 1:27:58 PM com.testautomation.util.ExcelAction readLocators
+INFO: Homepage
+Jan 31, 2020 1:27:58 PM com.testautomation.util.ExcelAction readLocators
+INFO: SelectDestination
+Jan 31, 2020 1:27:58 PM com.testautomation.util.ExcelAction readLocators
+INFO: objects{VerifySave=com.testautomation.models.CapturedObjectPropModel@2769ba04, Edit=com.testautomation.models.CapturedObjectPropModel@553e5635, SwitchParent=com.testautomation.models.CapturedObjectPropModel@c9210f0, SelectTranferType=com.testautomation.models.CapturedObjectPropModel@740f2f11, SelectPreferredVLSP=com.testautomation.models.CapturedObjectPropModel@1e5c120e, CompoundMaintenance=com.testautomation.models.CapturedObjectPropModel@39f4600e, SelectViaLoations=com.testautomation.models.CapturedObjectPropModel@25fde250, CheckOnPlanInformDMS=com.testautomation.models.CapturedObjectPropModel@28073659, SelectDestination=com.testautomation.models.CapturedObjectPropModel@56358d35, SelectPreferredMode=com.testautomation.models.CapturedObjectPropModel@4c5b63ed, Save=com.testautomation.models.CapturedObjectPropModel@67ef754, SelectSource=com.testautomation.models.CapturedObjectPropModel@175abc3c, Main=com.testautomation.models.CapturedObjectPropModel@6dfcd7c7}
+Jan 31, 2020 1:27:58 PM com.testautomation.util.ExcelAction readLocators
+INFO: namecom.testautomation.models.CapturedObjectPropModel@56358d35
+Jan 31, 2020 1:27:58 PM com.testautomation.util.ExcelAction readLocators
+INFO: c.getPage()=Homepage
+Jan 31, 2020 1:27:58 PM com.testautomation.util.ExcelAction readLocators
+INFO: locators[XPATH, //*[@id="destinationId"]]
+Jan 31, 2020 1:27:58 PM com.testautomation.util.ExcelAction readLocators
+INFO: size2
+Jan 31, 2020 1:27:58 PM com.testautomation.util.ExcelAction testSuiteIterate
+INFO: methodType=XPATH
+Jan 31, 2020 1:27:58 PM com.testautomation.util.ExcelAction testSuiteIterate
+INFO: objectLocators as name=//*[@id="destinationId"]
+Jan 31, 2020 1:27:58 PM com.testautomation.actions.MethodType methodExecutor
+INFO: methodType= XPATH,objectLocators=//*[@id="destinationId"],actionType=selectDropDownByVisibleText,data= CQ1VDC2,header= 
+Jan 31, 2020 1:28:02 PM com.testautomation.util.ExcelAction readLocators
+INFO: Homepage
+Jan 31, 2020 1:28:02 PM com.testautomation.util.ExcelAction readLocators
+INFO: SelectPreferredVLSP
+Jan 31, 2020 1:28:02 PM com.testautomation.util.ExcelAction readLocators
+INFO: objects{VerifySave=com.testautomation.models.CapturedObjectPropModel@2769ba04, Edit=com.testautomation.models.CapturedObjectPropModel@553e5635, SwitchParent=com.testautomation.models.CapturedObjectPropModel@c9210f0, SelectTranferType=com.testautomation.models.CapturedObjectPropModel@740f2f11, SelectPreferredVLSP=com.testautomation.models.CapturedObjectPropModel@1e5c120e, CompoundMaintenance=com.testautomation.models.CapturedObjectPropModel@39f4600e, SelectViaLoations=com.testautomation.models.CapturedObjectPropModel@25fde250, CheckOnPlanInformDMS=com.testautomation.models.CapturedObjectPropModel@28073659, SelectDestination=com.testautomation.models.CapturedObjectPropModel@56358d35, SelectPreferredMode=com.testautomation.models.CapturedObjectPropModel@4c5b63ed, Save=com.testautomation.models.CapturedObjectPropModel@67ef754, SelectSource=com.testautomation.models.CapturedObjectPropModel@175abc3c, Main=com.testautomation.models.CapturedObjectPropModel@6dfcd7c7}
+Jan 31, 2020 1:28:02 PM com.testautomation.util.ExcelAction readLocators
+INFO: namecom.testautomation.models.CapturedObjectPropModel@1e5c120e
+Jan 31, 2020 1:28:02 PM com.testautomation.util.ExcelAction readLocators
+INFO: c.getPage()=Homepage
+Jan 31, 2020 1:28:02 PM com.testautomation.util.ExcelAction readLocators
+INFO: locators[XPATH, //*[@id="vlsp"]]
+Jan 31, 2020 1:28:02 PM com.testautomation.util.ExcelAction readLocators
+INFO: size2
+Jan 31, 2020 1:28:02 PM com.testautomation.util.ExcelAction testSuiteIterate
+INFO: methodType=XPATH
+Jan 31, 2020 1:28:02 PM com.testautomation.util.ExcelAction testSuiteIterate
+INFO: objectLocators as name=//*[@id="vlsp"]
+Jan 31, 2020 1:28:02 PM com.testautomation.actions.MethodType methodExecutor
+INFO: methodType= XPATH,objectLocators=//*[@id="vlsp"],actionType=selectDropDownByVisibleText,data= CMAL,header= 
+Jan 31, 2020 1:28:06 PM com.testautomation.util.ExcelAction readLocators
+INFO: Homepage
+Jan 31, 2020 1:28:06 PM com.testautomation.util.ExcelAction readLocators
+INFO: SelectPreferredMode
+Jan 31, 2020 1:28:06 PM com.testautomation.util.ExcelAction readLocators
+INFO: objects{VerifySave=com.testautomation.models.CapturedObjectPropModel@2769ba04, Edit=com.testautomation.models.CapturedObjectPropModel@553e5635, SwitchParent=com.testautomation.models.CapturedObjectPropModel@c9210f0, SelectTranferType=com.testautomation.models.CapturedObjectPropModel@740f2f11, SelectPreferredVLSP=com.testautomation.models.CapturedObjectPropModel@1e5c120e, CompoundMaintenance=com.testautomation.models.CapturedObjectPropModel@39f4600e, SelectViaLoations=com.testautomation.models.CapturedObjectPropModel@25fde250, CheckOnPlanInformDMS=com.testautomation.models.CapturedObjectPropModel@28073659, SelectDestination=com.testautomation.models.CapturedObjectPropModel@56358d35, SelectPreferredMode=com.testautomation.models.CapturedObjectPropModel@4c5b63ed, Save=com.testautomation.models.CapturedObjectPropModel@67ef754, SelectSource=com.testautomation.models.CapturedObjectPropModel@175abc3c, Main=com.testautomation.models.CapturedObjectPropModel@6dfcd7c7}
+Jan 31, 2020 1:28:06 PM com.testautomation.util.ExcelAction readLocators
+INFO: namecom.testautomation.models.CapturedObjectPropModel@4c5b63ed
+Jan 31, 2020 1:28:06 PM com.testautomation.util.ExcelAction readLocators
+INFO: c.getPage()=Homepage
+Jan 31, 2020 1:28:06 PM com.testautomation.util.ExcelAction readLocators
+INFO: locators[XPATH, //*[@id="transMode"]]
+Jan 31, 2020 1:28:06 PM com.testautomation.util.ExcelAction readLocators
+INFO: size2
+Jan 31, 2020 1:28:06 PM com.testautomation.util.ExcelAction testSuiteIterate
+INFO: methodType=XPATH
+Jan 31, 2020 1:28:06 PM com.testautomation.util.ExcelAction testSuiteIterate
+INFO: objectLocators as name=//*[@id="transMode"]
+Jan 31, 2020 1:28:06 PM com.testautomation.actions.MethodType methodExecutor
+INFO: methodType= XPATH,objectLocators=//*[@id="transMode"],actionType=selectDropDownByVisibleText,data= Road,header= 
+Jan 31, 2020 1:28:10 PM com.testautomation.util.ExcelAction readLocators
+INFO: Homepage
+Jan 31, 2020 1:28:10 PM com.testautomation.util.ExcelAction readLocators
+INFO: CheckOnPlanInformDMS
+Jan 31, 2020 1:28:10 PM com.testautomation.util.ExcelAction readLocators
+INFO: objects{VerifySave=com.testautomation.models.CapturedObjectPropModel@2769ba04, Edit=com.testautomation.models.CapturedObjectPropModel@553e5635, SwitchParent=com.testautomation.models.CapturedObjectPropModel@c9210f0, SelectTranferType=com.testautomation.models.CapturedObjectPropModel@740f2f11, SelectPreferredVLSP=com.testautomation.models.CapturedObjectPropModel@1e5c120e, CompoundMaintenance=com.testautomation.models.CapturedObjectPropModel@39f4600e, SelectViaLoations=com.testautomation.models.CapturedObjectPropModel@25fde250, CheckOnPlanInformDMS=com.testautomation.models.CapturedObjectPropModel@28073659, SelectDestination=com.testautomation.models.CapturedObjectPropModel@56358d35, SelectPreferredMode=com.testautomation.models.CapturedObjectPropModel@4c5b63ed, Save=com.testautomation.models.CapturedObjectPropModel@67ef754, SelectSource=com.testautomation.models.CapturedObjectPropModel@175abc3c, Main=com.testautomation.models.CapturedObjectPropModel@6dfcd7c7}
+Jan 31, 2020 1:28:10 PM com.testautomation.util.ExcelAction readLocators
+INFO: namecom.testautomation.models.CapturedObjectPropModel@28073659
+Jan 31, 2020 1:28:10 PM com.testautomation.util.ExcelAction readLocators
+INFO: c.getPage()=Homepage
+Jan 31, 2020 1:28:10 PM com.testautomation.util.ExcelAction readLocators
+INFO: locators[XPATH, //*[@id="onPlanGenerateInformToDms"]]
+Jan 31, 2020 1:28:10 PM com.testautomation.util.ExcelAction readLocators
+INFO: size2
+Jan 31, 2020 1:28:10 PM com.testautomation.util.ExcelAction testSuiteIterate
+INFO: methodType=XPATH
+Jan 31, 2020 1:28:10 PM com.testautomation.actions.MethodType methodExecutor
+INFO: methodType= XPATH,objectLocators=//*[@id="onPlanGenerateInformToDms"],actionType=click,data= null,header= null

@@ -9,30 +9,25 @@ import javax.persistence.*;
 public class TestResultsReporting {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="TAT01_TEST_RESULT_ID")
 	private Integer testResultId;
 	
-	/*
-	 * @Column(name="TAM02_APPLICATION_ID") private Integer testedApplicationId;
-	 * 
-	 * @Column(name="TAM03_SCREEN_ID") private Integer testedScreenId;
-	 */
+	@Column(name = "TAM02_APPLICATION_ID")
+	private Integer applicationID;
 	
-	
-	@ManyToOne()
-	@JoinColumn(name = "TAM02_APPLICATION_ID", nullable = false)
-	private Application applicationTestReport;
-	
-	@ManyToOne()
-	@JoinColumn(name = "TAM03_SCREEN_ID", nullable = false)
-	private Screen screenTestReport;
+	@Column(name = "TAM03_SCREEN_ID")
+	private Integer screenID;
 	
 	@Column(name="TAT01_TEST_CASE_NAME")
 	private String testedCaseName;
 	
 	//@Temporal(TemporalType.DATE)
-	@Column(name="TAT01_TESTED_DT")
-	private Date testedDate;
+	@Column(name="TAT01_TEST_START_DT")
+	private Date testStartDate;
+	
+	@Column(name="TAT01_TEST_END_DT")
+	private Date testEndDate;
 	
 	@Column(name="TAT01_TESTED_BY")
 	private String testedBy;
@@ -40,14 +35,21 @@ public class TestResultsReporting {
 	@Column(name="TAT01_TEST_INPUT")
 	private String testInputs;
 	
-	@Column(name="TAT01_TEST_RESULT")
-	private String testResults;
+	@Column(name="TAT01_TEST_OUTPUT")
+	private String testOutput;
 
 	@Transient
 	private Date testFromDate;
 	
 	@Transient
 	private Date testToDate;
+	
+	@Transient
+	private String testRAppName;
+	
+	@Transient
+	private String testRScreenName;
+	
 	
 	public Integer getTestResultId() {
 		return testResultId;
@@ -57,36 +59,12 @@ public class TestResultsReporting {
 		this.testResultId = testResultId;
 	}
 
-	public Application getApplicationTestReport() {
-		return applicationTestReport;
-	}
-
-	public void setApplicationTestReport(Application applicationTestReport) {
-		this.applicationTestReport = applicationTestReport;
-	}
-
-	public Screen getScreenTestReport() {
-		return screenTestReport;
-	}
-
-	public void setScreenTestReport(Screen screenTestReport) {
-		this.screenTestReport = screenTestReport;
-	}
-
 	public String getTestedCaseName() {
 		return testedCaseName;
 	}
 
 	public void setTestedCaseName(String testedCaseName) {
 		this.testedCaseName = testedCaseName;
-	}
-
-	public Date getTestedDate() {
-		return testedDate;
-	}
-
-	public void setTestedDate(Date testedDate) {
-		this.testedDate = testedDate;
 	}
 
 	public String getTestedBy() {
@@ -105,14 +83,6 @@ public class TestResultsReporting {
 		this.testInputs = testInputs;
 	}
 
-	public String getTestResults() {
-		return testResults;
-	}
-
-	public void setTestResults(String testResults) {
-		this.testResults = testResults;
-	}
-
 	public Date getTestFromDate() {
 		return testFromDate;
 	}
@@ -127,5 +97,61 @@ public class TestResultsReporting {
 
 	public void setTestToDate(Date testToDate) {
 		this.testToDate = testToDate;
+	}
+
+	public Date getTestStartDate() {
+		return testStartDate;
+	}
+
+	public void setTestStartDate(Date testStartDate) {
+		this.testStartDate = testStartDate;
+	}
+
+	public Date getTestEndDate() {
+		return testEndDate;
+	}
+
+	public void setTestEndDate(Date testEndDate) {
+		this.testEndDate = testEndDate;
+	}
+
+	public String getTestOutput() {
+		return testOutput;
+	}
+
+	public void setTestOutput(String testOutput) {
+		this.testOutput = testOutput;
+	}
+
+	public Integer getApplicationID() {
+		return applicationID;
+	}
+
+	public void setApplicationID(Integer applicationID) {
+		this.applicationID = applicationID;
+	}
+
+	public Integer getScreenID() {
+		return screenID;
+	}
+
+	public void setScreenID(Integer screenID) {
+		this.screenID = screenID;
+	}
+
+	public String getTestRAppName() {
+		return testRAppName;
+	}
+
+	public void setTestRAppName(String testRAppName) {
+		this.testRAppName = testRAppName;
+	}
+
+	public String getTestRScreenName() {
+		return testRScreenName;
+	}
+
+	public void setTestRScreenName(String testRScreenName) {
+		this.testRScreenName = testRScreenName;
 	}
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.testautomation.model.Application;
 import com.testautomation.model.TestResultsReporting;
 
 @Repository
@@ -14,9 +15,13 @@ public interface TestResultsReportingRepository extends JpaRepository<TestResult
 
 	
 	
-	@Query("select distinct screenTestReport.screenName from TestResultsReporting where applicationTestReport.applicationName = :applicationName")
-	public ArrayList<String> getAllScreenNamesByApp(@Param("applicationName") String applicationName);
 	
-//	@Query("select distinct screenTestReport.screenName from TestResultsReporting")
-//	public ArrayList<String> getAllDistinctScreenNames();
+	@Query("from Application where applicationID = ?1")
+	public Application getApplicationById(Integer applicationID);
+	
+	@Query("from Screen where applicationID = ?1")
+	public Application getScreenById(Integer applicationName);
+	
+	@Query("select distinct testedBy from TestResultsReporting where applicationID = :applicationID")
+	public ArrayList<String> getAllTestedUsersByApp(@Param("applicationID") Integer applicationID);
 }

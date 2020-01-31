@@ -68,7 +68,7 @@ public class ExcelAction {
 		
 		String sheetName;
 		StringBuffer dynamicFilePath = new StringBuffer();			
-		dynamicFilePath.append("C:\\Workspace_TestAutomation1\\TestAutomation\\src\\main\\resources\\TestCase\\")
+		dynamicFilePath.append("C:\\Workspace_TestAutomation3\\TestAutomation\\src\\main\\resources\\TestCase\\")
 		.append(selectedApplication).append("\\").append("TestCase_").append(selectedApplication)
 		.append("_").append(selectedScreen).append(".xlsx");
 		
@@ -194,10 +194,10 @@ public class ExcelAction {
 								testCaseStatus.put(temp.getTestCaseName(), statusInfo);*/
 							} catch (Exception e) {
 								Reporter.log("Process failed for this test record : " + columnValue.get(execution).toString());
-								tempResultMap.put("failedTestData", "methodType: "+methodTypeTemp+", actionType: "+actionType + ", InputValue: "+ columnValue.get(execution).toString());
+								tempResultMap.put("FailedTestData", "methodType: "+methodTypeTemp+", actionType: "+actionType + ", InputValue: "+ columnValue.get(execution).toString());
 								tempResultMap.put("TestOutput","Fail");
 								tempResultMap.put("TestEndDate", df.format(calobj.getTime()));
-								tempResultMap.put("inputValue",inputValue.toString());
+								tempResultMap.put("InputValue",inputValue.toString());
 								testResultMap.put(tcName, tempResultMap);
 								System.out.println("In Exception....ExcelAction.testSuiteIterate.");
 								fail = "fail";
@@ -259,7 +259,7 @@ public class ExcelAction {
 			throw (e);
 		}finally {
 			tempResultMap.put("TestEndDate", df.format(calobj.getTime()));
-			tempResultMap.put("inputValue",inputValue.toString());
+			tempResultMap.put("InputValue",inputValue.toString());
 			testResultMap.put(tcName, tempResultMap);
 		}
 		
@@ -284,7 +284,7 @@ public class ExcelAction {
 
 			//${catalina.home}/
 			StringBuffer dynamicFilePath = new StringBuffer();			
-			dynamicFilePath.append("C:\\Workspace_TestAutomation1\\TestAutomation\\src\\main\\resources\\TestSuite\\")
+			dynamicFilePath.append("C:\\Workspace_TestAutomation3\\TestAutomation\\src\\main\\resources\\TestSuite\\")
 			.append(selectedApplication).append("\\").append("TestSuite_").append(selectedApplication)
 			.append("_").append(selectedScreen).append(".xlsx");
 			//String testSuiteFilePath = config.getConfigValues("TestSuiteName"); 
@@ -336,7 +336,7 @@ public class ExcelAction {
 
 		String testsheetnme = "TestCase_SheetName";
 		StringBuffer dynamicFilePath = new StringBuffer();			
-		dynamicFilePath.append("C:\\Workspace_TestAutomation1\\TestAutomation\\src\\main\\resources\\TestCase\\")
+		dynamicFilePath.append("C:\\Workspace_TestAutomation3\\TestAutomation\\src\\main\\resources\\TestCase\\")
 		.append(selectedApplication).append("\\").append("TestCase_").append(selectedApplication)
 		.append("_").append(selectedScreen).append(".xlsx");
 		String testCasePath = dynamicFilePath.toString();
@@ -405,7 +405,7 @@ public class ExcelAction {
 	public void readCapturedObjectProperties() throws Exception {
 		String testSheetName = "CapturedObjectProperties";
 		StringBuffer dynamicFilePath = new StringBuffer();			
-		dynamicFilePath.append("C:\\Workspace_TestAutomation1\\TestAutomation\\src\\main\\resources\\TestCase\\")
+		dynamicFilePath.append("C:\\Workspace_TestAutomation3\\TestAutomation\\src\\main\\resources\\TestCase\\")
 		.append(selectedApplication).append("\\").append("TestCase_").append(selectedApplication)
 		.append("_").append(selectedScreen).append(".xlsx");
 		String testCasePath = dynamicFilePath.toString();

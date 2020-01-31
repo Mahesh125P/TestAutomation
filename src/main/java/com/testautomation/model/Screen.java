@@ -1,37 +1,52 @@
 package com.testautomation.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name="KTAM03_SCREEN")
+@Table(name = "KTAM03_SCREEN")
 public class Screen {
 
-	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "TAM03_SCREEN_ID")
 	private Integer screenID;
-	
-	@Column(name="TAM03_SCREEN_NAME")
+
+	@Column(name = "TAM03_SCREEN_NAME")
 	private String screenName;
-	
-	@Column(name="TAM03_CREATED_BY")
+
+	@Column(name = "TAM03_CREATED_BY")
 	private String createdBy;
-	
-	@Column(name="TAM03_LASTUPDATED_BY")
+
+	@Column(name = "TAM03_LASTUPDATED_BY")
 	private String lastUpdatedBy;
-	
-	@ManyToOne()
-	@JoinColumn(name = "TAM02_APPLICATION_ID", nullable = false)
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "TAM02_APPLICATION_ID") 
 	private Application application;
-	
-	@OneToMany(mappedBy = "screenTestReport")	
-	private Set<TestResultsReporting> testResultsReporting;
+	 
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "TAM02_APPLICATION_ID")
+	private List<TestResultsReporting> testResultsReporting;  
+
+	/*
+	 * @OneToMany(mappedBy = "screenTestReport") private Set<TestResultsReporting>
+	 * testResultsReporting;
+	 */
 
 	public Integer getScreenID() {
 		return screenID;
+	}
+
+	public Application getApplication() {
+		return application;
+	}
+
+	public void setApplication(Application application) {
+		this.application = application;
 	}
 
 	public void setScreenID(Integer screenID) {
@@ -62,22 +77,20 @@ public class Screen {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
-	public Application getApplication() {
-		return application;
-	}
-
-	public void setApplication(Application application) {
-		this.application = application;
-	}
-
-	public Set<TestResultsReporting> getTestResultsReporting() {
+	public List<TestResultsReporting> getTestResultsReporting() {
 		return testResultsReporting;
 	}
 
-	public void setTestResultsReporting(Set<TestResultsReporting> testResultsReporting) {
+	public void setTestResultsReporting(List<TestResultsReporting> testResultsReporting) {
 		this.testResultsReporting = testResultsReporting;
 	}
 
-	
-	
+	/*
+	 * public Set<TestResultsReporting> getTestResultsReporting() { return
+	 * testResultsReporting; }
+	 * 
+	 * public void setTestResultsReporting(Set<TestResultsReporting>
+	 * testResultsReporting) { this.testResultsReporting = testResultsReporting; }
+	 */
+
 }

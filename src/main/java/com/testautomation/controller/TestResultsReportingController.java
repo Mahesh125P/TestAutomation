@@ -3,15 +3,10 @@ package com.testautomation.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,26 +31,16 @@ public class TestResultsReportingController {
 		
 	final static Logger logger = LoggerFactory.getLogger(TestResultsReportingController.class);
 		
-	@RequestMapping(value = "/populateScreensByApp")	
-	public ArrayList<String> displayScreensByApp(ModelMap model,@ModelAttribute("trReport") TestResultsReporting trReport) {
-		logger.info("Entering @TestResultsReportingController - displayScreensByApp::::");
-		
-		//trReport.getApplicationTestReport().getApplicationName();
-		//logger.info("TestResultsReportingController - Application Name ::::"+trReport.getApplicationTestReport().getApplicationName());
-		return testReportService.displayAllScreenNames("VDS");
-	}
-	
 	@RequestMapping(value = "/loadTestReports")	
 	public List<TestResultsReporting> getAllTestReports(ModelMap model,@ModelAttribute("trReport") TestResultsReporting trReport) {
 		logger.info("Entering @TestResultsReportingController - getAllTestReports::::");
-		Application app = new Application();
-		app.setApplicationName("VDS");
-		app.setApplicationID(1);
-		Screen scr = new Screen();
-		scr.setScreenName("Compound Transfer");
-		//scr.setScreenID(1);
-		trReport.setApplicationTestReport(app);
-		trReport.setScreenTestReport(scr);
+		/*
+		 * Application app = new Application(); app.setApplicationName("VDS");
+		 * app.setApplicationID(1); Screen scr = new Screen();
+		 * scr.setScreenName("Compound Transfer"); //scr.setScreenID(1);
+		 */		
+		trReport.setApplicationID(1);
+		trReport.setScreenID(1);
 		trReport.setTestedBy("Manual,Sowmiya");
 		return testReportService.getAllTestReports(trReport);
 	}
@@ -71,8 +56,8 @@ public class TestResultsReportingController {
 		Screen scr = new Screen();
 		scr.setScreenName("Compound Transfer");
 		//scr.setScreenID(1);
-		trReport.setApplicationTestReport(app);
-		trReport.setScreenTestReport(scr);
+		trReport.setApplicationID(1);
+		trReport.setScreenID(1);
 		trReport.setTestedBy("Manual,Sowmiya");
 		List<TestResultsReporting> testResultReports = testReportService.getTestReportsForExport(trReport);
 		
@@ -109,5 +94,9 @@ public class TestResultsReportingController {
 	    
 	}
 	
+	@RequestMapping(value = "/startTest", method = RequestMethod.GET)
+	public void presistTestResults() {
+		testReportService.persistTestResults();
+	}
 	
 }

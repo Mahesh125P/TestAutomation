@@ -39,9 +39,11 @@ public class ExportXlsView extends AbstractXlsxStreamingView {
 	        header.createCell(0).setCellValue("Application");
 	        header.createCell(1).setCellValue("Screen");
 	        header.createCell(2).setCellValue("TestCase");
-	        header.createCell(3).setCellValue("TestedBy");
-	        header.createCell(4).setCellValue("TestInput");
-	        header.createCell(5).setCellValue("TestResult Output");
+	        header.createCell(3).setCellValue("Tested From");
+	        header.createCell(4).setCellValue("Tested To");
+	        header.createCell(5).setCellValue("TestedBy");
+	        header.createCell(6).setCellValue("TestInput");
+	        header.createCell(7).setCellValue("TestResult Output");
 	        // Create a Font for styling header cells
 	        Font headerFont = setHeaderFont(workbook);
 	 
@@ -60,12 +62,15 @@ public class ExportXlsView extends AbstractXlsxStreamingView {
 	        	for (TestResultsReporting resultReport : resultReports){
 	        		logger.info("Entering @ExportXlsView - resultReport::::"+resultReport);
 		            Row reportRow = sheet.createRow(rowCount++);
-		            reportRow.createCell(0).setCellValue(resultReport.getApplicationTestReport().getApplicationName());
-		            reportRow.createCell(1).setCellValue(resultReport.getScreenTestReport().getScreenName());
+		            reportRow.createCell(0).setCellValue(resultReport.getTestRAppName());
+		            reportRow.createCell(1).setCellValue(resultReport.getTestRScreenName());
 		            reportRow.createCell(2).setCellValue(resultReport.getTestedCaseName());
-		            reportRow.createCell(3).setCellValue(resultReport.getTestedBy());
-		            reportRow.createCell(4).setCellValue(resultReport.getTestInputs());
-		            reportRow.createCell(5).setCellValue(resultReport.getTestResults());
+		            reportRow.createCell(3).setCellValue(resultReport.getTestFromDate());
+		            reportRow.createCell(4).setCellValue(resultReport.getTestToDate());
+		            reportRow.createCell(5).setCellValue(resultReport.getTestedBy());
+		            reportRow.createCell(6).setCellValue(resultReport.getTestInputs());
+		            reportRow.createCell(7).setCellValue(resultReport.getTestOutput());
+		            
 		        }
 	        	//OutputStream out = response.getOutputStream();
 	        	//workbook.write(out); 

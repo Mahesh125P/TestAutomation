@@ -28,6 +28,9 @@ out/
 /nbdist/
 /.nb-gradle/
 /bin/
+/test-output/
+/SCREENSHOT/
+/build.gradle/
 
 ### VS Code ###
 .vscode/

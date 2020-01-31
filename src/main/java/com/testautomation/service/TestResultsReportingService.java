@@ -1,21 +1,23 @@
 package com.testautomation.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.hibernate.service.spi.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
+import com.testautomation.model.Application;
 import com.testautomation.model.TestResultsReporting;
 import com.testautomation.repositories.TestResultsReportingRepository;
 
@@ -26,19 +28,11 @@ public class TestResultsReportingService {
 	@Autowired
 	TestResultsReportingRepository testReportRepository;
 	
+	
 	@PersistenceContext
     private EntityManager em;
 	
 	final static Logger logger = LoggerFactory.getLogger(TestResultsReportingService.class);
-	
-	//public List<TestResultsReporting> displayAllScreenNames(){
-	public ArrayList<String> displayAllScreenNames(String applicationName){	
-		ArrayList<String> screens = testReportRepository.getAllScreenNamesByApp(applicationName);
-		//ArrayList<String> screens = testReportRepository.getAllDistinctScreenNames();
-		//List<TestResultsReporting> screens = testReportRepository.findAll();
-		
-		return screens;
-	}
 	
 	public List<TestResultsReporting> getAllTestReports(TestResultsReporting trReport){
 		logger.info("Entering @TestResultsReportingService - getAllTestReports::::");
@@ -77,28 +71,28 @@ public class TestResultsReportingService {
 		 */
 		 
 		
-		StringBuffer searchQuery = new StringBuffer(" SELECT TAM02_APPLICATION_ID, TAM03_SCREEN_ID, TAT01_TEST_CASE_NAME, TAT01_TESTED_BY, TAT01_TEST_INPUT,"
-				+ " TAT01_TEST_RESULT "
-				+ "  FROM KTAT01_TEST_RESULT WHERE 1=1  ");
+		StringBuffer searchQuery = new StringBuffer(" SELECT APP.TAM02_APPLICATION_NAME,   SCR.TAM03_SCREEN_NAME,   TR.TAT01_TEST_CASE_NAME,   TR.TAT01_TESTED_BY,   TR.TAT01_TEST_INPUT,  "
+				+ " TR.TAT01_TEST_OUTPUT,   TR.TAT01_TEST_START_DT,   TR.TAT01_TEST_END_DT "
+				+ " FROM KTAT01_TEST_RESULT TR JOIN KTAM02_APPLICATION APP ON APP.TAM02_APPLICATION_ID = TR.TAM02_APPLICATION_ID JOIN KTAM03_SCREEN SCR ON SCR.TAM03_SCREEN_ID = TR.TAM03_SCREEN_ID  WHERE 1=1  ");
 		
-		if(trReport.getApplicationTestReport().getApplicationID() != null && trReport.getApplicationTestReport().getApplicationID() != 0) {
-			searchQuery.append(" AND TAM02_APPLICATION_ID IN(" + trReport.getApplicationTestReport().getApplicationID() + ")");
-		}
-		
-		if (trReport.getScreenTestReport().getScreenID() != null && trReport.getScreenTestReport().getScreenID() != 0) {
-			searchQuery.append(" AND TAM03_SCREEN_ID IN(" + trReport.getScreenTestReport().getScreenID() + ")");
+		if (trReport.getApplicationID() != null && trReport.getApplicationID() != 0) {
+			searchQuery.append(" AND TR.TAM02_APPLICATION_ID IN(" + trReport.getApplicationID() + ")");
 		}
 
+		if (trReport.getScreenID() != null && trReport.getScreenID() != 0) {
+			searchQuery.append(" AND TR.TAM03_SCREEN_ID IN(" + trReport.getScreenID() + ")");
+		}
+		
 		if (trReport.getTestFromDate() != null && trReport.getTestToDate() != null) {
-			searchQuery.append(" AND TAT01_TESTED_DT BETWEEN " + trReport.getTestFromDate() + " AND " + trReport.getTestToDate());
+			searchQuery.append(" AND TR.TAT01_TEST_START_DT BETWEEN " + trReport.getTestFromDate() + " AND " + trReport.getTestToDate());
 		}
-
+		
 		if (trReport.getTestedBy() != null && trReport.getTestedBy().trim().length() > 0) {
-			searchQuery.append(" AND TAT01_TESTED_BY IN(" + (convertListToString(Arrays.asList(trReport.getTestedBy().split(","))))+ ")");
+			searchQuery.append(" AND TR.TAT01_TESTED_BY IN(" + (convertListToString(Arrays.asList(trReport.getTestedBy().split(","))))+ ")");
 		}
 
-		if (trReport.getTestResults() != null && trReport.getTestResults().trim().length() > 0) {
-			searchQuery.append(" AND TAT01_TEST_RESULT IN('"+ (trReport.getTestResults() != null && trReport.getTestResults().equalsIgnoreCase("Pass") ? "P"
+		if (trReport.getTestOutput() != null && trReport.getTestOutput().trim().length() > 0) {
+			searchQuery.append(" AND TR.TAT01_TEST_OUTPUT IN('"+ (trReport.getTestOutput() != null && trReport.getTestOutput().equalsIgnoreCase("Pass") ? "P"
 							: "F")+ "')");
 		}
 		
@@ -130,17 +124,20 @@ public class TestResultsReportingService {
 		logger.info("Entering @TestResultsReportingService - getTestReportsForExport::::");
 		List<TestResultsReporting> testResultReports= new ArrayList<TestResultsReporting>();
 		try {
+			SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yyyy");
 			List<TestResultsReporting> testResults = getAllTestReports(trReport);
 			Iterator it = testResults.iterator();
 			while(it.hasNext()){
 			     Object[] rowObj = (Object[]) it.next();
 			     TestResultsReporting trRep = new TestResultsReporting();
-			     trRep.setApplicationTestReport(trReport.getApplicationTestReport());
-			     trRep.setScreenTestReport(trReport.getScreenTestReport());
+			     trRep.setTestRAppName(rowObj[0].toString());
+			     trRep.setTestRScreenName(rowObj[1].toString());
 			     trRep.setTestedCaseName(rowObj[2].toString());
 			     trRep.setTestedBy(rowObj[3].toString());
 			     trRep.setTestInputs(rowObj[4].toString());
-			     trRep.setTestResults(rowObj[5].toString());
+			     trRep.setTestOutput(rowObj[5].toString());
+			     trRep.setTestFromDate(new Date());
+			     trRep.setTestToDate(new Date());
 			     testResultReports.add(trRep);
 			}
 		}catch(Exception e) {
@@ -151,4 +148,93 @@ public class TestResultsReportingService {
 		return testResultReports;
 	}
 	
+	public void persistTestResult(HashMap<String,HashMap<String,String>> testResultMap) {
+		
+		for (Map.Entry<String, HashMap<String,String>> testResult : testResultMap.entrySet()) {
+				TestResultsReporting testResultsReporting = new TestResultsReporting();
+				testResultsReporting = convertMaptoTestResultBean(testResult.getKey(),testResult.getValue());
+				saveOrUpdateTestResult(testResultsReporting);				
+		}
+		
+	}
+	
+	public TestResultsReporting convertMaptoTestResultBean(String testCaseName, HashMap<String,String> testResultDtls) {
+		
+		TestResultsReporting testResultsReporting = new TestResultsReporting();
+		testResultsReporting.setTestedCaseName(testCaseName);
+		
+		//testResultsReporting.setApplicationTestReport(app1);
+		//testResultsReporting.setScreenTestReport(scr);
+		/*
+		 * testResultsReporting.setTestStartDate(null);
+		 * testResultsReporting.setTestEndDate(null);
+		 */
+		/*
+		 * testResultsReporting.setTestStartDate(testResultDtls.get("TestStartDate"));
+		 * testResultsReporting.setTestEndDate(testResultDtls.get("TestEndDate"));
+		 * java.sql.Date(Calendar.getInstance().getTime().getTime())
+		 */
+		testResultsReporting.setTestedBy(testResultDtls.get("LoggedInUser"));
+		testResultsReporting.setTestInputs(testResultDtls.get("InputValue"));
+		testResultsReporting.setTestOutput(testResultDtls.get("TestOutput"));	
+		testResultsReporting.setApplicationID(12);
+		testResultsReporting.setScreenID(35);
+		return testResultsReporting;
+		
+	}
+	
+	public void saveOrUpdateTestResult(TestResultsReporting testResult) {	
+		try {
+			/*
+			 * ApplicationService appServ = new ApplicationService(); Application app =
+			 * appServ.applicationrepository.getApplicationById(1); Screen scr = new
+			 * Screen(); scr.setScreenID(1);
+			 * app.setTestResultsReporting(testResultsReporting);
+			 */
+			
+			testReportRepository.save(testResult);
+			System.out.println("Test Case " + testResult.getTestedCaseName()+ " Saved Successfully!");
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Error");
+		}
+	}
+	
+public void persistTestResults() {
+		
+	try {
+		Application app = testReportRepository.getApplicationById(1);
+		
+		TestResultsReporting testResultsReporting = new TestResultsReporting();
+		testResultsReporting.setTestedCaseName("TC003");
+		testResultsReporting.setTestedBy("Mahesh1");
+		testResultsReporting.setTestInputs("TEST Input1");
+		testResultsReporting.setTestOutput("P");	
+		testResultsReporting.setApplicationID(12);
+		testResultsReporting.setScreenID(35);
+		//testResultsReporting.setApplicationTestReport(app);
+		//testResultsReporting.setScreenTestReport(app.getScreen().get(0));
+			/*
+			 * ArrayList<TestResultsReporting> testResultsReportingList = new
+			 * ArrayList<TestResultsReporting>();
+			 * testResultsReportingList.add(testResultsReporting);
+			 * app.setTestResultsReporting(testResultsReportingList);
+			 */
+		saveOrUpdateTestResult1(testResultsReporting);
+	}catch(Exception e){
+		e.printStackTrace();
+		System.out.println("Error: "+e.getLocalizedMessage());
+	}
+		
+	}
+	
+	public void saveOrUpdateTestResult1(TestResultsReporting testResult) {	
+		try {
+			testReportRepository.save(testResult);
+			System.out.println("Test Case " + testResult.getTestedCaseName()+ " Saved Successfully!");
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Error");
+		}
+	}
 }

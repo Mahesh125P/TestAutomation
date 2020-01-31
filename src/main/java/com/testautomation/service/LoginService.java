@@ -2,15 +2,10 @@ package com.testautomation.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.TreeSet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.testautomation.model.Application;
 import com.testautomation.model.Login;
 import com.testautomation.model.Screen;
@@ -44,45 +39,52 @@ public class LoginService {
 	
 	
 	public ArrayList<String> getApplicationNames() {
-		ArrayList<String> applicationList = new ArrayList<String>();
-		/*
-		 * applicationList.add("VDS"); applicationList.add("ITRS");
-		 */
 		ArrayList<String> applicationNameList =	loginrepository.getAllApplicationNames();
 		return applicationNameList;		
 	}
 	
 	public void getApplicationDetails() {
-				
+		applicationNameList = new TreeSet<String>();		
+		screenDetailsList = new ArrayList<String>(); 		
+		screenDetailsMap = new HashMap<String,ArrayList<String>>();
+		applicationDtlsMap = new HashMap<String,HashMap<String,String>>();
 		HashMap<String,String> applicationURLPathMap = new HashMap<String,String>();
-		ArrayList<Screen> applicationDtlsList = new ArrayList<Screen>();
+		ArrayList<Application> applicationDtlsList = new ArrayList<Application>();
+		applicationDtlsList =	loginrepository.getApplicationDetails();
 		/*
-		 * applicationList.add("VDS"); applicationList.add("ITRS");
+		 * String currentAppName = null; String prevAppName = null; for(Application
+		 * application:applicationDtlsList) { currentAppName =
+		 * application.getApplicationName(); applicationNameList.add(currentAppName);
+		 * if(prevAppName!=null && currentAppName!=prevAppName) {
+		 * applicationDtlsMap.put(prevAppName, applicationURLPathMap);
+		 * screenDetailsMap.put(prevAppName, screenDetailsList); applicationURLPathMap =
+		 * new HashMap<String,String>(); screenDetailsList = new ArrayList<String>(); }
+		 * //screenDetailsList.add(screen.getScreenName());
+		 * screenDetailsList.add("Compound Transfer");
+		 * screenDetailsList.add("Transfer Route");
+		 * applicationURLPathMap.put("applicationURL", application.getApplicationURL());
+		 * applicationURLPathMap.put("applicationBrowser",
+		 * application.getApplicationBrowser()); prevAppName = currentAppName; }
+		 * if(applicationURLPathMap!=null) { applicationDtlsMap.put(currentAppName,
+		 * applicationURLPathMap); screenDetailsMap.put(prevAppName, screenDetailsList);
+		 * applicationURLPathMap = new HashMap<String,String>(); screenDetailsList = new
+		 * ArrayList<String>(); }
 		 */
-		 applicationDtlsList =	loginrepository.getApplicationDetails();
-		 String currentAppName = null;
-		 String prevAppName = null;
-		 for(Screen screen:applicationDtlsList) {
-			 currentAppName = screen.getApplication().getApplicationName();			
-			 applicationNameList.add(currentAppName);			 
-			 if(prevAppName!=null && currentAppName!=prevAppName) {				 
-				 applicationDtlsMap.put(prevAppName, applicationURLPathMap);						 
-				 screenDetailsMap.put(prevAppName, screenDetailsList);
-				 applicationURLPathMap = new HashMap<String,String>();
-				 screenDetailsList = new ArrayList<String>(); 
-			 }
-			 screenDetailsList.add(screen.getScreenName());
-			 applicationURLPathMap.put("applicationURL", screen.getApplication().getApplicationURL());
-			 applicationURLPathMap.put("applicationBrowser", screen.getApplication().getApplicationBrowser());
-			 prevAppName = currentAppName;
-		 }
-		if(applicationURLPathMap!=null) {
-			applicationDtlsMap.put(currentAppName, applicationURLPathMap);
-			screenDetailsMap.put(prevAppName, screenDetailsList);
-			applicationURLPathMap = new HashMap<String,String>();
+		String AppName = null;
+		for(Application application:applicationDtlsList) {
+			AppName = application.getApplicationName();
+			applicationNameList.add(AppName);	
+			for(Screen screen: application.getScreen()) {
+				screenDetailsList.add(screen.getScreenName());
+				
+			}
+			screenDetailsMap.put(AppName, screenDetailsList);
+			applicationURLPathMap.put("applicationURL", application.getApplicationURL());
+			applicationURLPathMap.put("applicationBrowser", application.getApplicationBrowser());
+			applicationDtlsMap.put(AppName, applicationURLPathMap);	
 			screenDetailsList = new ArrayList<String>(); 
-		}
-		//return applicationDtlsList;		
+			applicationURLPathMap = new HashMap<String,String>();
+		}		
 	}
 	
 	public ArrayList<String> getScreenNames(String applicationName) {
@@ -96,7 +98,7 @@ public class LoginService {
 		 * screenNameList.add("ITRS Dealer Master"); }
 		 */
 		
-		ArrayList<String> screenNamesList =	loginrepository.getAllScreenNames(applicationName);	
+		ArrayList<String> screenNamesList =	null;//loginrepository.getAllScreenNames(applicationName);	
 		//ArrayList<String> screenNamesDtlList =	loginrepository.getAllScreenDetails(applicationName);
 		return screenNamesList;
 	}
