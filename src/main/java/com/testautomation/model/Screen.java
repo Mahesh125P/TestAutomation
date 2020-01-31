@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @Entity
 @Table(name = "KTAM03_SCREEN")
 public class Screen {
@@ -31,6 +33,9 @@ public class Screen {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "TAM02_APPLICATION_ID")
 	private List<TestResultsReporting> testResultsReporting;  
+	
+	@Transient
+	private MultipartFile file;
 
 	/*
 	 * @OneToMany(mappedBy = "screenTestReport") private Set<TestResultsReporting>
@@ -83,6 +88,14 @@ public class Screen {
 
 	public void setTestResultsReporting(List<TestResultsReporting> testResultsReporting) {
 		this.testResultsReporting = testResultsReporting;
+	}
+
+	public MultipartFile getFile() {
+		return file;
+	}
+
+	public void setFile(MultipartFile file) {
+		this.file = file;
 	}
 
 	/*
