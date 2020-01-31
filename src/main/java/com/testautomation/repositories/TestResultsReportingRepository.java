@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.testautomation.model.Application;
 import com.testautomation.model.TestResultsReporting;
+import com.testautomation.service.LookupDTO;
 
 @Repository
 public interface TestResultsReportingRepository extends JpaRepository<TestResultsReporting, Integer> {
@@ -24,4 +25,5 @@ public interface TestResultsReportingRepository extends JpaRepository<TestResult
 	
 	@Query("select distinct testedBy from TestResultsReporting where applicationID = :applicationID")
 	public ArrayList<String> getAllTestedUsersByApp(@Param("applicationID") Integer applicationID);
+	
 }
