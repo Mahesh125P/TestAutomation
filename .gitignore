@@ -30,7 +30,7 @@ out/
 /bin/
 /test-output/
 /SCREENSHOT/
-/build.gradle/
+/build.gradle
 
 ### VS Code ###
 .vscode/
