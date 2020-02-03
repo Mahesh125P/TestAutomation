@@ -80,7 +80,7 @@ public class MainTestNG {
 			 * }
 			 */
 
-	public void startTest(String selectedApplication, List<String> selectedScreenList) {
+	public void startTest(TestResultsReportingService testReportService, String selectedApplication, List<String> selectedScreenList) {
 
 		try {
 			filehandler = new FileHandler("./log.txt");
@@ -116,8 +116,7 @@ public class MainTestNG {
 			ExcelAction.selectedScreen = selectedScreen;			
 			test.testng();
 			testResultMap = ExcelAction.testResultMap;
-			TestResultsReportingService testResult = new TestResultsReportingService();
-			testResult.persistTestResult(testResultMap);
+			testReportService.persistTestResult(selectedApplication,selectedScreen,testResultMap);
 			
 			}catch (Exception e) {
 				try {

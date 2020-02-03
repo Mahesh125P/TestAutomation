@@ -21,6 +21,8 @@ import org.springframework.stereotype.Service;
 import com.testautomation.model.Application;
 import com.testautomation.model.Screen;
 import com.testautomation.model.TestResultsReporting;
+import com.testautomation.repositories.ApplicationRepository;
+import com.testautomation.repositories.ScreenRepository;
 import com.testautomation.repositories.TestResultsReportingRepository;
 
 @Service
@@ -30,12 +32,21 @@ public class TestResultsReportingService {
 	@Autowired
 	TestResultsReportingRepository testReportRepository;
 	
+	@Autowired
+	ApplicationRepository appRepository;
+	
+	@Autowired
+	ScreenRepository scrRepository;
 	
 	@PersistenceContext
     private EntityManager em;
 	
 	final static Logger logger = LoggerFactory.getLogger(TestResultsReportingService.class);
 	
+	public String[] reportHeaderColumnsArray = {"Application","Screen","TestCase","TestedBy","TestInput","TestResult Output"};
+    public ArrayList<String> reportHeaderColumnsList = new ArrayList<String>(Arrays.asList(reportHeaderColumnsArray));
+    
+    
 	public List<TestResultsReporting> getAllTestReports(TestResultsReporting trReport){
 		logger.info("Entering @TestResultsReportingService - getAllTestReports::::");
 		//List<TestResultsReporting> testResults = testReportRepository.findAll();
@@ -135,11 +146,11 @@ public class TestResultsReportingService {
 			     trRep.setTestRAppName(rowObj[0].toString());
 			     trRep.setTestRScreenName(rowObj[1].toString());
 			     trRep.setTestedCaseName(rowObj[2].toString());
-			     trRep.setTestedBy(rowObj[3].toString());
-			     trRep.setTestInputs(rowObj[4].toString());
-			     trRep.setTestOutput(rowObj[5].toString());
 			     trRep.setTestFromDate(new Date());
 			     trRep.setTestToDate(new Date());
+			     trRep.setTestedBy(rowObj[4].toString());
+			     trRep.setTestInputs(rowObj[5].toString());
+			     trRep.setTestOutput(rowObj[6].toString());			     
 			     testResultReports.add(trRep);
 			}
 		}catch(Exception e) {
@@ -237,5 +248,20 @@ public void persistTestResults() {
 			e.printStackTrace();
 			System.out.println("Error");
 		}
+	}
+	
+	
+	public ArrayList<String> getAllTestedUsersByApp(Integer appId) {
+		return testReportRepository.getAllTestedUsersByApp(appId);
+	}
+	 
+	
+	public ArrayList<LookupDTO> getAllApplicationNames() {
+		return appRepository.getAllApplicationNames();
+	}
+	
+	
+	public ArrayList<LookupDTO> getAllScreensByApp(Integer appId) {
+		return scrRepository.getAllScreensByApp(appId);
 	}
 }
