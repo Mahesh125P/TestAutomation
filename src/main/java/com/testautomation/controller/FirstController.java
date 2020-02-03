@@ -33,7 +33,7 @@ import com.testautomation.util.EmailUtil;
  *
  */
 
-@Controller
+@RestController
 public class FirstController {
 	
 	@Autowired
@@ -69,6 +69,10 @@ public class FirstController {
 		return testAutomationModel;
 	}
 	
+	@RequestMapping(value = "/getAllScreenDetails", method = RequestMethod.GET)
+	public HashMap<String,ArrayList<String>> getAllScreenDetails() {
+		return loginservice.getAllScreenDetails();
+	}
 	@RequestMapping(value = "/loginSubmit1", method = RequestMethod.POST)
 	public String LoginSubmit1(ModelMap model,@ModelAttribute("login") Login login) {
 		System.out.println("Started LoginSubmit!!!");

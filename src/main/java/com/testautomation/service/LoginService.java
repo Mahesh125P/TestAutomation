@@ -87,6 +87,23 @@ public class LoginService {
 		}		
 	}
 	
+	
+	public HashMap<String,ArrayList<String>> getAllScreenDetails(){
+		ArrayList<Application> applicationDtlsList = loginrepository.getApplicationDetails();
+		HashMap<String,ArrayList<String>> screenDetailsMapNew = new HashMap<String,ArrayList<String>>();
+		ArrayList<String> screenDetailsListNew = new ArrayList<String>();
+		String AppName = null;
+		for(Application application:applicationDtlsList) {
+			AppName = application.getApplicationName();
+			for(Screen screen: application.getScreen()) {
+				screenDetailsListNew.add(screen.getScreenName());			
+			}
+			screenDetailsMapNew.put(AppName, screenDetailsListNew);
+			screenDetailsListNew = new ArrayList<String>();
+		}
+		return screenDetailsMapNew;
+	}
+		
 	public ArrayList<String> getScreenNames(String applicationName) {
 		
 		ArrayList<String> screenNameList = new ArrayList<String>();
