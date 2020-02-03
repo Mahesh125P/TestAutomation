@@ -3,6 +3,7 @@ package com.testautomation.controller;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,16 +11,21 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.testautomation.MainTestNG;
 import com.testautomation.model.Application;
+import com.testautomation.model.Login;
 import com.testautomation.model.Screen;
 import com.testautomation.model.TestResultsReporting;
+import com.testautomation.service.LoginService;
 import com.testautomation.service.TestResultsReportingService;
 
 @RestController
@@ -27,6 +33,9 @@ public class TestResultsReportingController {
 
 	@Autowired
 	TestResultsReportingService testReportService;
+	
+	@Autowired
+	LoginService loginservice;
 	
 		
 	final static Logger logger = LoggerFactory.getLogger(TestResultsReportingController.class);
@@ -94,9 +103,40 @@ public class TestResultsReportingController {
 	    
 	}
 	
-	@RequestMapping(value = "/startTest", method = RequestMethod.GET)
+	@RequestMapping(value = "/startTest2", method = RequestMethod.GET)
 	public void presistTestResults() {
 		testReportService.persistTestResults();
+	}
+	
+	@PostMapping(value = "/startTest")
+	public String startTest(ModelMap model,@ModelAttribute("login") Login login) {
+		System.out.println("Started startTest!!!");
+		System.out.println("Selected App: "+login.getSelectedApplicationName());
+		ArrayList<String> applicationList = loginservice.getApplicationNames();
+		login.setSelectedApplicationName("VDS");
+		ArrayList<String> screenNameList = loginservice.getScreenNames(login.getSelectedApplicationName());
+		
+		ArrayList<String> testCaseList = loginservice.getTestCaseNames(login.getSelectedApplicationName());
+		
+		System.out.println("Selected Screens String: "+loginservice.convertListToString(login.getScreenNameList()));
+		
+		login.setApplicationList(applicationList);
+		login.setScreenNameList(screenNameList);
+		login.setTestCaseList(testCaseList);
+		loginservice.getApplicationDetails();
+		model.addAttribute("applicationList", login.getApplicationList());
+		model.addAttribute("screenNameList", login.getScreenNameList());
+		model.addAttribute("testCaseList", login.getTestCaseList());
+		model.addAttribute("selectedApplicationName", login.getSelectedApplicationName());
+		model.addAttribute("selectedScreenName",login.getSelectedScreenName());
+		System.out.println("Started executing Test!!!");
+		MainTestNG testStart = new MainTestNG();
+		testStart.startTest(testReportService,login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
+		//ApplicationService as = new ApplicationService();
+		//as.persistApplication();
+		testReportService.persistTestResults();
+		System.out.println("Completed startTest!!!");
+		return "homePage";
 	}
 	
 }
