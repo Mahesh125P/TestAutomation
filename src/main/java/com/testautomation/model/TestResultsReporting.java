@@ -37,6 +37,12 @@ public class TestResultsReporting {
 	
 	@Column(name="TAT01_TEST_OUTPUT")
 	private String testOutput;
+	
+	@Column(name="TAT01_TEST_FAILED_DATA")
+	private String testFailedData;
+	
+	@Column(name="TAT01_CREATED_BY")
+	private String createdBy;
 
 	@Transient
 	private Date testFromDate;
@@ -153,5 +159,21 @@ public class TestResultsReporting {
 
 	public void setTestRScreenName(String testRScreenName) {
 		this.testRScreenName = testRScreenName;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getTestFailedData() {
+		return testFailedData;
+	}
+
+	public void setTestFailedData(String testFailedData) {
+		this.testFailedData = testFailedData;
 	}
 }

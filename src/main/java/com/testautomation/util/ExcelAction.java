@@ -123,7 +123,7 @@ public class ExcelAction {
 		String key = tcName;
 		fail = null;
 		TestCase temp = (TestCase) testCaseSheet.get(key);
-		DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH24:mm:ss");
 		Calendar calobj = Calendar.getInstance();
 		try{					
 		
@@ -195,14 +195,14 @@ public class ExcelAction {
 							} catch (Exception e) {
 								Reporter.log("Process failed for this test record : " + columnValue.get(execution).toString());
 								tempResultMap.put("FailedTestData", "methodType: "+methodTypeTemp+", actionType: "+actionType + ", InputValue: "+ columnValue.get(execution).toString());
-								tempResultMap.put("TestOutput","Fail");
+								tempResultMap.put("TestOutput","F");
 								tempResultMap.put("TestEndDate", df.format(calobj.getTime()));
 								tempResultMap.put("InputValue",inputValue.toString());
 								testResultMap.put(tcName, tempResultMap);
 								System.out.println("In Exception....ExcelAction.testSuiteIterate.");
 								fail = "fail";
 								//Assert.fail();
-								continue;
+								break;
 							}
 						}
 
@@ -248,13 +248,13 @@ public class ExcelAction {
 		}
 		
 		if(tempResultMap.get("TestOutput")==null){
-			tempResultMap.put("TestOutput","Pass");
+			tempResultMap.put("TestOutput","P");
 		}
 		}catch(Exception e){
 			e.printStackTrace();
 			System.out.println("In Exception....ExcelAction.testSuiteIterate2.");
 			tempResultMap.put("Exception",e.getLocalizedMessage());
-			tempResultMap.put("TestOutput","Fail");
+			tempResultMap.put("TestOutput","F");
 			fail = "fail";
 			throw (e);
 		}finally {
