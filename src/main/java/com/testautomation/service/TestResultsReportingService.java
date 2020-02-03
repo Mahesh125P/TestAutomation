@@ -1,5 +1,6 @@
 package com.testautomation.service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.testautomation.model.Application;
+import com.testautomation.model.Screen;
 import com.testautomation.model.TestResultsReporting;
+import com.testautomation.repositories.ApplicationRepository;
+import com.testautomation.repositories.ScreenRepository;
 import com.testautomation.repositories.TestResultsReportingRepository;
 
 @Service
@@ -28,12 +32,21 @@ public class TestResultsReportingService {
 	@Autowired
 	TestResultsReportingRepository testReportRepository;
 	
+	@Autowired
+	ApplicationRepository appRepository;
+	
+	@Autowired
+	ScreenRepository scrRepository;
 	
 	@PersistenceContext
     private EntityManager em;
 	
 	final static Logger logger = LoggerFactory.getLogger(TestResultsReportingService.class);
 	
+	public String[] reportHeaderColumnsArray = {"Application","Screen","TestCase","TestedBy","TestInput","TestResult Output"};
+    public ArrayList<String> reportHeaderColumnsList = new ArrayList<String>(Arrays.asList(reportHeaderColumnsArray));
+    
+    
 	public List<TestResultsReporting> getAllTestReports(TestResultsReporting trReport){
 		logger.info("Entering @TestResultsReportingService - getAllTestReports::::");
 		//List<TestResultsReporting> testResults = testReportRepository.findAll();
@@ -133,11 +146,11 @@ public class TestResultsReportingService {
 			     trRep.setTestRAppName(rowObj[0].toString());
 			     trRep.setTestRScreenName(rowObj[1].toString());
 			     trRep.setTestedCaseName(rowObj[2].toString());
-			     trRep.setTestedBy(rowObj[3].toString());
-			     trRep.setTestInputs(rowObj[4].toString());
-			     trRep.setTestOutput(rowObj[5].toString());
 			     trRep.setTestFromDate(new Date());
 			     trRep.setTestToDate(new Date());
+			     trRep.setTestedBy(rowObj[4].toString());
+			     trRep.setTestInputs(rowObj[5].toString());
+			     trRep.setTestOutput(rowObj[6].toString());			     
 			     testResultReports.add(trRep);
 			}
 		}catch(Exception e) {
@@ -148,50 +161,49 @@ public class TestResultsReportingService {
 		return testResultReports;
 	}
 	
-	public void persistTestResult(HashMap<String,HashMap<String,String>> testResultMap) {
+	public void persistTestResult(String selectedApp, String selectedScreen, HashMap<String,HashMap<String,String>> testResultMap) {
 		
 		for (Map.Entry<String, HashMap<String,String>> testResult : testResultMap.entrySet()) {
 				TestResultsReporting testResultsReporting = new TestResultsReporting();
-				testResultsReporting = convertMaptoTestResultBean(testResult.getKey(),testResult.getValue());
+				Application app = testReportRepository.getApplicationByName(selectedApp);
+				Screen screen = testReportRepository.getScreenByName(selectedScreen);
+				testResultsReporting = convertMaptoTestResultBean(app.getApplicationID(),screen.getScreenID(),testResult.getKey(),testResult.getValue());
 				saveOrUpdateTestResult(testResultsReporting);				
 		}
 		
 	}
 	
-	public TestResultsReporting convertMaptoTestResultBean(String testCaseName, HashMap<String,String> testResultDtls) {
+	public TestResultsReporting convertMaptoTestResultBean(Integer selectedAppID, Integer selectedScreenID,String testCaseName, HashMap<String,String> testResultDtls) {
 		
 		TestResultsReporting testResultsReporting = new TestResultsReporting();
 		testResultsReporting.setTestedCaseName(testCaseName);
+		testResultsReporting.setApplicationID(selectedAppID);
+		testResultsReporting.setScreenID(selectedScreenID);		
 		
-		//testResultsReporting.setApplicationTestReport(app1);
-		//testResultsReporting.setScreenTestReport(scr);
-		/*
-		 * testResultsReporting.setTestStartDate(null);
-		 * testResultsReporting.setTestEndDate(null);
-		 */
-		/*
-		 * testResultsReporting.setTestStartDate(testResultDtls.get("TestStartDate"));
-		 * testResultsReporting.setTestEndDate(testResultDtls.get("TestEndDate"));
-		 * java.sql.Date(Calendar.getInstance().getTime().getTime())
-		 */
-		testResultsReporting.setTestedBy(testResultDtls.get("LoggedInUser"));
+		Date testStartDt = null;
+		Date testEndDt = null;
+		try {
+			testStartDt = new SimpleDateFormat("dd/MM/yyyy").parse(testResultDtls.get("TestStartDate"));
+			testEndDt = new SimpleDateFormat("dd/MM/yyyy").parse(testResultDtls.get("TestEndDate"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		testResultsReporting.setTestInputs(testResultDtls.get("InputValue"));
-		testResultsReporting.setTestOutput(testResultDtls.get("TestOutput"));	
-		testResultsReporting.setApplicationID(12);
-		testResultsReporting.setScreenID(35);
+		testResultsReporting.setTestOutput(testResultDtls.get("TestOutput"));
+		testResultsReporting.setTestStartDate(testStartDt);
+		testResultsReporting.setTestEndDate(testEndDt);
+		testResultsReporting.setTestedBy(testResultDtls.get("LoggedInUser"));
+		testResultsReporting.setCreatedBy(testResultDtls.get("LoggedInUser"));
+		testResultsReporting.setTestFailedData(testResultDtls.get("FailedTestData"));
 		return testResultsReporting;
 		
 	}
 	
 	public void saveOrUpdateTestResult(TestResultsReporting testResult) {	
-		try {
-			/*
-			 * ApplicationService appServ = new ApplicationService(); Application app =
-			 * appServ.applicationrepository.getApplicationById(1); Screen scr = new
-			 * Screen(); scr.setScreenID(1);
-			 * app.setTestResultsReporting(testResultsReporting);
-			 */
-			
+		try {	
 			testReportRepository.save(testResult);
 			System.out.println("Test Case " + testResult.getTestedCaseName()+ " Saved Successfully!");
 		}catch(Exception e) {
@@ -206,8 +218,8 @@ public void persistTestResults() {
 		Application app = testReportRepository.getApplicationById(1);
 		
 		TestResultsReporting testResultsReporting = new TestResultsReporting();
-		testResultsReporting.setTestedCaseName("TC003");
-		testResultsReporting.setTestedBy("Mahesh1");
+		testResultsReporting.setTestedCaseName("TC004");
+		testResultsReporting.setTestedBy("Mahesh4");
 		testResultsReporting.setTestInputs("TEST Input1");
 		testResultsReporting.setTestOutput("P");	
 		testResultsReporting.setApplicationID(12);
@@ -236,5 +248,20 @@ public void persistTestResults() {
 			e.printStackTrace();
 			System.out.println("Error");
 		}
+	}
+	
+	
+	public ArrayList<String> getAllTestedUsersByApp(Integer appId) {
+		return testReportRepository.getAllTestedUsersByApp(appId);
+	}
+	 
+	
+	public ArrayList<LookupDTO> getAllApplicationNames() {
+		return appRepository.getAllApplicationNames();
+	}
+	
+	
+	public ArrayList<LookupDTO> getAllScreensByApp(Integer appId) {
+		return scrRepository.getAllScreensByApp(appId);
 	}
 }
