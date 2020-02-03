@@ -37,22 +37,19 @@ public class ApplicationService {
 		return applicationrepository.findAll();
 	}
 	
-	public void persistApplication() { //Sample Persist
-		Application app = applicationrepository.getApplicationById(12);
-		app.setApplicationBrowser("CHROME1");
-		Screen scr1 = new Screen(); //Add new Screen
-		scr1.setScreenName("Shipment Plan Gen9");
-		scr1.setCreatedBy("Mahesh9");
-		ArrayList<Screen> screenList = new ArrayList<Screen>(); 
-		for(Screen screens: app.getScreen()) { //Update existing Screen
-			screens.setScreenName(screens.getScreenName() + ".");
-			screenList.add(screens);
-		}
-		screenList.add(scr1);
-		app.setScreen(screenList);
-		applicationrepository.save(app);
-		
-	}
+	/*
+	 * public void persistApplication() { //Sample Persist Application app =
+	 * applicationrepository.getApplicationById(12);
+	 * app.setApplicationBrowser("CHROME1"); Screen scr1 = new Screen(); //Add new
+	 * Screen scr1.setScreenName("Shipment Plan Gen9");
+	 * scr1.setCreatedBy("Mahesh9"); ArrayList<Screen> screenList = new
+	 * ArrayList<Screen>(); for(Screen screens: app.getScreen()) { //Update existing
+	 * Screen screens.setScreenName(screens.getScreenName() + ".");
+	 * screenList.add(screens); } screenList.add(scr1); app.setScreen(screenList);
+	 * applicationrepository.save(app);
+	 * 
+	 * }
+	 */
 	
 	public ArrayList<LookupDTO> getAllApplicationNames() {
 		return applicationrepository.getAllApplicationNames();
@@ -61,54 +58,58 @@ public class ApplicationService {
 	public List<ApplicationDTO> getApplicationDetails(Integer id) {
 		return applicationrepository.getApplicationDetails(id);
 	}
-	
-	
-	/*
-	 * public boolean saveDataFromApplication(Application applicationobj) { return
-	 * applicationrepository.save(applicationobj); }
-	 */
-
-	
-	public boolean saveDataFromFileUpload(MultipartFile file) {
-		boolean isFlag = false;
-		//String extension  = FilenameUtils.getExtension(file.getOriginalFilename());
-		//if(extension.equalsIgnoreCase("xls") || extension.equalsIgnoreCase("xlsx")) {
-		isFlag = ReadDataFromExcel(file);
-		
-		return false;
-	}
 
 	@Transactional
-	private boolean ReadDataFromExcel(MultipartFile file) {
+	public boolean saveDetails(MultipartFile file,String appName, String appURL, String appBrowser) {
 		Workbook workbook = getWorkBook(file);
 		Sheet sheet = workbook.getSheetAt(0);
 		Iterator<Row> rows = sheet.iterator();
-		rows.next();
-		while(rows.hasNext()) {
-			Row row = rows.next();
-			Screen screen = new Screen();
-			Application application = new Application();
-			
-			
-			
-			if(row.getCell(0).getCellType() != null) {
-				 application.setApplicationName(row.getCell(0).getStringCellValue());
-				 application.setApplicationURL("http://localhost:9080/Login.action");
-				 application.setCreatedBy("Manual");
-			}
-			application.setApplicationID(
-					applicationrepository.getApplicationId(application.getApplicationName()));
-			//application.setApplicationID(1);
-			if(row.getCell(1).getCellType() != null) {
-				screen.setScreenName(row.getCell(1).getStringCellValue());
-			}
-			screen.setCreatedBy("XZHU26");
-			//application.getScreenList().add(screen);
-			screen.setApplication(application);
-			
-			applicationrepository.save(screen);
-		}
+		Application application = new Application();
+		Screen scr = new Screen(); //Add new Screen
+		ArrayList<Screen> screenList = new ArrayList<Screen>(); 
+		ArrayList<String> screenNamesList = new ArrayList<String>(); 
 		
+		application = applicationrepository.getApplicationValues(appName);
+		
+		if(application!= null) {
+			for(Screen screens: application.getScreen()) { //Update existing Screen
+				screenNamesList.add(screens.getScreenName());
+				screenList.add(screens);
+			}
+		} else {
+			application = new Application();
+		}
+		 
+		rows.next();
+		if (sheet.getRow(0) != null) {
+			while(rows.hasNext()) {
+		
+				Row row = rows.next();
+					
+				if(row.getCell(1).getCellType() != null) {
+					if(!screenNamesList.contains(row.getCell(1).getStringCellValue())) {
+						scr = new Screen();
+						scr.setScreenName(row.getCell(1).getStringCellValue());
+						scr.setCreatedBy("Manual");
+						screenList.add(scr);
+					} 
+				}
+			} 
+			application.setApplicationBrowser(appBrowser);
+			application.setApplicationName(appName);
+			application.setApplicationURL(appURL);
+			application.setCreatedBy("Manual");
+			
+			application.setScreen(screenList);		
+			applicationrepository.save(application);
+		} else {
+			application = applicationrepository.getApplicationValues(appName);
+			application.setApplicationBrowser(appBrowser);
+			application.setApplicationName(appName);
+			application.setApplicationURL(appURL);
+			application.setCreatedBy("Manual");
+			applicationrepository.save(application);
+		}
 		return true;
 	}	
 

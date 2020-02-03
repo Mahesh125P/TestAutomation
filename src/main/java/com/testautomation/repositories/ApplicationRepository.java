@@ -32,9 +32,9 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 	public ArrayList<LookupDTO> getAllApplicationNames();
 
 	
-	@Query("select distinct applicationID from Application where applicationName = :applicationName") 
-	public Integer getApplicationId(@Param("applicationName") String applicationName);
+	@Query("from Application where applicationName = :applicationName") 
+	public Application getApplicationValues(@Param("applicationName") String applicationName);
 	
-	@Query("Select new com.testautomation.model.ApplicationDTO(application.applicationID,application.applicationName,application.applicationURL,screenName) from Screen where application.applicationID = :id")
+	@Query("Select new com.testautomation.model.ApplicationDTO(application.applicationID,application.applicationName,application.applicationURL,application.applicationBrowser,screenName) from Screen where application.applicationID = :id")
 	public List<ApplicationDTO> getApplicationDetails(@Param("id") Integer id);
 }

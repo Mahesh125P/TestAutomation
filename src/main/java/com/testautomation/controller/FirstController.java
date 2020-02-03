@@ -139,7 +139,7 @@ public class FirstController {
 		MainTestNG testStart = new MainTestNG();
 		//testStart.startTest(login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
 		ApplicationService as = new ApplicationService();
-		as.persistApplication();
+		//as.persistApplication();
 		TestResultsReportingService tsService = new TestResultsReportingService();
 		tsService.persistTestResults();
 		System.out.println("Completed startTest!!!");
