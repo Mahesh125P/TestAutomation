@@ -137,7 +137,7 @@ public class FirstController {
 		model.addAttribute("selectedScreenName",login.getSelectedScreenName());
 		System.out.println("Started executing Test!!!");
 		MainTestNG testStart = new MainTestNG();
-		//testStart.startTest(login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
+		//testStart.startTest(login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));		
 		//ApplicationService as = new ApplicationService();
 		//as.persistApplication();
 		TestResultsReportingService tsService = new TestResultsReportingService();
