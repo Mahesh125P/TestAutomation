@@ -20,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
- 
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.JsonObject;
 import com.testautomation.model.Application;
 import com.testautomation.model.Screen;
 import com.testautomation.model.TestAutomationModel;
@@ -53,35 +58,28 @@ public class TestResultsReportingController {
         
  
     final static Logger logger = LoggerFactory.getLogger(TestResultsReportingController.class);
-    @RequestMapping(value = "/loadTestReports", method = RequestMethod.POST)    
-	public List<TestResultsReporting> getAllTestReports(ModelMap model,@RequestBody(required = false) TestResultsReporting trReport) {
+    @RequestMapping(value = "/loadTestReports", method = RequestMethod.POST,produces=MediaType.APPLICATION_JSON_VALUE)//produces = {"application/json"}
+   
+    public List<TestResultsReporting> getAllTestReports(@RequestBody(required = false) TestResultsReporting trReport) {
+   // public List<TestResultsReporting> getAllTestReports(@ModelAttribute("trReport") TestResultsReporting trReport) {
+    	
 		logger.info("Entering @TestResultsReportingController - getAllTestReports::::");
-		/*
-		 * Application app = new Application(); app.setApplicationName("VDS");
-		 * app.setApplicationID(1); Screen scr = new Screen();
-		 * scr.setScreenName("Compound Transfer"); //scr.setScreenID(1);
-		 */		
-		/*
-		 * trReport.setApplicationID(1); trReport.setScreenID(1);
-		 * trReport.setTestedBy("Manual,Sowmiya");
-		 */
-		return testReportService.getAllTestReports(trReport);
+		List<TestResultsReporting> searchResults = testReportService.getTestReportsForExport(trReport);
+		 // JsonObject js =  testReportService.convertToJson(testReportService.getTestReportsForExport(trReport));
+		  //TestAutomationModel tm = new TestAutomationModel();
+		  
+		  return searchResults;
 	}
 	
-    @RequestMapping(value = "/exportExlTestReports",produces = "application/vnd.ms-excel")
+    @RequestMapping(value = "/exportExlTestReports",produces = "application/vnd.ms-excel",method = RequestMethod.POST)
 	 public ModelAndView exportTestReportsExcel() {
 		
 		logger.info("Entering @TestResultsReportingController - exportTestReportsExcel::::");
 		TestResultsReporting trReport = new TestResultsReporting();
 		/*
-		 * Application app = new Application(); app.setApplicationName("VDS");
-		 * app.setApplicationID(1); Screen scr = new Screen();
-		 * scr.setScreenName("Compound Transfer");
+		 * trReport.setApplicationID(1); trReport.setScreenID(1);
+		 * trReport.setTestedBy("Manual,Sowmiya");
 		 */
-		//scr.setScreenID(1);
-		trReport.setApplicationID(1);
-		trReport.setScreenID(1);
-		trReport.setTestedBy("Manual,Sowmiya");
 		List<TestResultsReporting> testResultReports = testReportService.getTestReportsForExport(trReport);
 		
 		ModelAndView mv = new ModelAndView("exportExcelView", "testResultReports", testResultReports);
@@ -90,23 +88,20 @@ public class TestResultsReportingController {
 		return mv;
 	}
 	
-	@RequestMapping(value = "/exportTestExcel")
+	@RequestMapping(value = "/exportResultToExcel",method = RequestMethod.POST)
     public void downloadExcelTestResults(
             HttpServletRequest request, 
-            HttpServletResponse response) throws IOException {
+            HttpServletResponse response,@RequestBody(required = false) TestResultsReporting trReport) throws IOException {
  
         logger.info("Entering @TestResultsReportingController - downloadExcelTestFile::::");
                 
-        TestResultsReporting trReport = new TestResultsReporting();
-        Application app = new Application();
-        app.setApplicationName("VDS");
-        app.setApplicationID(1);
-        Screen scr = new Screen();
-        scr.setScreenName("Compound Transfer");
-        //scr.setScreenID(1);
-        trReport.setApplicationID(1);
-		trReport.setScreenID(1);
-		trReport.setTestedBy("Manual,Sowmiya");
+		/*
+		 * TestResultsReporting trReport = new TestResultsReporting(); Application app =
+		 * new Application(); app.setApplicationName("VDS"); app.setApplicationID(1);
+		 * Screen scr = new Screen(); scr.setScreenName("Compound Transfer");
+		 * //scr.setScreenID(1); trReport.setApplicationID(1); trReport.setScreenID(1);
+		 * trReport.setTestedBy("Manual,Sowmiya");
+		 */
         List<TestResultsReporting> testResultReports = testReportService.getTestReportsForExport(trReport);
         
         LocalDateTime localDate = LocalDateTime.now();      

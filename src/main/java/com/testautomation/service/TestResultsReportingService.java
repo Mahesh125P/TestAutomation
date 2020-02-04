@@ -1,5 +1,7 @@
 package com.testautomation.service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +19,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.testautomation.model.Application;
 import com.testautomation.model.TestResultsReporting;
 import com.testautomation.repositories.ApplicationRepository;
@@ -102,7 +108,7 @@ public class TestResultsReportingService {
 			searchQuery.append(" AND TR.TAT01_TESTED_BY IN(" + (convertListToString(Arrays.asList(trReport.getTestedBy().split(","))))+ ")");
 		}
 
-		if (trReport.getTestOutput() != null && trReport.getTestOutput().trim().length() > 0) {
+		if (trReport.getTestOutput() != null && trReport.getTestOutput().trim().length() > 0 && trReport.getTestOutput().trim() !="B") {
 			searchQuery.append(" AND TR.TAT01_TEST_OUTPUT IN('"+ (trReport.getTestOutput() != null && trReport.getTestOutput().equalsIgnoreCase("Pass") ? "P"
 							: "F")+ "')");
 		}
@@ -112,6 +118,33 @@ public class TestResultsReportingService {
 		List<TestResultsReporting> testResults =qry.getResultList();
 		return testResults;	
 	
+	}
+	
+	
+	public JsonObject convertToJson(List<TestResultsReporting> resultsList) {
+		
+		JsonObject reportObject = new JsonObject();
+		JsonArray reportObject_array = new JsonArray();
+		JsonObject reportObject_array_object = new JsonObject();
+		try {
+			for (TestResultsReporting resultReport : resultsList){
+				reportObject_array_object = new JsonObject();
+				reportObject_array_object.addProperty("testRAppName", resultReport.getTestRAppName());
+				reportObject_array_object.addProperty("testRScreenName", resultReport.getTestRScreenName());
+				reportObject_array_object.addProperty("testedCaseName", resultReport.getTestedCaseName());
+				reportObject_array_object.addProperty("testFromDate", resultReport.getTestFromDate().toString());
+				reportObject_array_object.addProperty("testToDate", resultReport.getTestToDate().toString());
+				reportObject_array_object.addProperty("testedBy", resultReport.getTestedBy());
+				reportObject_array_object.addProperty("testInputs", resultReport.getTestInputs());
+				reportObject_array_object.addProperty("testOutput", resultReport.getTestOutput());
+				reportObject_array.add(reportObject_array_object);
+			}
+			reportObject.add("testReport", reportObject_array);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	    return reportObject; // this is proper JSON
 	}
 	
 	
@@ -127,14 +160,14 @@ public class TestResultsReportingService {
 		}
 		return finalStr.trim(); 
 	}
-	
-	
+		
 	
 	public List<TestResultsReporting> getTestReportsForExport(TestResultsReporting trReport){
 		
 		logger.info("Entering @TestResultsReportingService - getTestReportsForExport::::");
 		List<TestResultsReporting> testResultReports= new ArrayList<TestResultsReporting>();
 		try {
+			SimpleDateFormat format1 = new SimpleDateFormat("dd-MMM-yyyy");
 			SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yyyy");
 			List<TestResultsReporting> testResults = getAllTestReports(trReport);
 			Iterator it = testResults.iterator();
@@ -144,11 +177,11 @@ public class TestResultsReportingService {
 			     trRep.setTestRAppName(rowObj[0].toString());
 			     trRep.setTestRScreenName(rowObj[1].toString());
 			     trRep.setTestedCaseName(rowObj[2].toString());
-			     trRep.setTestFromDate(new Date());
-			     trRep.setTestToDate(new Date());
-			     trRep.setTestedBy(rowObj[4].toString());
-			     trRep.setTestInputs(rowObj[5].toString());
-			     trRep.setTestOutput(rowObj[6].toString());			     
+			     trRep.setTestFromDate(new Date());//6
+			     trRep.setTestToDate(new Date());//7
+			     trRep.setTestedBy(rowObj[3].toString());
+			     trRep.setTestInputs(rowObj[4].toString());
+			     trRep.setTestOutput(rowObj[5].toString() != null && rowObj[5].toString().equalsIgnoreCase("P") ? "Pass":"Fail");			     
 			     testResultReports.add(trRep);
 			}
 		}catch(Exception e) {
