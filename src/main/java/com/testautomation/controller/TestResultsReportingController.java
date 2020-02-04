@@ -7,13 +7,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.TreeSet;
- 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
- 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -23,19 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.gson.JsonObject;
-import com.testautomation.model.Application;
-import com.testautomation.model.Screen;
+import com.testautomation.MainTestNG;
+import com.testautomation.model.Login;
 import com.testautomation.model.TestAutomationModel;
 import com.testautomation.model.TestResultsReporting;
 import com.testautomation.service.LoginService;
@@ -89,6 +82,67 @@ public class TestResultsReportingController {
 	}
 	
 	@RequestMapping(value = "/exportResultToExcel",method = RequestMethod.POST)
+	public void downloadExcelTestFile(
+	        HttpServletRequest request, 
+	        HttpServletResponse response) throws IOException {
+
+		logger.info("Entering @TestResultsReportingController - downloadExcelTestFile::::");
+	    XSSFWorkbook wb = new XSSFWorkbook();
+
+	    wb.createSheet("Sheet1");
+
+	    //response.reset();
+	    //response.setStatus(HttpServletResponse.SC_OK);
+	    response.setContentType("application/vnd.ms-excel");
+	    response.setHeader("Content-Disposition", "attachment; filename=test.xls");
+
+	    OutputStream out = response.getOutputStream();
+	     wb.write(out); 
+	    
+	    logger.info(" @TestResultsReportingController - downloadExcelTestFile::::");
+	    out.flush();
+	    out.close();
+	    wb.close();
+	    logger.info("Exiting @TestResultsReportingController - downloadExcelTestFile::::");
+	    
+	}
+	
+	@RequestMapping(value = "/startTest2", method = RequestMethod.GET)
+	public void presistTestResults() {
+		testReportService.persistTestResults();
+	}
+	
+	@PostMapping(value = "/startTest")
+	public String startTest(ModelMap model,@ModelAttribute("login") Login login) {
+		System.out.println("Started startTest!!!");
+		System.out.println("Selected App: "+login.getSelectedApplicationName());
+		ArrayList<String> applicationList = loginservice.getApplicationNames();
+		login.setSelectedApplicationName("VDS");
+		ArrayList<String> screenNameList = loginservice.getScreenNames(login.getSelectedApplicationName());
+		
+		ArrayList<String> testCaseList = loginservice.getTestCaseNames(login.getSelectedApplicationName());
+		
+		System.out.println("Selected Screens String: "+loginservice.convertListToString(login.getScreenNameList()));
+		
+		login.setApplicationList(applicationList);
+		login.setScreenNameList(screenNameList);
+		login.setTestCaseList(testCaseList);
+		loginservice.getApplicationDetails();
+		model.addAttribute("applicationList", login.getApplicationList());
+		model.addAttribute("screenNameList", login.getScreenNameList());
+		model.addAttribute("testCaseList", login.getTestCaseList());
+		model.addAttribute("selectedApplicationName", login.getSelectedApplicationName());
+		model.addAttribute("selectedScreenName",login.getSelectedScreenName());
+		System.out.println("Started executing Test!!!");
+		MainTestNG testStart = new MainTestNG();
+		testStart.startTest(testReportService,login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
+		//ApplicationService as = new ApplicationService();
+		//as.persistApplication();
+		testReportService.persistTestResults();
+		System.out.println("Completed startTest!!!");
+		return "homePage";
+	}
+	
     public void downloadExcelTestResults(
             HttpServletRequest request, 
             HttpServletResponse response,@RequestBody(required = false) TestResultsReporting trReport) throws IOException {

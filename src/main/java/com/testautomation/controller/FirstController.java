@@ -33,7 +33,7 @@ import com.testautomation.util.EmailUtil;
  *
  */
 
-@Controller
+@RestController
 public class FirstController {
 	
 	@Autowired
@@ -69,6 +69,10 @@ public class FirstController {
 		return testAutomationModel;
 	}
 	
+	@RequestMapping(value = "/getAllScreenDetails", method = RequestMethod.GET)
+	public HashMap<String,ArrayList<String>> getAllScreenDetails() {
+		return loginservice.getAllScreenDetails();
+	}
 	@RequestMapping(value = "/loginSubmit1", method = RequestMethod.POST)
 	public String LoginSubmit1(ModelMap model,@ModelAttribute("login") Login login) {
 		System.out.println("Started LoginSubmit!!!");
@@ -114,7 +118,7 @@ public class FirstController {
 		return "homePage";
 	}
 	
-	@RequestMapping(value = "/Test2", method = RequestMethod.GET)
+	@RequestMapping(value = "/startTest1", method = RequestMethod.GET)
 	public String startTest(ModelMap model,@ModelAttribute("login") Login login) {
 		System.out.println("Started startTest!!!");
 		System.out.println("Selected App: "+login.getSelectedApplicationName());
@@ -137,9 +141,9 @@ public class FirstController {
 		model.addAttribute("selectedScreenName",login.getSelectedScreenName());
 		System.out.println("Started executing Test!!!");
 		MainTestNG testStart = new MainTestNG();
-		//testStart.startTest(login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
-		ApplicationService as = new ApplicationService();
-		as.persistApplication();
+		//testStart.startTest(login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));		
+		//ApplicationService as = new ApplicationService();
+		//as.persistApplication();
 		TestResultsReportingService tsService = new TestResultsReportingService();
 		tsService.persistTestResults();
 		System.out.println("Completed startTest!!!");

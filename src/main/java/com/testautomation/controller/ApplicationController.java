@@ -1,7 +1,12 @@
 package com.testautomation.controller;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +17,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +25,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,6 +34,7 @@ import com.testautomation.model.ApplicationDTO;
 import com.testautomation.model.Screen;
 import com.testautomation.service.ApplicationService;
 import com.testautomation.service.LookupDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Mahesh Kumar P
@@ -39,11 +47,12 @@ public class ApplicationController {
 	@Autowired
 	ApplicationService applicationService;
 	
-	@PostMapping(value = "/saveApplication")
-	public void startTest1() {  //Sample Persist
-		applicationService.persistApplication();
-		
-	}
+	/*
+	 * @PostMapping(value = "/saveApplication") public void startTest1() { //Sample
+	 * Persist applicationService.persistApplication();
+	 * 
+	 * }
+	 */
 	
 	@GetMapping(value = "/applicationNames")
 	public ArrayList<LookupDTO> loadApplicationNames() {
@@ -54,35 +63,23 @@ public class ApplicationController {
     public List<ApplicationDTO> applicationDetails(@PathVariable Integer id) {
 		return this.applicationService.getApplicationDetails(id);
 	}
-
-	/*
-	 * @PutMapping(value = "/update/{id}") public RedirectAttributes
-	 * updateApplicationDatails(@PathVariable int id, @RequestBody Application
-	 * applicationobj, RedirectAttributes redirectAttributes) { boolean isFlag =
-	 * applicationService.saveDataFromApplication(applicationobj); if(isFlag) {
-	 * return redirectAttributes.addFlashAttribute(
-	 * "successMessage","Application details update suceesfully"); } else { return
-	 * redirectAttributes.addFlashAttribute(
-	 * "errorMessage","Application details not done successfully"); } }
-	 */
-	   
-	@PutMapping(value = "/fileUpload")
-	public RedirectAttributes uploadFile(@ModelAttribute Screen screen, RedirectAttributes  redirectAttributes) {
-		boolean isFlag = applicationService.saveDataFromFileUpload(screen.getFile());
+	
+	@PostMapping(value = "/updateApplicationDetails")
+	public String updateApplicationDetails(@RequestParam("file") MultipartFile file,
+			@RequestParam("appName") String appName, @RequestParam("appURL") String appURL, @RequestParam("appBrowser") String appBrowser) {
+		boolean isFlag = applicationService.saveDetails(file, appName, appURL, appBrowser);
 		if(isFlag) {
-			return redirectAttributes.addFlashAttribute("successMessage","FileUpload suceesfully");
+			return "FileUpload suceesfully";
 		} else {
-			return redirectAttributes.addFlashAttribute("errorMessage","FileUpload not done successfully");
+			return "FileUpload not done successfully";
 		}
 	}
 		
-	@GetMapping(value = "/downloadExcel/{id}")
-	public void downloadExcelTestResults(@PathVariable Integer id,
+	@RequestMapping(value = "/downloadExcel/{id}")
+	public void downloadExcel(@PathVariable Integer id,
 	       HttpServletRequest request,
 	       HttpServletResponse response) throws IOException {
-
-		//logger.info("Entering @TestResultsReportingController - downloadExcelTestFile::::");
-	       
+  
 		Application application = new Application();
 		application.setApplicationID(id);
 		List<ApplicationDTO> screenNameReports = applicationService.getApplicationDetails(id);
@@ -104,20 +101,38 @@ public class ApplicationController {
         // Create data cells
         int rowCount = 1;
         if(screenNameReports != null && screenNameReports.size() > 0) {
-      
 	        for (ApplicationDTO resultReport : screenNameReports){
-	        
 	           Row reportRow = sheet.createRow(rowCount++);
-	         //  reportRow.createCell(0).setCellValue(resultReport.getApplicationName());
+	           reportRow.createCell(0).setCellValue(resultReport.getApplicationName());
 	           reportRow.createCell(1).setCellValue(resultReport.getScreenName());
              }
         }
 		   
 		 OutputStream out = response.getOutputStream();
+		 
 		 wb.write(out);
-		   
 		 
 		 out.flush();
 		 out.close();
+	}
+	
+	@RequestMapping(value = "/downloadTemplate")
+	public void downloadTemplate(
+	       HttpServletRequest request,
+	       HttpServletResponse response) throws IOException {
+  
+		File templateFile = new File("C:\\WorkSpaceSpringAutomation\\TestAutomation\\src\\main\\webapp\\WEB-INF\\template" + File.separator + "ApplicationScreenDetails.xlsx");
+		if (templateFile.exists()) {
+		String mimeType = URLConnection.guessContentTypeFromName(templateFile.getName());
+		if (mimeType == null) {
+		mimeType = "application/octet-stream";
+		}
+		response.setContentType(mimeType);
+		response.setHeader("Content-Disposition",
+		String.format("inline; filename=\"" + templateFile.getName() + "\""));
+		response.setContentLength((int) templateFile.length());
+		InputStream inputStream = new BufferedInputStream(new FileInputStream(templateFile));
+		FileCopyUtils.copy(inputStream, response.getOutputStream());
+		}
 	}
 }
