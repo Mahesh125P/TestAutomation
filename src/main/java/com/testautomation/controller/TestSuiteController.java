@@ -52,19 +52,21 @@ public class TestSuiteController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/template", method = RequestMethod.GET)
-	public void downloadTestSuiteTemplate(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		File templateFile = new File(projectfilePath + File.separator + "esip.xlsx");
-		if (templateFile.exists()) {
-			String mimeType = URLConnection.guessContentTypeFromName(templateFile.getName());
+	@RequestMapping(value = "/downloadTestSuite", method = RequestMethod.GET)
+	public void downloadTestSuiteFile(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam("application") String application, @RequestParam("screen") String screen) throws IOException {
+		String filePath = projectfilePath + File.separator + application + File.separator + screen;
+		File testSuiteFile = new File(filePath, "TestSuite_" + application + "_" + screen + ".xlsx");
+		if (testSuiteFile.exists()) {
+			String mimeType = URLConnection.guessContentTypeFromName(testSuiteFile.getName());
 			if (mimeType == null) {
 				mimeType = "application/octet-stream";
 			}
 			response.setContentType(mimeType);
 			response.setHeader("Content-Disposition",
-					String.format("inline; filename=\"" + templateFile.getName() + "\""));
-			response.setContentLength((int) templateFile.length());
-			InputStream inputStream = new BufferedInputStream(new FileInputStream(templateFile));
+					String.format("inline; filename=\"" + testSuiteFile.getName() + "\""));
+			response.setContentLength((int) testSuiteFile.length());
+			InputStream inputStream = new BufferedInputStream(new FileInputStream(testSuiteFile));
 			FileCopyUtils.copy(inputStream, response.getOutputStream());
 		}
 
@@ -89,5 +91,26 @@ public class TestSuiteController {
 		}
 		response.setStatus("success");
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/downloadTestCase", method = RequestMethod.GET)
+	public void downloadTestCaseFile(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam("application") String application, @RequestParam("screen") String screen) throws IOException {
+		String filePath = projectfilePath + File.separator + "src" + File.separator + "main" + File.separator
+				+ "resources" + File.separator + "TestCase" + application + File.separator;
+		File testCaseFile = new File(filePath, "TestCase_" + application + "_" + screen + ".xlsx");
+		if (testCaseFile.exists()) {
+			String mimeType = URLConnection.guessContentTypeFromName(testCaseFile.getName());
+			if (mimeType == null) {
+				mimeType = "application/octet-stream";
+			}
+			response.setContentType(mimeType);
+			response.setHeader("Content-Disposition",
+					String.format("inline; filename=\"" + testCaseFile.getName() + "\""));
+			response.setContentLength((int) testCaseFile.length());
+			InputStream inputStream = new BufferedInputStream(new FileInputStream(testCaseFile));
+			FileCopyUtils.copy(inputStream, response.getOutputStream());
+		}
+
 	}
 }
