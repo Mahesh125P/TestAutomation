@@ -151,9 +151,7 @@ public class TestResultsReportingController {
 	        // Create data cells
 	        int rowCount = 1;
 	        if(testResultReports != null && testResultReports.size() > 0) {
-	            logger.info("Entering @ExportXlsView - resultReports.size()::::"+testResultReports.size());
 	            for (TestResultsReporting resultReport : testResultReports){
-	                logger.info("Entering @ExportXlsView - resultReport::::"+resultReport);
 	                Row reportRow = sheet.createRow(rowCount++);
 	                reportRow.createCell(0).setCellValue(resultReport.getTestRAppName());
 		            reportRow.createCell(1).setCellValue(resultReport.getTestRScreenName());
