@@ -45,12 +45,6 @@ public class TestResultsReporting {
 	private String createdBy;
 
 	@Transient
-	private Date testFromDate;
-	
-	@Transient
-	private Date testToDate;
-	
-	@Transient
 	private String testRAppName;
 	
 	@Transient
@@ -87,22 +81,6 @@ public class TestResultsReporting {
 
 	public void setTestInputs(String testInputs) {
 		this.testInputs = testInputs;
-	}
-
-	public Date getTestFromDate() {
-		return testFromDate;
-	}
-
-	public void setTestFromDate(Date testFromDate) {
-		this.testFromDate = testFromDate;
-	}
-
-	public Date getTestToDate() {
-		return testToDate;
-	}
-
-	public void setTestToDate(Date testToDate) {
-		this.testToDate = testToDate;
 	}
 
 	public Date getTestStartDate() {

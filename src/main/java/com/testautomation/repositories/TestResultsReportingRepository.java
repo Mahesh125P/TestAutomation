@@ -10,12 +10,9 @@ import org.springframework.stereotype.Repository;
 import com.testautomation.model.Application;
 import com.testautomation.model.Screen;
 import com.testautomation.model.TestResultsReporting;
-import com.testautomation.service.LookupDTO;
 
 @Repository
-public interface TestResultsReportingRepository extends JpaRepository<TestResultsReporting, Integer> {
-
-	
+public interface TestResultsReportingRepository extends JpaRepository<TestResultsReporting, Integer> {	
 	
 	
 	@Query("from Application where applicationID = ?1")
