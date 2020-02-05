@@ -11,6 +11,10 @@ import com.testautomation.model.Application;
 import com.testautomation.model.Screen;
 import com.testautomation.model.TestResultsReporting;
 
+/**
+ * @author sowmiya.r
+ *
+ */
 @Repository
 public interface TestResultsReportingRepository extends JpaRepository<TestResultsReporting, Integer> {	
 	

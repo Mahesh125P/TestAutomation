@@ -4,6 +4,10 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+/**
+ * @author sowmiya.r
+ *
+ */
 @Entity
 @Table(name="KTAT01_TEST_RESULT")
 public class TestResultsReporting {

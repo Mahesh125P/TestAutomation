@@ -25,6 +25,10 @@ import com.testautomation.repositories.ApplicationRepository;
 import com.testautomation.repositories.ScreenRepository;
 import com.testautomation.repositories.TestResultsReportingRepository;
 
+/**
+ * @author sowmiya.r
+ *
+ */
 @Service
 public class TestResultsReportingService {
 
