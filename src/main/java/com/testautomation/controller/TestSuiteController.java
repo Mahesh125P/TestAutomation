@@ -30,13 +30,14 @@ public class TestSuiteController {
 
 	final static Logger logger = LoggerFactory.getLogger(TestSuiteController.class);
 
-	final static String projectfilePath = Paths.get("").toAbsolutePath().toString();
+	final static String projectfilePath = Paths.get("").toAbsolutePath().toString() + File.separator + "src"
+			+ File.separator + "main" + File.separator + "resources" + File.separator;
 
 	@RequestMapping(value = "/uploadTestSuite", method = RequestMethod.POST)
 	public ResponseEntity<ResponseDTO> uploadTestSuite(@RequestParam("file") MultipartFile file,
 			@RequestParam("application") String application, @RequestParam("screen") String screen) {
 		logger.info("Entering @TestSuiteController - ::::");
-		String filePath = projectfilePath + File.separator + application + File.separator + screen;
+		String filePath = projectfilePath + File.separator + application + File.separator;
 		ResponseDTO response = new ResponseDTO();
 		try {
 			File saveFile = new File(filePath, "TestSuite_" + application + "_" + screen + ".xlsx");
@@ -55,7 +56,7 @@ public class TestSuiteController {
 	@RequestMapping(value = "/downloadTestSuite", method = RequestMethod.GET)
 	public void downloadTestSuiteFile(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam("application") String application, @RequestParam("screen") String screen) throws IOException {
-		String filePath = projectfilePath + File.separator + application + File.separator + screen;
+		String filePath = projectfilePath + "TestSuite" + File.separator + application + File.separator;
 		File testSuiteFile = new File(filePath, "TestSuite_" + application + "_" + screen + ".xlsx");
 		if (testSuiteFile.exists()) {
 			String mimeType = URLConnection.guessContentTypeFromName(testSuiteFile.getName());
@@ -76,8 +77,7 @@ public class TestSuiteController {
 	public ResponseEntity<ResponseDTO> uploadTestCase(@RequestParam("file") MultipartFile file,
 			@RequestParam("application") String application, @RequestParam("screen") String screen) {
 		logger.info("Entering @TestSuiteController - ::::");
-		String filePath = projectfilePath + File.separator + "src" + File.separator + "main" + File.separator
-				+ "resources" + File.separator + "TestCase" + application + File.separator;
+		String filePath = projectfilePath + "TestCase" + File.separator + application + File.separator;
 		ResponseDTO response = new ResponseDTO();
 		try {
 			File saveFile = new File(filePath, "TestCase_" + application + "_" + screen + ".xlsx");
@@ -96,8 +96,7 @@ public class TestSuiteController {
 	@RequestMapping(value = "/downloadTestCase", method = RequestMethod.GET)
 	public void downloadTestCaseFile(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam("application") String application, @RequestParam("screen") String screen) throws IOException {
-		String filePath = projectfilePath + File.separator + "src" + File.separator + "main" + File.separator
-				+ "resources" + File.separator + "TestCase" + application + File.separator;
+		String filePath = projectfilePath + "TestCase" + File.separator + application + File.separator;
 		File testCaseFile = new File(filePath, "TestCase_" + application + "_" + screen + ".xlsx");
 		if (testCaseFile.exists()) {
 			String mimeType = URLConnection.guessContentTypeFromName(testCaseFile.getName());
