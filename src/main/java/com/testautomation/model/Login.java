@@ -8,11 +8,11 @@ import javax.persistence.*;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="KVDSM02_USERMASTER")
+@Table(name="KTAM01_USER")
 public class Login {
 	
 	@Id
-	@Column(name="VDSM02_USERID_D")
+	@Column(name="TAM01_USER_ID")
 	private String userName;
 
 	@Transient
@@ -20,7 +20,7 @@ public class Login {
 	
 	@Transient
 	private ArrayList<String> applicationList;
-	
+
 	@Transient
 	private ArrayList<String> screenNameList;
 	
@@ -45,8 +45,8 @@ public class Login {
 		return password;
 	}
 
-	public void setPassword(String password) {
-		password = password;
+	public void setPassword(String Password) {
+		password = Password;
 	}
 	
 
