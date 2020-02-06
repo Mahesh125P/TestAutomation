@@ -37,7 +37,7 @@ public class TestSuiteController {
 	public ResponseEntity<ResponseDTO> uploadTestSuite(@RequestParam("file") MultipartFile file,
 			@RequestParam("application") String application, @RequestParam("screen") String screen) {
 		logger.info("Entering @TestSuiteController - ::::");
-		String filePath = projectfilePath + File.separator + application + File.separator;
+		String filePath = projectfilePath + "TestSuite"+File.separator + application + File.separator;
 		ResponseDTO response = new ResponseDTO();
 		try {
 			File saveFile = new File(filePath, "TestSuite_" + application + "_" + screen + ".xlsx");
