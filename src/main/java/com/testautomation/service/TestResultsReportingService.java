@@ -51,7 +51,7 @@ public class TestResultsReportingService {
 		
 		logger.info("Entering @TestResultsReportingService - getAllTestReports::::");
 		List<TestResultsReporting> testResults = null;
-		SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+		SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 		try {
 			StringBuffer searchQuery = new StringBuffer(" SELECT APP.TAM02_APPLICATION_NAME,   SCR.TAM03_SCREEN_NAME,   TR.TAT01_TEST_CASE_NAME,   TR.TAT01_TESTED_BY,   TR.TAT01_TEST_INPUT,  "
 					+ " TR.TAT01_TEST_OUTPUT,   DATE_FORMAT(TR.TAT01_TEST_START_DT, '%d-%m-%Y %H:%i:%s') AS TAT01_TEST_START_DT,  DATE_FORMAT(TR.TAT01_TEST_END_DT, '%d-%m-%Y %H:%i:%s') AS TAT01_TEST_END_DT "
@@ -66,8 +66,8 @@ public class TestResultsReportingService {
 			}
 			
 			if (trReport.getTestStartDate() != null && trReport.getTestEndDate() != null) {
-				searchQuery.append(" AND TR.TAT01_TEST_START_DT BETWEEN STR_TO_DATE('" + (format1.format(trReport.getTestStartDate().getTime())) + "', '%d-%m-%Y %H:%i:%s')  "
-						+ " AND STR_TO_DATE('" + (format1.format(trReport.getTestEndDate().getTime())) + "', '%d-%m-%Y %H:%i:%s') ");
+				searchQuery.append(" AND TR.TAT01_TEST_START_DT BETWEEN STR_TO_DATE('" + (format1.format(trReport.getTestStartDate().getTime())) + "', '%d-%m-%Y %H:%i')  "
+						+ " AND STR_TO_DATE('" + (format1.format(trReport.getTestEndDate().getTime())) + "', '%d-%m-%Y %H:%i') ");
 			}
 			
 			if (trReport.getTestedBy() != null && trReport.getTestedBy().trim().length() > 0) {
