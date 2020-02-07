@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -61,8 +62,13 @@ public class TestResultsReportingService {
 				searchQuery.append(" AND TR.TAM02_APPLICATION_ID IN(" + trReport.getApplicationID() + ")");
 			}
 	
-			if (trReport.getScreenID() != null && trReport.getScreenID() != 0) {
-				searchQuery.append(" AND TR.TAM03_SCREEN_ID IN(" + trReport.getScreenID() + ")");
+			/*
+			 * if (trReport.getScreenID() != null && trReport.getScreenID() != 0) {
+			 * searchQuery.append(" AND TR.TAM03_SCREEN_ID IN(" + trReport.getScreenID() +
+			 * ")"); }
+			 */
+			if (trReport.getScreenIDList() != null && trReport.getScreenIDList().size() > 0) {
+				searchQuery.append(" AND TR.TAM03_SCREEN_ID IN(" +getIdFromListMap(trReport.getScreenIDList())+ ")");
 			}
 			
 			if (trReport.getTestStartDate() != null && trReport.getTestEndDate() != null) {
@@ -70,10 +76,16 @@ public class TestResultsReportingService {
 						+ " AND STR_TO_DATE('" + (format1.format(trReport.getTestEndDate().getTime())) + "', '%d-%m-%Y %H:%i') ");
 			}
 			
-			if (trReport.getTestedBy() != null && trReport.getTestedBy().trim().length() > 0) {
-				searchQuery.append(" AND TR.TAT01_TESTED_BY IN(" + (convertListToString(Arrays.asList(trReport.getTestedBy().split(","))))+ ")");
+			if (trReport.getTestedByUser() != null && trReport.getTestedByUser().size() > 0) {
+				searchQuery.append(" AND TR.TAT01_TESTED_BY IN(" + (convertListToString(trReport.getTestedByUser()))+ ")");
 			}
-	
+			/*
+			 * if (trReport.getTestedBy() != null && trReport.getTestedBy().trim().length()
+			 * > 0) { searchQuery.append(" AND TR.TAT01_TESTED_BY IN(" +
+			 * (convertListToString(Arrays.asList(trReport.getTestedBy().split(","))))+
+			 * ")"); }
+			 */
+				
 			if (trReport.getTestOutput() != null && trReport.getTestOutput().trim().length() > 0 && !trReport.getTestOutput().trim().equalsIgnoreCase("B")) {
 				searchQuery.append(" AND TR.TAT01_TEST_OUTPUT IN('"+ trReport.getTestOutput()+ "')");
 			}
@@ -220,6 +232,25 @@ public class TestResultsReportingService {
 			e.printStackTrace();
 			System.out.println("Error");
 		}
+	}
+	
+	public StringBuffer getIdFromListMap(ArrayList<HashMap<String,String>> maplist){
+		
+		StringBuffer idBuf = new StringBuffer() ;
+        StringBuffer bufFinal = new StringBuffer();
+		ArrayList<String> id = new ArrayList<String>();
+		TreeSet<String> idSet = new TreeSet<String>();
+		for(HashMap<String, String> maps : maplist){
+        	//System.out.println("maps:::"+maps.get("id"));
+        	idSet.add(maps.get("id"));
+        }
+		id.addAll(idSet);
+		for(String id_s:id) {
+			idBuf.append(id_s).append(",");
+		}
+		bufFinal.append(idBuf.subSequence(0, idBuf.length()-1));idBuf.setLength(0);
+		System.out.println(bufFinal);
+		return bufFinal;
 	}
 	
 	

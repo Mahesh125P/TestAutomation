@@ -201,9 +201,10 @@ public class TestResultsReportingController {
     	TestAutomationModel tAModel = null;
 		try {
 	    	ArrayList<Integer> appsList = testReportService.getAllAppsList();		
+
 			ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
-			ArrayList<LookupDTO> testScreensList= testReportService.getAllScreensByApp(appsList.get(0));
-	        ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(appsList.get(0));       
+			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(appsList.get(0)); 
+	    	ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(appsList.get(0));       
 	        
 	        tAModel = new TestAutomationModel();
 	        tAModel.testUsersList = allTestedUsers;
@@ -223,9 +224,10 @@ public class TestResultsReportingController {
     	logger.info("Entering @TestResultsReportingController - reloadTestReports::::");
     	TestAutomationModel tAModel = null;
 		try {
-	    	ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
-			ArrayList<LookupDTO> testScreensList= testReportService.getAllScreensByApp(applicationId);
-	        ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(applicationId);       
+
+			ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
+			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(applicationId);
+			ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(applicationId);       
 	        
 	        tAModel = new TestAutomationModel();
 	        tAModel.testUsersList = allTestedUsers;
