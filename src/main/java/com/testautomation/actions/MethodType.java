@@ -1,4 +1,4 @@
-package com.testautomation.actions;
+package main.java.actions;
 /**
  * The MethodType class is used to identify the method specified in the testcase 
  * excel and to perform the same action
@@ -21,15 +21,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import com.testautomation.MainTestNG;
-import com.testautomation.models.MethodParameters;
-import com.testautomation.util.GlobalVariables;
-import com.testautomation.util.ReadElementLocators;
-import com.testautomation.util.WebDriverClass;
+import main.java.MainTestNG;
+import main.java.model.MethodParameters;
+import main.java.util.GlobalVariables;
+import main.java.util.ReadElementLocators;
+import main.java.util.WebDriverClass;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -38,6 +39,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+
 
 public class MethodType extends GlobalVariables{
 
@@ -125,8 +127,8 @@ public class MethodType extends GlobalVariables{
 			String actionType, String data, MethodParameters model) throws Exception {
 		Class cl = null;
 		try {
-			cl = (Class) Class.forName("com.testautomation.actions.MethodType");
-			com.testautomation.actions.MethodType clName = (MethodType) cl.newInstance();
+			cl = (Class) Class.forName("main.java.actions.MethodType");
+			main.java.actions.MethodType clName = (MethodType) cl.newInstance();
 			Method[] methods = cl.getMethods();
 			
 			Method methodName = findMethods(actionType, methods);
@@ -142,7 +144,7 @@ public class MethodType extends GlobalVariables{
 			throw (e);
 		} catch (Exception e) {
 
-			com.testautomation.MainTestNG.LOGGER
+			main.java.MainTestNG.LOGGER
 					.info("exception occured in finding methods, method name is incorrect"
 							+ e);
 			e.printStackTrace();
@@ -231,14 +233,37 @@ public class MethodType extends GlobalVariables{
 
 	/**
 	 *Click on button/checkbox/radio button
+	 * @throws AWTException 
+	 * @throws InterruptedException 
 	 */
-	public void click(MethodParameters model) {
+	public void click(MethodParameters model) throws AWTException, InterruptedException {
+		
+		wait1(500);
+		//WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
+		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
+		executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())));
+		
+		//WebDriverClass.getDriver().manage().window().maximize();	
+		executor.executeScript("window.scrollBy(0,600)");
+		
+		/*wait.until(
+				ExpectedConditions.elementToBeClickable(model.getElement().get(
+						0))).click();*/
+		//wait1(500);
+		MainTestNG.LOGGER.info("click method started"
+				+ model.getObjectLocators());
+		MainTestNG.LOGGER.info("click method completed");
+	}
+	
+	public void popupClickChrome(MethodParameters model) throws AWTException, InterruptedException {
+		
 		wait1(500);
 		WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
+		
 		wait.until(
 				ExpectedConditions.elementToBeClickable(model.getElement().get(
 						0))).click();
-		wait1(500);
+		//wait1(500);
 		MainTestNG.LOGGER.info("click method started"
 				+ model.getObjectLocators());
 		MainTestNG.LOGGER.info("click method completed");
@@ -250,7 +275,8 @@ public class MethodType extends GlobalVariables{
 	public void submit(MethodParameters model) {
 		MainTestNG.LOGGER.info("submit method started"
 				+ model.getObjectLocators());
-		model.getElement().get(0).submit();
+		//model.getElement().get(0).submit();
+		model.getElement().get(0).click();
 		MainTestNG.LOGGER.info("submit method end");
 	}
 
@@ -298,7 +324,21 @@ public class MethodType extends GlobalVariables{
 		alert.accept();
 		MainTestNG.LOGGER.info("completed alertAccept()");
 	}
+	
+	public void clickWithAlertAccept(MethodParameters model) {
 
+		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
+		executor.executeScript("window.confirm = function(){ return true;}");
+		executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())));
+	}
+	
+	public void clickWithAlertDismiss(MethodParameters model) {
+
+		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
+		executor.executeScript("window.confirm = function(){return false;}");
+		executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())));
+	}
+	
 	/**
 	 *Alert dismiss meaning click on Cancel button
 	 */
@@ -535,7 +575,7 @@ public class MethodType extends GlobalVariables{
 	public void switchToChildWindow(MethodParameters model) throws Exception {
 
 	//	model.getElement().get(0).click();
-		winHandleBefore = WebDriverClass.getInstance().getWindowHandle();
+		winHandleBefore =  WebDriverClass.getInstance().getWindowHandle();
 		String parent = WebDriverClass.getInstance().getWindowHandle();
 		Set<String> windows = WebDriverClass.getInstance().getWindowHandles();
 
@@ -570,8 +610,10 @@ public class MethodType extends GlobalVariables{
 
 		MainTestNG.LOGGER.info("scrollElementIntoView started");
 		((JavascriptExecutor) WebDriverClass.getDriver())
-				.executeScript("arguments[0].scrollIntoView(true);", model
-						.getElement().get(0));
+				.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())));
+		
+		((JavascriptExecutor) WebDriverClass.getDriver()).executeScript("window.scrollBy(0,-100)");
+		
 		wait1(1000);
 
 	}
@@ -686,10 +728,22 @@ public class MethodType extends GlobalVariables{
 
 		action.moveToElement(model.getElement().get(0)).perform();
 		WebElement subElement = WebDriverClass.getInstance().findElement(
-				By.xpath(model.getData()));
+				By.linkText(model.getData()));
 		action.moveToElement(subElement);
 		action.click().build().perform();
+	}
+	
+	/**
+	 * @param model
+	 * Lets say there is pagination, on mentioned page to click to move forward
+	 */
+	public void clickPaginationPage(MethodParameters model) {
+		Actions action = new Actions(WebDriverClass.getInstance());
 
+		WebElement page = WebDriverClass.getInstance().findElement(
+				By.linkText(model.getData()));
+		action.moveToElement(page);
+		action.click().build().perform();
 	}
 
 	/**
@@ -719,8 +773,11 @@ public class MethodType extends GlobalVariables{
 	 * @throws AWTException 
 	 */
 	public void fileUploadinIE(MethodParameters model) throws AWTException {
-		model.getElement().get(0).click();
-		StringSelection ss = new StringSelection("C:\\Workspace_TestAutomation\\TestAutomation\\src\\main\\resources\\TestSuite.xlsx");
+		//model.getElement().get(0).click();
+		
+		WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())).sendKeys("C:\\Users\\jeyaprakash.s\\Downloads\\CompoundTransfer_XPENG2.xls");
+		
+		/*StringSelection ss = new StringSelection(model.getData());
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(ss, null);
 		Robot r;
 		try {
@@ -737,7 +794,7 @@ public class MethodType extends GlobalVariables{
 			MainTestNG.LOGGER.severe(e.getMessage());
 			throw(e);
 			
-		}
+		}*/
 
 	}
 	
@@ -767,6 +824,8 @@ public class MethodType extends GlobalVariables{
 		try
 		{
 			model.getElement().get(0).click();
+			//WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators()));
+			
 			Thread.sleep(1000);
 			
 			// Get Robot Object.
@@ -862,7 +921,8 @@ public class MethodType extends GlobalVariables{
 	 * Verify the alert text
 	 */
 	public void verifyalertText(MethodParameters model) {
-		model.getElement().get(0).click();
+		WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
+		wait.until(ExpectedConditions.alertIsPresent());
 		wait1(1000);
 		Alert alert = WebDriverClass.getInstance().switchTo().alert();
 		wait1(1000);
@@ -870,7 +930,8 @@ public class MethodType extends GlobalVariables{
 			alertText = null;
 		}
 		alertText = alert.getText();
-		Assert.assertEquals(alertText.toString(), model.getData());
+		Assert.assertTrue(alertText.toString().contains(model.getData()));
+		//Assert.assertEquals(alertText.toString(), model.getData());
 		alert.accept();
 	}
 
@@ -926,14 +987,49 @@ public class MethodType extends GlobalVariables{
 	}
 
 	/**
-	 *Verifies the Text present in the element
+	 *Verifies the Partial Text present in the element
 	 * @throws Exception 
 	 */
 	public void verifyText(MethodParameters model) throws Exception {
 		try{
 			MainTestNG.LOGGER.info("model.getElement().get(0).getText()**********"+ model.getElement().get(0).getText());
 			MainTestNG.LOGGER.info("model.getData()**********" + model.getData());
-			Assert.assertEquals(model.getData(), model.getElement().get(0).getText().toString());
+			//Assert.assertEquals(model.getData(), model.getElement().get(0).getText().toString());
+			Assert.assertTrue(model.getElement().get(0).getText().toString().contains(model.getData()));
+			MainTestNG.LOGGER.info("verify text completed");
+	   	}catch (Exception e) {
+	   		MainTestNG.LOGGER.info("Exception..." + e.getMessage());
+			throw(e);
+		}
+	}
+	
+	/**
+	 *Verifies the Start Text present in the element
+	 * @throws Exception 
+	 */
+	public void verifyStartText(MethodParameters model) throws Exception {
+		try{
+			MainTestNG.LOGGER.info("model.getElement().get(0).getText()**********"+ model.getElement().get(0).getText());
+			MainTestNG.LOGGER.info("model.getData()**********" + model.getData());
+			//Assert.assertEquals(model.getData(), model.getElement().get(0).getText().toString());
+			Assert.assertTrue(model.getElement().get(0).getText().toString().startsWith(model.getData()));
+			MainTestNG.LOGGER.info("verify text completed");
+	   	}catch (Exception e) {
+	   		MainTestNG.LOGGER.info("Exception..." + e.getMessage());
+			throw(e);
+		}
+	}
+	
+	/**
+	 *Verifies the End Text present in the element
+	 * @throws Exception 
+	 */
+	public void verifyEndText(MethodParameters model) throws Exception {
+		try{
+			MainTestNG.LOGGER.info("model.getElement().get(0).getText()**********"+ model.getElement().get(0).getText());
+			MainTestNG.LOGGER.info("model.getData()**********" + model.getData());
+			//Assert.assertEquals(model.getData(), model.getElement().get(0).getText().toString());
+			Assert.assertTrue(model.getElement().get(0).getText().toString().endsWith(model.getData()));
 			MainTestNG.LOGGER.info("verify text completed");
 	   	}catch (Exception e) {
 	   		MainTestNG.LOGGER.info("Exception..." + e.getMessage());
@@ -995,12 +1091,22 @@ public class MethodType extends GlobalVariables{
 			List<WebElement> Columnsrow = rowstable.get(row).findElements(
 					By.tagName("td"));
 
-			for (WebElement tblCol: Columnsrow) {
+			int columnscount = Columnsrow.size();
 
-				if(tblCol.getText().equals(model.getData()))
+			for (int column = 0; column < columnscount; column++) {
+
+				String celtext = Columnsrow.get(column).getText();
+				celtext.getClass();
+				if(Columnsrow.get(column).getText().equals(model.getData()))
 				{
-					WebDriverClass.getDriver().findElement(
-							By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/a")).click();
+					/*List<WebElement> actions = Columnsrow.get(column).findElements(By.tagName("td"));
+					actions.get(0).click();*/
+					JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
+					executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(
+							By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/input[@type='checkbox']")));
+					/*WebDriverClass.getDriver().findElement(
+							By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/input[@type='checkbox']")).click();
+				*/
 				}
 			}
 		}
@@ -1011,8 +1117,11 @@ public class MethodType extends GlobalVariables{
 	 * Click and open URL link based on primary input value
 	 */
 	public void dynamicTableLink(MethodParameters model) {
-		WebDriverClass.getDriver().findElement(
-				By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/a")).click();
+		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
+		executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(
+				By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/a")));
+	/*	WebDriverClass.getDriver().findElement(
+				By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/a")).click();*/
 	}
 	
 	/**
@@ -1021,10 +1130,14 @@ public class MethodType extends GlobalVariables{
 	 * Based on Static input value URL name
 	 */
 	public void dynamicTableEdit(MethodParameters model) {
-		wait1(2000);
-		WebDriverClass.getDriver().findElement(
-				By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/a[contains(text(), '"+ model.getHeaderValue() + "')]")).click();
 		wait1(1000);
+		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
+		executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(
+				By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/a[contains(text(), '"+ model.getHeaderValue() + "')]")));
+		/*WebDriverClass.getDriver().findElement(
+				By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/a[contains(text(), '"+ model.getHeaderValue() + "')]")).click();
+		*/
+		wait1(500);
 	}
 	
 	/**
@@ -1032,8 +1145,12 @@ public class MethodType extends GlobalVariables{
 	 * Click Check box row based on primary input value
 	 */
 	public void dynamicTableCheck(MethodParameters model) {
-		WebDriverClass.getDriver().findElement(
-				By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/input[@type='checkbox']")).click();
+		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
+		executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(
+				By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/input[@type='checkbox']")));
+	
+	/*	WebDriverClass.getDriver().findElement(
+				By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/input[@type='checkbox']")).click();*/
 	}
 	
 	/**
@@ -1047,8 +1164,12 @@ public class MethodType extends GlobalVariables{
 		for(int i=0;i<rowsHeader.size();i++) {
 			if (rowsHeader.get(i).getText().equals(model.getHeaderValue())) {
 				int index = i + 1;
-				WebDriverClass.getDriver().findElement(
-						By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td[" +index+ "]/a")).click();
+				JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
+				executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(
+						By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td[" +index+ "]/a")));
+				
+				/*WebDriverClass.getDriver().findElement(
+						By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td[" +index+ "]/a")).click();*/
 			}
 		}
 	}
@@ -1190,7 +1311,7 @@ public class MethodType extends GlobalVariables{
 	 */
 	public void singleMouseHover(MethodParameters model) {
 		Actions action = new Actions(WebDriverClass.getDriver());
-		action.moveToElement((WebElement) model.getElement()).perform();
+		action.moveToElement(model.getElement().get(0)).perform();
 
 	}
 
