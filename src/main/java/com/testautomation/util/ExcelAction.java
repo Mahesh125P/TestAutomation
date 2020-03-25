@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -167,45 +168,46 @@ public class ExcelAction {
 					String header = temp.getHeaderValue().get(i);
 
 					// Data Sheet logic
-					if (!(temp.getTestData().get(i).isEmpty())) {
-						if (temp.getTestData().get(i).contains(".")) {
-							
-							String data = temp.getTestData().get(i);
-							String[] testDataArray = data.split("\\.");
-							//String header = temp.getHeader().get(i);
-							//String[] headerArray = header.split("\\.");
-							//List headerValue = getColumnValue(headerArray);
-							List columnValue = getColumnValue(testDataArray);
-							Reporter.log("column value======" + columnValue.get(execution).toString());
-							inputValue.append("~").append(testDataArray[1]).append(" : ").append(columnValue.get(execution).toString());
-							//Reporter.log("column value size==========="+ columnValue.size());
-							try {
-								//Reporter.log("testCaseExecution======================"+ noOfExecution);
-								List<String> list=readLocators(methodType,objectLocators);
-								methodType=list.get(0);
-								objectLocators=list.get(1);
-								MainTestNG.LOGGER.info("methodType="+methodType);
-								MainTestNG.LOGGER.info("objectLocators as name="+objectLocators);
-								methodtype.methodExecutor(methodType,objectLocators, actionType, columnValue.get(execution).toString(), header);
-								/*System.out.println("Statu fail.....");
-								statusInfo.put("Status", "Pass");
-								statusInfo.put("ActionType", actionName);
-								statusInfo.put("objectLocators", objectLocators);
-								testCaseStatus.put(temp.getTestCaseName(), statusInfo);*/
-							} catch (Exception e) {
-								Reporter.log("Process failed for this test record : " + columnValue.get(execution).toString());
-								tempResultMap.put("FailedTestData", "methodType: "+methodTypeTemp+", actionType: "+actionType + ", InputValue: "+ columnValue.get(execution).toString());
-								tempResultMap.put("TestOutput","F");
-								tempResultMap.put("TestEndDate", df.format(calobj.getTime()));
-								tempResultMap.put("InputValue",inputValue.toString());
-								testResultMap.put(tcName, tempResultMap);
-								System.out.println("In Exception....ExcelAction.testSuiteIterate.");
-								fail = "fail";
-								//Assert.fail();
-								break;
+					if (temp.getTestData().get(i) != null) {
+						if (!(temp.getTestData().get(i).isEmpty())) {
+							if (temp.getTestData().get(i).contains(".")) {
+								
+								String data = temp.getTestData().get(i);
+								String[] testDataArray = data.split("\\.");
+								//String header = temp.getHeader().get(i);
+								//String[] headerArray = header.split("\\.");
+								//List headerValue = getColumnValue(headerArray);
+								List columnValue = getColumnValue(testDataArray);
+								Reporter.log("column value======" + columnValue.get(execution).toString());
+								inputValue.append("~").append(testDataArray[1]).append(" : ").append(columnValue.get(execution).toString());
+								//Reporter.log("column value size==========="+ columnValue.size());
+								try {
+									//Reporter.log("testCaseExecution======================"+ noOfExecution);
+									List<String> list=readLocators(methodType,objectLocators);
+									methodType=list.get(0);
+									objectLocators=list.get(1);
+									MainTestNG.LOGGER.info("methodType="+methodType);
+									MainTestNG.LOGGER.info("objectLocators as name="+objectLocators);
+									methodtype.methodExecutor(methodType,objectLocators, actionType, columnValue.get(execution).toString(), header);
+									/*System.out.println("Statu fail.....");
+									statusInfo.put("Status", "Pass");
+									statusInfo.put("ActionType", actionName);
+									statusInfo.put("objectLocators", objectLocators);
+									testCaseStatus.put(temp.getTestCaseName(), statusInfo);*/
+								} catch (Exception e) {
+									Reporter.log("Process failed for this test record : " + columnValue.get(execution).toString());
+									tempResultMap.put("FailedTestData", "methodType: "+methodTypeTemp+", actionType: "+actionType + ", InputValue: "+ columnValue.get(execution).toString());
+									tempResultMap.put("TestOutput","F");
+									tempResultMap.put("TestEndDate", df.format(calobj.getTime()));
+									tempResultMap.put("InputValue",inputValue.toString());
+									testResultMap.put(tcName, tempResultMap);
+									System.out.println("In Exception....ExcelAction.testSuiteIterate.");
+									fail = "fail";
+									//Assert.fail();
+									break;
+								}
 							}
-						}
-
+					    }
 						if (execution == noOfExecution) {
 							break;
 						}
@@ -269,7 +271,12 @@ public class ExcelAction {
 
 		Map<String, Object> dataSheet = (HashMap<String, Object>) testDataSheet
 				.get(testDataArray[0]);
-		List coulmnValue = (ArrayList) dataSheet.get(testDataArray[1]);	
+		String value = null;
+		if(testDataArray.length > 2)
+			value =  dataSheet.get(testDataArray[1]).toString().replace("[", "").replace("]", "").concat(",").concat(dataSheet.get(testDataArray[3]).toString().replace("[", "").replace("]", ""));
+		else
+			value =  dataSheet.get(testDataArray[1]).toString().replace("[", "").replace("]", "");
+		List coulmnValue =  Arrays.asList(value);
 		return coulmnValue;
 	}
 
@@ -346,41 +353,42 @@ public class ExcelAction {
 		try {
 			for (int row = 1; row <= ExcelLibrary.getRows(testCaseSheetName,
 					testCasePath); row++) {
-
-				if (!(ExcelLibrary.readCell(row, 0, testCaseSheetName,
-						testCasePath).isEmpty())) {
-
-					tc = new TestCase();
-					tc.setTestCaseName(ExcelLibrary.readCell(row, 0,testCaseSheetName, testCasePath));
-					tc.setTestStepId(ExcelLibrary.readCell(row, 1,testCaseSheetName, testCasePath));
-					tc.setMethodType(ExcelLibrary.readCell(row, 3,testCaseSheetName, testCasePath));
-					tc.setObjectNameFromPropertiesFile(ExcelLibrary.readCell(row, 4, testCaseSheetName, testCasePath));
-					tc.setActionType(ExcelLibrary.readCell(row, 5,testCaseSheetName, testCasePath));
-					tc.setOnFail(ExcelLibrary.readCell(row, 6,testCaseSheetName, testCasePath));
-					tc.setTestData(ExcelLibrary.readCell(row, 7,testCaseSheetName, testCasePath));
-					tc.setHeaderValue(ExcelLibrary.readCell(row, 8,testCaseSheetName, testCasePath));
-					testCaseSheet.put(ExcelLibrary.readCell(row, 0,testCaseSheetName, testCasePath), tc);
-				} else {
-
-					tc.setTestStepId(ExcelLibrary.readCell(row, 1,
-							testCaseSheetName, testCasePath));
-					tc.setMethodType(ExcelLibrary.readCell(row, 3,
-							testCaseSheetName, testCasePath));
-					tc.setObjectNameFromPropertiesFile(ExcelLibrary.readCell(
-							row, 4, testCaseSheetName, testCasePath));
-					tc.setActionType(ExcelLibrary.readCell(row, 5,
-							testCaseSheetName, testCasePath));
-					tc.setOnFail(ExcelLibrary.readCell(row, 6,
-							testCaseSheetName, testCasePath));
-					tc.setTestData(ExcelLibrary.readCell(row, 7,
-							testCaseSheetName, testCasePath));
-					tc.setHeaderValue(ExcelLibrary.readCell(row, 8,
-							testCaseSheetName, testCasePath));
-					System.out.println("TestCase Details..else..."+row);
+				if(ExcelLibrary.readCell(row, 0, testCaseSheetName,
+						testCasePath) != null) {
+					if (!(ExcelLibrary.readCell(row, 0, testCaseSheetName,
+							testCasePath).isEmpty())) {
+	
+						tc = new TestCase();
+						tc.setTestCaseName(ExcelLibrary.readCell(row, 0,testCaseSheetName, testCasePath));
+						tc.setTestStepId(ExcelLibrary.readCell(row, 1,testCaseSheetName, testCasePath));
+						tc.setMethodType(ExcelLibrary.readCell(row, 3,testCaseSheetName, testCasePath));
+						tc.setObjectNameFromPropertiesFile(ExcelLibrary.readCell(row, 4, testCaseSheetName, testCasePath));
+						tc.setActionType(ExcelLibrary.readCell(row, 5,testCaseSheetName, testCasePath));
+						tc.setOnFail(ExcelLibrary.readCell(row, 6,testCaseSheetName, testCasePath));
+						tc.setTestData(ExcelLibrary.readCell(row, 7,testCaseSheetName, testCasePath));
+						tc.setHeaderValue(ExcelLibrary.readCell(row, 8,testCaseSheetName, testCasePath));
+						testCaseSheet.put(ExcelLibrary.readCell(row, 0,testCaseSheetName, testCasePath), tc);
+					} else {
+	
+						tc.setTestStepId(ExcelLibrary.readCell(row, 1,
+								testCaseSheetName, testCasePath));
+						tc.setMethodType(ExcelLibrary.readCell(row, 3,
+								testCaseSheetName, testCasePath));
+						tc.setObjectNameFromPropertiesFile(ExcelLibrary.readCell(
+								row, 4, testCaseSheetName, testCasePath));
+						tc.setActionType(ExcelLibrary.readCell(row, 5,
+								testCaseSheetName, testCasePath));
+						tc.setOnFail(ExcelLibrary.readCell(row, 6,
+								testCaseSheetName, testCasePath));
+						tc.setTestData(ExcelLibrary.readCell(row, 7,
+								testCaseSheetName, testCasePath));
+						tc.setHeaderValue(ExcelLibrary.readCell(row, 8,
+								testCaseSheetName, testCasePath));
+						System.out.println("TestCase Details..else..."+row);
+					}
 				}
-			}
 			System.out.println("TestCase Details..else..."+testCaseSheet.size());
-			
+			}
 		} catch (InvalidFormatException e) {
 
 			MainTestNG.LOGGER.info(e.getMessage());

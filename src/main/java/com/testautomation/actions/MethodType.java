@@ -1,4 +1,4 @@
-package main.java.actions;
+package com.testautomation.actions;
 /**
  * The MethodType class is used to identify the method specified in the testcase 
  * excel and to perform the same action
@@ -21,11 +21,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import main.java.MainTestNG;
-import main.java.model.MethodParameters;
-import main.java.util.GlobalVariables;
-import main.java.util.ReadElementLocators;
-import main.java.util.WebDriverClass;
+import com.testautomation.MainTestNG;
+import com.testautomation.models.MethodParameters;
+import com.testautomation.util.GlobalVariables;
+import com.testautomation.util.ReadElementLocators;
+import com.testautomation.util.WebDriverClass;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -128,7 +128,7 @@ public class MethodType extends GlobalVariables{
 		Class cl = null;
 		try {
 			cl = (Class) Class.forName("main.java.actions.MethodType");
-			main.java.actions.MethodType clName = (MethodType) cl.newInstance();
+			com.testautomation.actions.MethodType clName = (MethodType) cl.newInstance();
 			Method[] methods = cl.getMethods();
 			
 			Method methodName = findMethods(actionType, methods);
@@ -144,7 +144,7 @@ public class MethodType extends GlobalVariables{
 			throw (e);
 		} catch (Exception e) {
 
-			main.java.MainTestNG.LOGGER
+			com.testautomation.MainTestNG.LOGGER
 					.info("exception occured in finding methods, method name is incorrect"
 							+ e);
 			e.printStackTrace();
