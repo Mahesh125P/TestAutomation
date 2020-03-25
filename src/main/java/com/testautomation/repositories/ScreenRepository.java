@@ -18,4 +18,7 @@ public interface ScreenRepository extends JpaRepository<Screen, Integer>{
 	@Query("select new com.testautomation.service.LookupDTO(screenID,screenName) from Screen where application.applicationID = :applicationID")
 	public ArrayList<LookupDTO> getAllScreensByApp(@Param("applicationID") Integer applicationID );
 	
+	@Query("select screenID from Screen where application.applicationID = :applicationID order by screenName")
+	public ArrayList<Integer> getAllScreensByAppList(@Param("applicationID") Integer applicationID );
+	
 }

@@ -10,12 +10,13 @@ import org.springframework.stereotype.Repository;
 import com.testautomation.model.Application;
 import com.testautomation.model.Screen;
 import com.testautomation.model.TestResultsReporting;
-import com.testautomation.service.LookupDTO;
 
+/**
+ * @author sowmiya.r
+ *
+ */
 @Repository
-public interface TestResultsReportingRepository extends JpaRepository<TestResultsReporting, Integer> {
-
-	
+public interface TestResultsReportingRepository extends JpaRepository<TestResultsReporting, Integer> {	
 	
 	
 	@Query("from Application where applicationID = ?1")
@@ -30,7 +31,6 @@ public interface TestResultsReportingRepository extends JpaRepository<TestResult
 	@Query("from Screen where screenName = ?1")
 	public Screen getScreenByName(String screenName);
 	
-
-	//@Query("select distinct testedBy from TestResultsReporting where applicationID = :applicationID")
-	//public ArrayList<String> getAllTestedUsersByApp(@Param("applicationID") Integer applicationID);
+	@Query("select distinct testedBy from TestResultsReporting where applicationID = :applicationID")
+	public ArrayList<String> getAllTestedUsersByApp(@Param("applicationID") Integer applicationID);
 }

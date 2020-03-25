@@ -17,6 +17,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,6 +36,8 @@ import com.testautomation.model.ApplicationDTO;
 import com.testautomation.model.Screen;
 import com.testautomation.service.ApplicationService;
 import com.testautomation.service.LookupDTO;
+import com.testautomation.service.ResponseDTO;
+
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -46,93 +50,96 @@ public class ApplicationController {
 
 	@Autowired
 	ApplicationService applicationService;
-	
+
 	/*
 	 * @PostMapping(value = "/saveApplication") public void startTest1() { //Sample
 	 * Persist applicationService.persistApplication();
 	 * 
 	 * }
 	 */
-	
+
 	@GetMapping(value = "/applicationNames")
 	public ArrayList<LookupDTO> loadApplicationNames() {
 		return this.applicationService.getAllApplicationNames();
 	}
-	   
+
 	@GetMapping(value = "/applicationDetails/{id}")
-    public List<ApplicationDTO> applicationDetails(@PathVariable Integer id) {
+	public List<ApplicationDTO> applicationDetails(@PathVariable Integer id) {
 		return this.applicationService.getApplicationDetails(id);
 	}
-	
+
 	@PostMapping(value = "/updateApplicationDetails")
-	public String updateApplicationDetails(@RequestParam("file") MultipartFile file,
-			@RequestParam("appName") String appName, @RequestParam("appURL") String appURL, @RequestParam("appBrowser") String appBrowser) {
+	public ResponseEntity<ResponseDTO> updateApplicationDetails(@RequestParam("file") MultipartFile file,
+			@RequestParam("appName") String appName, @RequestParam("appURL") String appURL,
+			@RequestParam("appBrowser") String appBrowser) {
+		ResponseDTO response = new ResponseDTO();
 		boolean isFlag = applicationService.saveDetails(file, appName, appURL, appBrowser);
-		if(isFlag) {
-			return "FileUpload suceesfully";
+		if (isFlag) {
+			response.setStatus("error");
+//			return "FileUpload suceesfully";
 		} else {
-			return "FileUpload not done successfully";
+			response.setStatus("success");
+//			return "FileUpload not done successfully";
 		}
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-		
+
 	@RequestMapping(value = "/downloadExcel/{id}")
-	public void downloadExcel(@PathVariable Integer id,
-	       HttpServletRequest request,
-	       HttpServletResponse response) throws IOException {
-  
+	public void downloadExcel(@PathVariable Integer id, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+
 		Application application = new Application();
 		application.setApplicationID(id);
 		List<ApplicationDTO> screenNameReports = applicationService.getApplicationDetails(id);
-	
-		     
-		String fileName = "ApplicationScreenDetails" +  ".xlsx";
-		
+
+		String fileName = "ApplicationScreenDetails" + ".xlsx";
+
 		response.setContentType("application/vnd.ms-excel");
-		 
+
 		response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 		XSSFWorkbook wb = new XSSFWorkbook();
-	
+
 		Sheet sheet = wb.createSheet("Screen Name Report");
-	
+
 		Row header = sheet.createRow(0);
-        header.createCell(0).setCellValue("Application Name");
-        header.createCell(1).setCellValue("Screen Name");
-		   
-        // Create data cells
-        int rowCount = 1;
-        if(screenNameReports != null && screenNameReports.size() > 0) {
-	        for (ApplicationDTO resultReport : screenNameReports){
-	           Row reportRow = sheet.createRow(rowCount++);
-	           reportRow.createCell(0).setCellValue(resultReport.getApplicationName());
-	           reportRow.createCell(1).setCellValue(resultReport.getScreenName());
-             }
-        }
-		   
-		 OutputStream out = response.getOutputStream();
-		 
-		 wb.write(out);
-		 
-		 out.flush();
-		 out.close();
-	}
-	
-	@RequestMapping(value = "/downloadTemplate")
-	public void downloadTemplate(
-	       HttpServletRequest request,
-	       HttpServletResponse response) throws IOException {
-  
-		File templateFile = new File("C:\\WorkSpaceSpringAutomation\\TestAutomation\\src\\main\\webapp\\WEB-INF\\template" + File.separator + "ApplicationScreenDetails.xlsx");
-		if (templateFile.exists()) {
-		String mimeType = URLConnection.guessContentTypeFromName(templateFile.getName());
-		if (mimeType == null) {
-		mimeType = "application/octet-stream";
+		header.createCell(0).setCellValue("Application Name");
+		header.createCell(1).setCellValue("Screen Name");
+
+		// Create data cells
+		int rowCount = 1;
+		if (screenNameReports != null && screenNameReports.size() > 0) {
+			for (ApplicationDTO resultReport : screenNameReports) {
+				Row reportRow = sheet.createRow(rowCount++);
+				reportRow.createCell(0).setCellValue(resultReport.getApplicationName());
+				reportRow.createCell(1).setCellValue(resultReport.getScreenName());
+			}
 		}
-		response.setContentType(mimeType);
-		response.setHeader("Content-Disposition",
-		String.format("inline; filename=\"" + templateFile.getName() + "\""));
-		response.setContentLength((int) templateFile.length());
-		InputStream inputStream = new BufferedInputStream(new FileInputStream(templateFile));
-		FileCopyUtils.copy(inputStream, response.getOutputStream());
+
+		OutputStream out = response.getOutputStream();
+
+		wb.write(out);
+
+		out.flush();
+		out.close();
+	}
+
+	@RequestMapping(value = "/downloadTemplate")
+	public void downloadTemplate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		File templateFile = new File(
+				"C:\\WorkSpaceSpringAutomation\\TestAutomation\\src\\main\\webapp\\WEB-INF\\template" + File.separator
+						+ "ApplicationScreenDetails.xlsx");
+		if (templateFile.exists()) {
+			String mimeType = URLConnection.guessContentTypeFromName(templateFile.getName());
+			if (mimeType == null) {
+				mimeType = "application/octet-stream";
+			}
+			response.setContentType(mimeType);
+			response.setHeader("Content-Disposition",
+					String.format("inline; filename=\"" + templateFile.getName() + "\""));
+			response.setContentLength((int) templateFile.length());
+			InputStream inputStream = new BufferedInputStream(new FileInputStream(templateFile));
+			FileCopyUtils.copy(inputStream, response.getOutputStream());
 		}
 	}
 }

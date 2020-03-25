@@ -10,38 +10,37 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.TreeSet;
- 
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
- 
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.testautomation.MainTestNG;
-import com.testautomation.model.Application;
 import com.testautomation.model.Login;
-import com.testautomation.model.Screen;
 import com.testautomation.model.TestAutomationModel;
 import com.testautomation.model.TestResultsReporting;
 import com.testautomation.service.LoginService;
 import com.testautomation.service.LookupDTO;
 import com.testautomation.service.TestResultsReportingService;
- 
+
 /**
  * @author sowmiya.r
  *
@@ -49,80 +48,33 @@ import com.testautomation.service.TestResultsReportingService;
  
 @RestController
 public class TestResultsReportingController {
-
-	@Autowired
-	TestResultsReportingService testReportService;
-	
-	@Autowired
-	LoginService loginservice;
-	
-		
-	final static Logger logger = LoggerFactory.getLogger(TestResultsReportingController.class);
-		
-	 @RequestMapping(value = "/loadTestReports", method = RequestMethod.POST)    
-	 public List<TestResultsReporting> getAllTestReports(ModelMap model,@RequestBody(required = false) TestResultsReporting trReport) { 
-		logger.info("Entering @TestResultsReportingController - getAllTestReports::::");
-		/*
-		 * Application app = new Application(); app.setApplicationName("VDS");
-		 * app.setApplicationID(1); Screen scr = new Screen();
-		 * scr.setScreenName("Compound Transfer"); //scr.setScreenID(1);
-		 */		
-		/*
-		 * trReport.setApplicationID(1); trReport.setScreenID(1);
-		 * trReport.setTestedBy("Manual,Sowmiya");
-		 */
-		return testReportService.getAllTestReports(trReport);
+ 
+    @Autowired
+    TestResultsReportingService testReportService;
+    
+    @Autowired
+    LoginService loginservice;
+    
+    final static Logger logger = LoggerFactory.getLogger(TestResultsReportingController.class);
+    
+    
+    @RequestMapping(value = "/loadTestReports", method = RequestMethod.POST)
+    public List<TestResultsReporting> getAllTestReports(@RequestBody(required = false) TestResultsReporting trReport) {
+    	
+    	logger.info("Entering @TestResultsReportingController - getAllTestReports::::");
+    	List<TestResultsReporting> searchResults = null; 
+    	try {
+    		searchResults = testReportService.getTestReportsForExport(trReport);
+    	}catch(Exception e) {
+    		logger.error("Exception @TestResultsReportingController - getAllTestReports::::");
+    		e.printStackTrace();
+    	}
+		logger.info("Exiting @TestResultsReportingController - getAllTestReports::::");
+		return searchResults;
 	}
 	
-    @RequestMapping(value = "/exportExlTestReports",produces = "application/vnd.ms-excel")
-	 public ModelAndView exportTestReportsExcel() {
-		
-		logger.info("Entering @TestResultsReportingController - exportTestReportsExcel::::");
-		TestResultsReporting trReport = new TestResultsReporting();
-		/*
-		 * Application app = new Application(); app.setApplicationName("VDS");
-		 * app.setApplicationID(1); Screen scr = new Screen();
-		 * scr.setScreenName("Compound Transfer");
-		 */
-		//scr.setScreenID(1);
-		trReport.setApplicationID(1);
-		trReport.setScreenID(1);
-		trReport.setTestedBy("Manual,Sowmiya");
-		List<TestResultsReporting> testResultReports = testReportService.getTestReportsForExport(trReport);
-		
-		ModelAndView mv = new ModelAndView("exportExcelView", "testResultReports", testResultReports);
-		mv.setViewName("exportExcelView");
-		//return new ModelAndView("exportExcelView", "testResultReports", testResultReports);
-		return mv;
-	}
-	
-	@RequestMapping(value = "/exportTestExcel")
-	public void downloadExcelTestFile(
-	        HttpServletRequest request, 
-	        HttpServletResponse response) throws IOException {
-
-		logger.info("Entering @TestResultsReportingController - downloadExcelTestFile::::");
-	    XSSFWorkbook wb = new XSSFWorkbook();
-
-	    wb.createSheet("Sheet1");
-
-	    //response.reset();
-	    //response.setStatus(HttpServletResponse.SC_OK);
-	    response.setContentType("application/vnd.ms-excel");
-	    response.setHeader("Content-Disposition", "attachment; filename=test.xls");
-
-	    OutputStream out = response.getOutputStream();
-	     wb.write(out); 
-	    
-	    logger.info(" @TestResultsReportingController - downloadExcelTestFile::::");
-	    out.flush();
-	    out.close();
-	    wb.close();
-	    logger.info("Exiting @TestResultsReportingController - downloadExcelTestFile::::");
-	    
-	}
-	
-	@RequestMapping(value = "/startTest2", method = RequestMethod.GET)
+    
+    @RequestMapping(value = "/startTest2", method = RequestMethod.GET)
 	public void presistTestResults() {
 		testReportService.persistTestResults();
 	}
@@ -158,100 +110,134 @@ public class TestResultsReportingController {
 		return "homePage";
 	}
 	
-    public void downloadExcelTestResults(
-            HttpServletRequest request, 
-            HttpServletResponse response) throws IOException {
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(value = "/downloadTestReportExcel", method = RequestMethod.POST)
+    public void downloadExcelTestResults(HttpServletRequest request, 
+            HttpServletResponse response,@RequestBody(required = false) TestResultsReporting trReport) throws IOException {
  
-        logger.info("Entering @TestResultsReportingController - downloadExcelTestFile::::");
-                
-        TestResultsReporting trReport = new TestResultsReporting();
-        Application app = new Application();
-        app.setApplicationName("VDS");
-        app.setApplicationID(1);
-        Screen scr = new Screen();
-        scr.setScreenName("Compound Transfer");
-        //scr.setScreenID(1);
-        trReport.setApplicationID(1);
-		trReport.setScreenID(1);
-		trReport.setTestedBy("Manual,Sowmiya");
-        List<TestResultsReporting> testResultReports = testReportService.getTestReportsForExport(trReport);
+        logger.info("Entering @TestResultsReportingController - downloadExcelTestResults::::");
         
-        LocalDateTime localDate = LocalDateTime.now();      
-        ZonedDateTime zdt = localDate.atZone(ZoneId.systemDefault());
-        Date output = Date.from(zdt.toInstant());
-        SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yyyy");       
-        String outputDate = format2.format(output);
-        
-        //String fileName = "TestResultReports-" + localDate.toString() + ".xlsx"; 
-        String fileName = "TestResultReports-" + outputDate.toString() + ".xlsx"; 
- 
-         //response.reset();
-        //response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType("application/vnd.ms-excel");
-       // response.setHeader("Content-Disposition", "attachment; filename=test.xls");
-        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-        XSSFWorkbook wb = new XSSFWorkbook();
- 
-        Sheet sheet = wb.createSheet("TestResults_Report");
-        
-        Row header = sheet.createRow(0);
-        header.createCell(0).setCellValue("Application");
-        header.createCell(1).setCellValue("Screen");
-        header.createCell(2).setCellValue("TestCase");
-        header.createCell(3).setCellValue("Tested From");
-        header.createCell(4).setCellValue("Tested To");
-        header.createCell(5).setCellValue("TestedBy");
-        header.createCell(6).setCellValue("TestInput");
-        header.createCell(7).setCellValue("TestResult Output");
-        
-        // Create data cells
-        int rowCount = 1;
-        if(testResultReports != null && testResultReports.size() > 0) {
-            logger.info("Entering @ExportXlsView - resultReports.size()::::"+testResultReports.size());
-            for (TestResultsReporting resultReport : testResultReports){
-                logger.info("Entering @ExportXlsView - resultReport::::"+resultReport);
-                Row reportRow = sheet.createRow(rowCount++);
-                reportRow.createCell(0).setCellValue(resultReport.getTestRAppName());
-	            reportRow.createCell(1).setCellValue(resultReport.getTestRScreenName());
-	            reportRow.createCell(2).setCellValue(resultReport.getTestedCaseName());
-	            reportRow.createCell(3).setCellValue(resultReport.getTestFromDate());
-	            reportRow.createCell(4).setCellValue(resultReport.getTestToDate());
-	            reportRow.createCell(5).setCellValue(resultReport.getTestedBy());
-	            reportRow.createCell(6).setCellValue(resultReport.getTestInputs());
-	            reportRow.createCell(7).setCellValue(resultReport.getTestOutput() != null && resultReport.getTestOutput().equalsIgnoreCase("P") ? "Pass" :"Fail");
-            }
+        OutputStream out = null;
+        XSSFWorkbook wb = null;
+        try {
+	        List<TestResultsReporting> testResultReports = testReportService.getTestReportsForExport(trReport);
+	        
+	        LocalDateTime localDate = LocalDateTime.now();      
+	        ZonedDateTime zdt = localDate.atZone(ZoneId.systemDefault());
+	        Date output = Date.from(zdt.toInstant());
+	        SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yyyy");       
+	        String outputDate = format2.format(output);
+	        
+	        String fileName = "TestResultReports-" + outputDate.toString() + ".xlsx"; 
+	 
+	        response.setContentType("application/vnd.ms-excel");
+	        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+	        wb = new XSSFWorkbook();
+	 
+	        Sheet sheet = wb.createSheet("TestResults_Report");
+	        
+	        Row header = sheet.createRow(0);
+	        header.createCell(0).setCellValue("Application");
+	        header.createCell(1).setCellValue("Screen");
+	        header.createCell(2).setCellValue("TestCase");
+	        header.createCell(3).setCellValue("Tested From");
+	        header.createCell(4).setCellValue("Tested To");
+	        header.createCell(5).setCellValue("TestedBy");
+	        header.createCell(6).setCellValue("TestInput");
+	        header.createCell(7).setCellValue("TestOutput");
+	        
+	        
+	        // Create data cells
+	        int rowCount = 1;
+	        if(testResultReports != null && testResultReports.size() > 0) {
+	            for (TestResultsReporting resultReport : testResultReports){
+	                Row reportRow = sheet.createRow(rowCount++);
+	                reportRow.createCell(0).setCellValue(resultReport.getTestRAppName());
+		            reportRow.createCell(1).setCellValue(resultReport.getTestRScreenName());
+		            reportRow.createCell(2).setCellValue(resultReport.getTestedCaseName());
+		            
+		            Cell cell3 = reportRow.createCell(3);
+		            CellStyle cellStyle3 = wb.createCellStyle();
+		            CreationHelper createHelper3 = wb.getCreationHelper();
+		            cellStyle3.setDataFormat(createHelper3.createDataFormat().getFormat("dd-mm-yyyy hh:mm:ss"));
+		            cell3.setCellValue(resultReport.getTestStartDate());
+		            cell3.setCellStyle(cellStyle3);
+		            
+		            Cell cell4 = reportRow.createCell(4);
+		            CellStyle cellStyle4 = wb.createCellStyle();
+		            CreationHelper createHelper4 = wb.getCreationHelper();
+		            cellStyle4.setDataFormat(createHelper4.createDataFormat().getFormat("dd-mm-yyyy hh:mm:ss"));
+		            cell4.setCellValue(resultReport.getTestEndDate());
+		            cell4.setCellStyle(cellStyle4);
+		            //reportRow.createCell(4).setCellValue(resultReport.getTestToDate());
+		            
+		            reportRow.createCell(5).setCellValue(resultReport.getTestedBy());
+		            reportRow.createCell(6).setCellValue(resultReport.getTestInputs());
+		            reportRow.createCell(7).setCellValue(resultReport.getTestOutput() != null && resultReport.getTestOutput().equalsIgnoreCase("P") ? "Pass" :"Fail");
+	            }
+	        }
+	        
+	        out = response.getOutputStream();
+	        wb.write(out);  
+        }catch(Exception e) {
+        	logger.error("Exception @TestResultsReportingController - downloadExcelTestResults::::");
+    		e.printStackTrace();
+        } finally {
+        	out.flush();
+            out.close();
+            wb.close();
         }
         
-        OutputStream out = response.getOutputStream();
-        wb.write(out); 
-        
-        logger.info(" @TestResultsReportingController - downloadExcelTestFile::::");
-        out.flush();
-        out.close();
-        wb.close();
-        logger.info("Exiting @TestResultsReportingController - downloadExcelTestFile::::");
+        logger.info("Exiting @TestResultsReportingController - downloadExcelTestResults::::");
         
     }
     
     
-    @RequestMapping(value ="/loadtestDetails")
+    @RequestMapping(value ="/loadTestReportDetails")
     public TestAutomationModel loadTestReports() {
         
-        ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
-        ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(1);
-        ArrayList<LookupDTO> testScreensList= testReportService.getAllScreensByApp(1);
-        
-        TestAutomationModel tm = new TestAutomationModel();
-        tm.testUsersList = allTestedUsers;
-        tm.testAppsList = testAppsList;
-        tm.testScreensList = testScreensList;
-       // tm.testReportColumnsList = testReportService.reportHeaderColumnsList;
-        
-        return tm;
+    	logger.info("Entering @TestResultsReportingController - loadTestReports::::");
+    	TestAutomationModel tAModel = null;
+		try {
+	    	ArrayList<Integer> appsList = testReportService.getAllAppsList();		
+
+			ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
+			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(appsList.get(0)); 
+	    	ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(appsList.get(0));       
+	        
+	        tAModel = new TestAutomationModel();
+	        tAModel.testUsersList = allTestedUsers;
+	        tAModel.testAppsList = testAppsList;
+	        tAModel.testScreensList = testScreensList;
+		}catch(Exception e) {
+        	logger.error("Exception @TestResultsReportingController - loadTestReports::::");
+    		e.printStackTrace();
+        }
+		logger.info("Exiting @TestResultsReportingController - loadTestReports::::");
+        return tAModel;
     }
     
-    @RequestMapping(value ="/loadtestDetails1")
-    public ArrayList<LookupDTO> loadAppNames() {    	
-    	return testReportService.getAllApplicationNames();
+    @GetMapping(value ="/loadTestReportDetails/{applicationId}")
+    public TestAutomationModel reloadTestReports(@PathVariable Integer applicationId) {
+        
+    	logger.info("Entering @TestResultsReportingController - reloadTestReports::::");
+    	TestAutomationModel tAModel = null;
+		try {
+
+			ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
+			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(applicationId);
+			ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(applicationId);       
+	        
+	        tAModel = new TestAutomationModel();
+	        tAModel.testUsersList = allTestedUsers;
+	        tAModel.testAppsList = testAppsList;
+	        tAModel.testScreensList = testScreensList;
+		}catch(Exception e) {
+        	logger.error("Exception @TestResultsReportingController - reloadTestReports::::");
+    		e.printStackTrace();
+        }
+        logger.info("Exiting @TestResultsReportingController - reloadTestReports::::");
+        return tAModel;
     }
 }

@@ -1,9 +1,16 @@
 package com.testautomation.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.persistence.*;
 
+/**
+ * @author sowmiya.r
+ *
+ */
 @Entity
 @Table(name="KTAT01_TEST_RESULT")
 public class TestResultsReporting {
@@ -45,17 +52,16 @@ public class TestResultsReporting {
 	private String createdBy;
 
 	@Transient
-	private Date testFromDate;
-	
-	@Transient
-	private Date testToDate;
-	
-	@Transient
 	private String testRAppName;
 	
 	@Transient
 	private String testRScreenName;
 	
+	@Transient
+	private List testedByUser;
+	
+	@Transient
+	private ArrayList<HashMap<String,String>> screenIDList;
 	
 	public Integer getTestResultId() {
 		return testResultId;
@@ -87,22 +93,6 @@ public class TestResultsReporting {
 
 	public void setTestInputs(String testInputs) {
 		this.testInputs = testInputs;
-	}
-
-	public Date getTestFromDate() {
-		return testFromDate;
-	}
-
-	public void setTestFromDate(Date testFromDate) {
-		this.testFromDate = testFromDate;
-	}
-
-	public Date getTestToDate() {
-		return testToDate;
-	}
-
-	public void setTestToDate(Date testToDate) {
-		this.testToDate = testToDate;
 	}
 
 	public Date getTestStartDate() {
@@ -175,5 +165,21 @@ public class TestResultsReporting {
 
 	public void setTestFailedData(String testFailedData) {
 		this.testFailedData = testFailedData;
+	}
+
+	public List getTestedByUser() {
+		return testedByUser;
+	}
+
+	public void setTestedByUser(List testedByUser) {
+		this.testedByUser = testedByUser;
+	}
+
+	public ArrayList<HashMap<String,String>> getScreenIDList() {
+		return screenIDList;
+	}
+
+	public void setScreenIDList(ArrayList<HashMap<String,String>> screenIDList) {
+		this.screenIDList = screenIDList;
 	}
 }

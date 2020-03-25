@@ -28,7 +28,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 	
 	boolean save(Screen screen);
 	
-	@Query("select new com.testautomation.service.LookupDTO(applicationID,applicationName) from Application")
+	@Query("select new com.testautomation.service.LookupDTO(applicationID,applicationName) from Application order by applicationName")
 	public ArrayList<LookupDTO> getAllApplicationNames();
 
 	
@@ -37,4 +37,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 	
 	@Query("Select new com.testautomation.model.ApplicationDTO(application.applicationID,application.applicationName,application.applicationURL,application.applicationBrowser,screenName) from Screen where application.applicationID = :id")
 	public List<ApplicationDTO> getApplicationDetails(@Param("id") Integer id);
+	
+	@Query("select applicationID from Application order by applicationName")
+	public ArrayList<Integer> getAllAppsList();
 }
