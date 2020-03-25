@@ -239,13 +239,15 @@ public class MethodType extends GlobalVariables{
 	public void click(MethodParameters model) throws AWTException, InterruptedException {
 		
 		wait1(500);
-		//WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
+		WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
 		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
-		executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())));
-		
+		//executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())));
+		//wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(model.getObjectLocators()))); 
+		//executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())));
+		executor.executeScript("arguments[0].click();", wait.until(
+				ExpectedConditions.presenceOfElementLocated(By.xpath(model.getObjectLocators()))));
 		//WebDriverClass.getDriver().manage().window().maximize();	
 		executor.executeScript("window.scrollBy(0,600)");
-		
 		/*wait.until(
 				ExpectedConditions.elementToBeClickable(model.getElement().get(
 						0))).click();*/
@@ -1126,18 +1128,127 @@ public class MethodType extends GlobalVariables{
 	
 	/**
 	 * @param model
-	 * Click and open URL link based on primary input value if the value having multiple URL Link presented on same row
-	 * Based on Static input value URL name
+	 * Update the multiple column on on same row
+	 * Based on Static input value name
 	 */
 	public void dynamicTableEdit(MethodParameters model) {
-		wait1(1000);
-		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
-		executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(
-				By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/a[contains(text(), '"+ model.getHeaderValue() + "')]")));
-		/*WebDriverClass.getDriver().findElement(
-				By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/a[contains(text(), '"+ model.getHeaderValue() + "')]")).click();
-		*/
-		wait1(500);
+
+		List<WebElement> rowsHeader =  WebDriverClass.getDriver().findElements(By.tagName("th"));
+		
+		for(int i=0;i<rowsHeader.size();i++) {
+			if (rowsHeader.get(i).getText().equals(model.getHeaderValue())) {
+				String[] data = model.getData().split(",");
+				//int index = i + 1;
+				WebDriverClass.getDriver().findElement(
+								By.xpath(".//tr/td[contains(text(), '"+ data[0] + "')]/ancestor::tr[1]/td/input[@name='"+model.getObjectLocators()+"']")).clear();
+				WebDriverClass.getDriver().findElement(
+							    By.xpath(".//tr/td[contains(text(), '"+ data[0] + "')]/ancestor::tr[1]/td/input[@name='"+model.getObjectLocators()+"']")).sendKeys(data[1]);
+				//JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
+				//executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(
+				//		By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/input[@type='text']")));
+				//WebDriverClass.getDriver().findElement(
+				//		By.xpath(".//tr/td[contains(text(), '"+ data[0] + "')]/ancestor::tr[1]/td/input[@id='SaveFreightCostForm_insuranceFee']")).clear();
+				//WebDriverClass.getDriver().findElement(
+				//		By.xpath(".//tr/td[contains(text(), '"+ data[0] + "')]/ancestor::tr[1]/td[" +index+ "]/a")).sendKeys(data[1]);
+		
+				/*WebDriverClass.getDriver().findElement(
+						By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td[" +index+ "]/a")).click();*/
+			}
+		}
+	}
+	
+	/**
+	 * @param model
+	 * Update the drop down column on same row
+	 * Based on Static input value name
+	 */
+	public void dynamicTableDropDownUpdate(MethodParameters model) {
+
+		List<WebElement> rowsHeader =  WebDriverClass.getDriver().findElements(By.tagName("th"));
+		
+		for(int i=0;i<rowsHeader.size();i++) {
+			if (rowsHeader.get(i).getText().equals(model.getHeaderValue())) {
+				String[] data = model.getData().split(",");
+				//int index = i + 1;
+				WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
+				wait.pollingEvery(2, TimeUnit.SECONDS).until(
+						ExpectedConditions.elementToBeClickable(WebDriverClass.getDriver().findElement(
+							    By.xpath(".//tr/td[contains(text(), '"+ data[0] + "')]/ancestor::tr[1]/td/select[@name='"+model.getObjectLocators()+"']"))));
+				Select sel = new Select(WebDriverClass.getDriver().findElement(
+					    By.xpath(".//tr/td[contains(text(), '"+ data[0] + "')]/ancestor::tr[1]/td/select[@name='"+model.getObjectLocators()+"']")));
+				sel.selectByVisibleText(data[1]);
+			}
+		}
+	}
+	
+	/**
+	 * @param model
+	 * Validate error message on same row
+	 * Based on Static input value name
+	 */
+	public void dynamicTableVerifyErrorText(MethodParameters model) {
+
+		List<WebElement> rowsHeader =  WebDriverClass.getDriver().findElements(By.tagName("th"));
+		
+		for(int i=0;i<rowsHeader.size();i++) {
+			if (rowsHeader.get(i).getText().equals(model.getHeaderValue())) {
+				String[] data = model.getData().split(",");
+				//int index = i + 1;
+				WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
+				wait.pollingEvery(2, TimeUnit.SECONDS).until(
+						ExpectedConditions.elementToBeClickable(WebDriverClass.getDriver().findElement(
+							    By.xpath(".//tr/td[contains(text(), '"+ data[0] + "')]/ancestor::tr[1]/td/input[@name='"+model.getObjectLocators()+"']"))));
+				String errorMessage = WebDriverClass.getDriver().findElement(
+					    By.xpath(".//tr/td[contains(text(), '"+ data[0] + "')]/ancestor::tr[1]/td/input[@name='"+model.getObjectLocators()+"']")).getText();
+				Assert.assertTrue(errorMessage.contains(data[1]));
+				MainTestNG.LOGGER.info("verify error text completed");
+			}
+		}
+	}
+	
+	/**
+	 * @param model
+	 * Validate display result
+	 * Based on Static input value name
+	 */
+	public void dynamicTableVerifyResult(MethodParameters model) {
+		
+		List<WebElement> rowsHeader = WebDriverClass.getDriver().findElements(By.tagName("th"));
+		int columnToVerify= -1;
+		for (int header = 0; header < rowsHeader.size(); header++) {
+			if (rowsHeader.get(header).getText().equals(model.getHeaderValue())) {
+				columnToVerify = header;
+			}
+		}
+		
+		String[] actType = model.getObjectLocators().split("\\$");
+
+		WebElement mytable = WebDriverClass.getDriver().findElement(
+				By.xpath(actType[0]));
+		
+		List<WebElement> rowstable = mytable.findElements(By.tagName("tr"));
+
+		int rows_count = rowstable.size();
+		
+		for (int row = 0; row < rows_count; row++) {
+			
+			List<WebElement> Columnsrow = rowstable.get(row).findElements(
+					By.tagName("td"));
+		
+			int columnscount = Columnsrow.size();
+
+			for (int column = 0; column < columnscount; column++) {
+		
+					String celtext = Columnsrow.get(column).getText();
+					
+					if(column == columnToVerify) {
+						//String errorMessage = WebDriverClass.getDriver().findElement(
+							   // By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td[" +index+ "]")).getText();
+						Assert.assertTrue(model.getData().contains(celtext));
+			        }
+		     }
+	    }
+		MainTestNG.LOGGER.info("verify text result completed");
 	}
 	
 	/**
