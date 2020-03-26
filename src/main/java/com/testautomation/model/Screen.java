@@ -37,6 +37,8 @@ public class Screen {
 	@Transient
 	private MultipartFile file;
 
+	@Column(name = "TAM03_SCREEN_QUERY")
+	private String screenQuery;
 	/*
 	 * @OneToMany(mappedBy = "screenTestReport") private Set<TestResultsReporting>
 	 * testResultsReporting;
@@ -96,6 +98,14 @@ public class Screen {
 
 	public void setFile(MultipartFile file) {
 		this.file = file;
+	}
+
+	public String getScreenQuery() {
+		return screenQuery;
+	}
+
+	public void setScreenQuery(String screenQuery) {
+		this.screenQuery = screenQuery;
 	}
 
 	/*

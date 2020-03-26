@@ -33,6 +33,9 @@ public class Login {
 	@Transient
 	private String selectedScreenName;
 	
+	@Transient
+	private boolean isDataFromDBCheckbox;
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -90,6 +93,13 @@ public class Login {
 		this.selectedScreenName = selectedScreenName;
 	}
 
-	
+	public boolean isDataFromDBCheckbox() {
+		return isDataFromDBCheckbox;
+	}
+
+	public void setDataFromDBCheckbox(boolean isDataFromDBCheckbox) {
+		this.isDataFromDBCheckbox = isDataFromDBCheckbox;
+	}
+
 	
 }

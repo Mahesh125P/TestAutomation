@@ -15,4 +15,6 @@ public class TestAutomationModel {
 	public ArrayList<LookupDTO> testScreensList = new ArrayList<LookupDTO>();
 	public ArrayList<String> testUsersList = new ArrayList<String>();
 	
+	public String screenQuery = new String();
+	
 }

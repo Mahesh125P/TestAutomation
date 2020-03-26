@@ -83,6 +83,9 @@ public class TestResultsReportingController {
 	public String startTest(ModelMap model,@ModelAttribute("login") Login login) {
 		System.out.println("Started startTest!!!");
 		System.out.println("Selected App: "+login.getSelectedApplicationName());
+		
+		System.out.println("isDataFromDBCheckbox(): "+login.isDataFromDBCheckbox());
+		
 		ArrayList<String> applicationList = loginservice.getApplicationNames();
 		login.setSelectedApplicationName("VDS");
 		ArrayList<String> screenNameList = loginservice.getScreenNames(login.getSelectedApplicationName());
@@ -102,6 +105,9 @@ public class TestResultsReportingController {
 		model.addAttribute("selectedScreenName",login.getSelectedScreenName());
 		System.out.println("Started executing Test!!!");
 		MainTestNG testStart = new MainTestNG();
+		
+		testReportService.doCopyFileToDbData(login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
+		
 		testStart.startTest(testReportService,login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
 		//ApplicationService as = new ApplicationService();
 		//as.persistApplication();
