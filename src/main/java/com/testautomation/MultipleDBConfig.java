@@ -40,25 +40,23 @@ public class MultipleDBConfig {
 	}
 
 	// SQL SERVER	
-	/*
-	 * @Bean(name = "dbSqlServer")
-	 * 
-	 * @ConfigurationProperties(prefix = "spring.sqlserverdatasource") public
-	 * DataSource createSqlServerDataSource() { DriverManagerDataSource dataSource =
-	 * new DriverManagerDataSource();
-	 * dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
-	 * ;
-	 * dataSource.setUrl("jdbc:sqlserver://127.0.0.1:1433;databaseName=springbootdb"
-	 * ); dataSource.setUsername("sa"); dataSource.setPassword("tspl@123");
-	 * 
-	 * return dataSource; }
-	 * 
-	 * @Bean(name = "jdbcSqlServer")
-	 * 
-	 * @Autowired public JdbcTemplate
-	 * createSqlServerJdbcTemplate(@Qualifier("dbSqlServer") DataSource sqlserverDS)
-	 * { return new JdbcTemplate(sqlserverDS); }
-	 */
+	@Bean(name = "dbSqlServer")
+	@ConfigurationProperties(prefix = "spring.sqlserverdatasource")
+	public DataSource createSqlServerDataSource() {
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+		dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		dataSource.setUrl("jdbc:sqlserver://127.0.0.1:1433;databaseName=springbootdb");
+		dataSource.setUsername("sa");
+		dataSource.setPassword("tspl@123");
+
+		return dataSource;
+	}
+
+	@Bean(name = "jdbcSqlServer")
+	@Autowired
+	public JdbcTemplate createSqlServerJdbcTemplate(@Qualifier("dbSqlServer") DataSource sqlserverDS) {
+		return new JdbcTemplate(sqlserverDS);
+	}
 
 	// ORACLE 	
 	@Bean(name = "oracleDb")
