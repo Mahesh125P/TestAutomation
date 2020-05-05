@@ -1,11 +1,8 @@
 package com.testautomation.model;
 
-import javax.persistence.Entity;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.persistence.*;
-import javax.persistence.Table;
 
 @Entity
 @Table(name="KTAM01_USER")
@@ -33,8 +30,20 @@ public class Login {
 	@Transient
 	private String selectedScreenName;
 	
+	@Transient 
+	private boolean dataFromDBCheckbox;
+	
+	@Column(name="TAM01_APPLICATIONS")
+	private String userApplications;
+	
 	@Transient
-	private boolean isDataFromDBCheckbox;
+	private ArrayList<String> usersList;
+	
+	@Transient
+	private ArrayList<String> applicationsList;
+	
+	@Transient
+	private String applicationsMappedToUser;
 	
 	public String getUserName() {
 		return userName;
@@ -94,12 +103,43 @@ public class Login {
 	}
 
 	public boolean isDataFromDBCheckbox() {
-		return isDataFromDBCheckbox;
+		return dataFromDBCheckbox;
 	}
 
-	public void setDataFromDBCheckbox(boolean isDataFromDBCheckbox) {
-		this.isDataFromDBCheckbox = isDataFromDBCheckbox;
+	public void setDataFromDBCheckbox(boolean dataFromDBCheckbox) {
+		this.dataFromDBCheckbox = dataFromDBCheckbox;
 	}
 
-	
+	public String getUserApplications() {
+		return userApplications;
+	}
+
+	public void setUserApplications(String userApplications) {
+		this.userApplications = userApplications;
+	}
+
+	public ArrayList<String> getUsersList() {
+		return usersList;
+	}
+
+	public void setUsersList(ArrayList<String> usersList) {
+		this.usersList = usersList;
+	}
+
+	public ArrayList<String> getApplicationsList() {
+		return applicationsList;
+	}
+
+	public void setApplicationsList(ArrayList<String> applicationsList) {
+		this.applicationsList = applicationsList;
+	}
+
+	public String getApplicationsMappedToUser() {
+		return applicationsMappedToUser;
+	}
+
+	public void setApplicationsMappedToUser(String applicationsMappedToUser) {
+		this.applicationsMappedToUser = applicationsMappedToUser;
+	}
+
 }

@@ -23,4 +23,7 @@ public interface LoginRepository extends JpaRepository<Login, String>{
 	@Query("from Application")
 	public ArrayList<Application> getApplicationDetails();	
 	
+	@Query("select distinct userName from Login")
+	public ArrayList<String> getAllUsers();
+	
 }

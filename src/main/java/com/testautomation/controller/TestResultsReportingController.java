@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -37,9 +38,11 @@ import com.testautomation.MainTestNG;
 import com.testautomation.model.Login;
 import com.testautomation.model.TestAutomationModel;
 import com.testautomation.model.TestResultsReporting;
+import com.testautomation.service.DataFromDatabaseService;
 import com.testautomation.service.LoginService;
 import com.testautomation.service.LookupDTO;
 import com.testautomation.service.TestResultsReportingService;
+import com.testautomation.util.ExcelAction;
 
 /**
  * @author sowmiya.r
@@ -54,6 +57,13 @@ public class TestResultsReportingController {
     
     @Autowired
     LoginService loginservice;
+    
+    @Autowired
+    DataFromDatabaseService dataFromDbService;
+    
+    @Autowired 
+	HttpSession httpSession;
+    
     
     final static Logger logger = LoggerFactory.getLogger(TestResultsReportingController.class);
     
@@ -85,9 +95,9 @@ public class TestResultsReportingController {
 		System.out.println("Selected App: "+login.getSelectedApplicationName());
 		
 		System.out.println("isDataFromDBCheckbox(): "+login.isDataFromDBCheckbox());
-		
+				
 		ArrayList<String> applicationList = loginservice.getApplicationNames();
-		login.setSelectedApplicationName("VDS");
+		//login.setSelectedApplicationName("VDS");
 		ArrayList<String> screenNameList = loginservice.getScreenNames(login.getSelectedApplicationName());
 		
 		ArrayList<String> testCaseList = loginservice.getTestCaseNames(login.getSelectedApplicationName());
@@ -105,9 +115,13 @@ public class TestResultsReportingController {
 		model.addAttribute("selectedScreenName",login.getSelectedScreenName());
 		System.out.println("Started executing Test!!!");
 		MainTestNG testStart = new MainTestNG();
-		
-		testReportService.doCopyFileToDbData(login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
-		
+		//login.setUserName(httpSession.getAttribute("userName").toString());	//Session
+		if(login.isDataFromDBCheckbox()) {
+			dataFromDbService.setuserNDataFromDBMap(login.getUserName(),"Yes");
+			dataFromDbService.doCopyFileToDbData(login.getUserName(),login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
+		} else {
+			dataFromDbService.setuserNDataFromDBMap(login.getUserName(),"No");
+		}
 		testStart.startTest(testReportService,login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
 		//ApplicationService as = new ApplicationService();
 		//as.persistApplication();
@@ -246,4 +260,5 @@ public class TestResultsReportingController {
         logger.info("Exiting @TestResultsReportingController - reloadTestReports::::");
         return tAModel;
     }
-}
+    
+ }
