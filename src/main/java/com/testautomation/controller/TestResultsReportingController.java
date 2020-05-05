@@ -38,6 +38,7 @@ import com.testautomation.MainTestNG;
 import com.testautomation.model.Login;
 import com.testautomation.model.TestAutomationModel;
 import com.testautomation.model.TestResultsReporting;
+import com.testautomation.repositories.ComponentMappingRepository;
 import com.testautomation.service.DataFromDatabaseService;
 import com.testautomation.service.LoginService;
 import com.testautomation.service.LookupDTO;
@@ -60,6 +61,10 @@ public class TestResultsReportingController {
     
     @Autowired
     DataFromDatabaseService dataFromDbService;
+    
+    @Autowired
+    ComponentMappingRepository componentMappingRepository;
+    
     
     @Autowired 
 	HttpSession httpSession;
@@ -103,7 +108,7 @@ public class TestResultsReportingController {
 		ArrayList<String> testCaseList = loginservice.getTestCaseNames(login.getSelectedApplicationName());
 		
 		System.out.println("Selected Screens String: "+loginservice.convertListToString(login.getScreenNameList()));
-		
+		List<String> selectedScreenList = null;
 		login.setApplicationList(applicationList);
 		login.setScreenNameList(screenNameList);
 		login.setTestCaseList(testCaseList);
@@ -115,14 +120,21 @@ public class TestResultsReportingController {
 		model.addAttribute("selectedScreenName",login.getSelectedScreenName());
 		System.out.println("Started executing Test!!!");
 		MainTestNG testStart = new MainTestNG();
-		//login.setUserName(httpSession.getAttribute("userName").toString());	//Session
 		if(login.isDataFromDBCheckbox()) {
 			dataFromDbService.setuserNDataFromDBMap(login.getUserName(),"Yes");
 			dataFromDbService.doCopyFileToDbData(login.getUserName(),login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
 		} else {
 			dataFromDbService.setuserNDataFromDBMap(login.getUserName(),"No");
 		}
-		testStart.startTest(testReportService,login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
+		
+		if(login.getSelectedComponentID()!= null && !login.getSelectedComponentID().isEmpty() &&  !login.getSelectedComponentID().equals("undefined")) {
+			selectedScreenList = componentMappingRepository.findScreenNameByComponentId(Integer.parseInt(login.getSelectedComponentID()));
+		}
+		else
+		selectedScreenList = Arrays.asList(login.getSelectedScreenName().split(","));
+		
+		testStart.startTest(testReportService,login.getSelectedApplicationName(),selectedScreenList,login.getSelectedComponentID(),dataFromDbService);
+		//testStart.startTest(testReportService,login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
 		//ApplicationService as = new ApplicationService();
 		//as.persistApplication();
 		testReportService.persistTestResults();

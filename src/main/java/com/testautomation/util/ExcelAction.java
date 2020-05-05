@@ -59,9 +59,14 @@ public class ExcelAction {
 	HashMap<String,String> tempResultMap = new HashMap<String,String>();
 	public static HashMap<String,HashMap<String,String>> testResultMap = new HashMap<String,HashMap<String,String>>();
 	StringBuffer inputValue = new StringBuffer();
-	final static String projectfilePath = Paths.get("").toAbsolutePath().toString() + File.separator + "src"
-			+ File.separator + "main" + File.separator + "resources" + File.separator;
 	
+	final static String testcasesprojectfilePath = Paths.get("").toAbsolutePath().toString() + File.separator + "src"
+            + File.separator + "main" + File.separator + "resources" + File.separator + "TestCase" + File.separator ;
+    final static String dbtestcasesprojectfilePath = Paths.get("").toAbsolutePath().toString() + File.separator + "src"
+            + File.separator + "main" + File.separator + "resources" + File.separator  + "DBData"+ File.separator;
+    final static String testsuitprojectfilePath = Paths.get("").toAbsolutePath().toString() + File.separator + "src"
+            + File.separator + "main" + File.separator + "resources" + File.separator + "TestSuite" + File.separator ;
+        
 	/*
 	 * public static void main(String[] args) throws Exception { ExcelAction action
 	 * = new ExcelAction(); action.readCapturedObjectProperties();
@@ -77,9 +82,19 @@ public class ExcelAction {
 		
 		String sheetName;
 		StringBuffer dynamicFilePath = new StringBuffer();			
-		dynamicFilePath.append(projectfilePath+ "TestCase\\")
-		.append(selectedApplication).append("\\").append("TestCase_").append(selectedApplication)
-		.append("_").append(selectedScreen).append(".xlsx");
+		/*
+		 * dynamicFilePath.append(projectfilePath+ "TestCase\\").append(selectedApplication).append("\\").append("TestCase_").append(
+		 * selectedApplication) .append("_").append(selectedScreen).append(".xlsx");
+		 */
+		
+		if(DataFromDatabaseService.userNDataFromDBMap.get(currentTestAutoUser).equalsIgnoreCase("Yes")){
+            dynamicFilePath.append(dbtestcasesprojectfilePath).append(selectedApplication).append("\\").append("DbData_TestCase_");
+        } else {
+            dynamicFilePath.append(testcasesprojectfilePath).append(selectedApplication).append("\\").append("TestCase_");
+        }
+        
+        dynamicFilePath.append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
+        
 		
 		String pathOFFile = dynamicFilePath.toString();
 		List<String> list = ExcelLibrary
@@ -311,17 +326,28 @@ public class ExcelAction {
 
 			//${catalina.home}/
 			StringBuffer dynamicFilePath = new StringBuffer();	
-			if (operationType.equals("Manual")) {
-				dynamicFilePath.append(projectfilePath + "TestSuite\\")
-				.append(selectedApplication)
-				.append("\\").append("TestSuite_").append(selectedApplication)
-				.append("_").append(selectedScreen).append(".xlsx");
-			} else {
-				dynamicFilePath.append(projectfilePath + "TestSuite\\")
-				.append(selectedApplication).append("\\").append("Automatic")
-				.append("\\").append("TestSuite_").append(selectedApplication)
-				.append("_").append(selectedScreen).append(".xlsx");
-			}
+			/*
+			 * if (operationType.equals("Manual")) { dynamicFilePath.append(projectfilePath
+			 * + "TestSuite\\") .append(selectedApplication)
+			 * .append("\\").append("TestSuite_").append(selectedApplication)
+			 * .append("_").append(selectedScreen).append(".xlsx"); } else {
+			 * dynamicFilePath.append(projectfilePath + "TestSuite\\")
+			 * .append(selectedApplication).append("\\").append("Automatic")
+			 * .append("\\").append("TestSuite_").append(selectedApplication)
+			 * .append("_").append(selectedScreen).append(".xlsx"); }
+			 */
+			//dynamicFilePath.append("C:\\SOWMIYA\\TESTING AUTOMATION\\TestAutomation_Workspace\\TestAutomation\\src\\main\\resources\\TestSuite\\")
+            //String testSuiteFilePath = config.getConfigValues("TestSuiteName");
+            
+            if (operationType.equals("Manual")) {
+                dynamicFilePath.append(testsuitprojectfilePath)
+                .append(selectedApplication).append("\\").append("TestSuite_")
+                .append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
+            } else {
+                dynamicFilePath.append(testsuitprojectfilePath)
+                .append(selectedApplication).append("\\").append("Automatic").append("\\")
+                .append("TestSuite_").append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
+            }
 			//String testSuiteFilePath = config.getConfigValues("TestSuiteName"); 
 			String testSuiteFilePath = dynamicFilePath.toString();
 			System.out.println(testSuiteFilePath);
@@ -371,9 +397,18 @@ public class ExcelAction {
 
 		String testsheetnme = "TestCase_SheetName";
 		StringBuffer dynamicFilePath = new StringBuffer();	
-		dynamicFilePath.append(projectfilePath + "\\TestCase\\")
-		.append(selectedApplication).append("\\").append("TestCase_").append(selectedApplication)
-		.append("_").append(selectedScreen).append(".xlsx");
+		/*
+		 * dynamicFilePath.append(projectfilePath + "\\TestCase\\")
+		 * .append(selectedApplication).append("\\").append("TestCase_").append(
+		 * selectedApplication) .append("_").append(selectedScreen).append(".xlsx");
+		 */
+		if(DataFromDatabaseService.userNDataFromDBMap.get(currentTestAutoUser).equalsIgnoreCase("Yes")){
+            dynamicFilePath.append(dbtestcasesprojectfilePath).append(selectedApplication).append("\\").append("DbData_TestCase_");
+        } else {
+            dynamicFilePath.append(testcasesprojectfilePath).append(selectedApplication).append("\\").append("TestCase_");
+        }        
+        dynamicFilePath.append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
+        
 		String testCasePath = dynamicFilePath.toString();
 		String testCaseSheetName = config.getConfigValues(testsheetnme);
 
@@ -441,9 +476,18 @@ public class ExcelAction {
 	public void readCapturedObjectProperties() throws Exception {
 		String testSheetName = "CapturedObjectProperties";
 		StringBuffer dynamicFilePath = new StringBuffer();			
-		dynamicFilePath.append(projectfilePath + "TestCase\\")
-		.append(selectedApplication).append("\\").append("TestCase_").append(selectedApplication)
-		.append("_").append(selectedScreen).append(".xlsx");
+		/*
+		 * dynamicFilePath.append(projectfilePath + "TestCase\\")
+		 * .append(selectedApplication).append("\\").append("TestCase_").append(
+		 * selectedApplication) .append("_").append(selectedScreen).append(".xlsx");
+		 */
+		if(DataFromDatabaseService.userNDataFromDBMap.get(currentTestAutoUser).equalsIgnoreCase("Yes")){
+            dynamicFilePath.append(dbtestcasesprojectfilePath).append(selectedApplication).append("\\").append("DbData_TestCase_");
+        } else {
+            dynamicFilePath.append(testcasesprojectfilePath).append(selectedApplication).append("\\").append("TestCase_");
+        }        
+        dynamicFilePath.append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
+        
 		String testCasePath = dynamicFilePath.toString();
 		MainTestNG.LOGGER.info("testCasePath=="+testCasePath);
 		try {

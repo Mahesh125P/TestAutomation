@@ -316,4 +316,32 @@ public class DataFromDatabaseService {
 		userNDataFromDBMap.put("sowmiya", isDbData);
 	}
 	
+	public String getDataFromDBForScenarioBuilding(String screenName, String queryToGetData) {
+
+		String data = "";
+		try {
+			// To get Data from DB
+			String application_db = getApplicationDb(screenName);
+			List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
+			if (!application_db.equals("") && application_db.equalsIgnoreCase("Oracle")) {
+				 rows = jdbcOracleTemplate.queryForList(queryToGetData);
+			} else if (!application_db.equals("") && application_db.equalsIgnoreCase("MySql")) {
+				 rows = jdbcMySqlTemplate.queryForList(queryToGetData);
+			} else if (!application_db.equals("") && application_db.equalsIgnoreCase("SqlSever")) {
+				// rows = jdbcSqlSeverTemplate.queryForList(queryToGetData);
+			}
+			for (Map<String, Object> map : rows) {
+				HashMap<String, String> eachRow = new HashMap<String, String>();
+				for (Map.Entry<String, Object> entry : map.entrySet()) {
+					System.out.println(entry.getKey() + ":" + entry.getValue().toString());
+					data = entry.getValue().toString();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return data;
+	}
+	
 }

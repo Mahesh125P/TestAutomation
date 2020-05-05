@@ -1,5 +1,9 @@
 package com.testautomation.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,11 +18,14 @@ import java.util.TreeSet;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.io.Files;
 import com.testautomation.model.Application;
 import com.testautomation.model.Screen;
 import com.testautomation.model.TestResultsReporting;
@@ -48,6 +55,7 @@ public class TestResultsReportingService {
 	
 	final static Logger logger = LoggerFactory.getLogger(TestResultsReportingService.class);
 	
+		
 	public List<TestResultsReporting> getAllTestReports(TestResultsReporting trReport){
 		
 		logger.info("Entering @TestResultsReportingService - getAllTestReports::::");
@@ -146,12 +154,12 @@ public class TestResultsReportingService {
 	}
 	
 	public void persistTestResult(String selectedApp, HashMap<String,HashMap<String,String>> testResultMap) {
-		
+	 			
 		for (Map.Entry<String, HashMap<String,String>> testResult : testResultMap.entrySet()) {
 				TestResultsReporting testResultsReporting = new TestResultsReporting();
 				Application app = testReportRepository.getApplicationByName(selectedApp);
 				String[] screenName = testResult.getKey().split("~");
-				Screen screen = testReportRepository.getScreenByName(screenName[1]);
+				Screen screen = testReportRepository.getScreenByName(screenName[1]);				
 				testResultsReporting = convertMaptoTestResultBean(app.getApplicationID(),screen.getScreenID(),testResult.getKey(),testResult.getValue());
 				saveOrUpdateTestResult(testResultsReporting);				
 		}
@@ -207,8 +215,8 @@ public class TestResultsReportingService {
 			testResultsReporting.setTestedBy("Mahesh4");
 			testResultsReporting.setTestInputs("TEST Input1");
 			testResultsReporting.setTestOutput("P");	
-			testResultsReporting.setApplicationID(12);
-			testResultsReporting.setScreenID(35);
+			testResultsReporting.setApplicationID(1);
+			testResultsReporting.setScreenID(1);
 			//testResultsReporting.setApplicationTestReport(app);
 			//testResultsReporting.setScreenTestReport(app.getScreen().get(0));
 				/*
@@ -276,4 +284,5 @@ public class TestResultsReportingService {
 	public ArrayList<Integer> getAllScreensList(Integer appId) {
 		return scrRepository.getAllScreensByAppList(appId);
 	}
+
 }

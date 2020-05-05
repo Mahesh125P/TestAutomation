@@ -45,6 +45,9 @@ public class Login {
 	@Transient
 	private String applicationsMappedToUser;
 	
+	@Transient
+	private String selectedComponentID;
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -142,4 +145,11 @@ public class Login {
 		this.applicationsMappedToUser = applicationsMappedToUser;
 	}
 
+	public String getSelectedComponentID() {
+		return selectedComponentID;
+	}
+
+	public void setSelectedComponentID(String selectedComponentID) {
+		this.selectedComponentID = selectedComponentID;
+	}
 }
