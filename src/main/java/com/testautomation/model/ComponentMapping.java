@@ -3,6 +3,7 @@ package com.testautomation.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,9 +30,6 @@ public class ComponentMapping implements Serializable {
 	@Column(name = "TAM05_SCENARIO_ID")
 	private Integer componentMappingId;
 
-	@Column(name = "TAM03_SCREEN_ID")
-	private Integer screen;
-
 	@Column(name = "TAM05_TEST_ORDER_N0")
 	private Integer testOrder;
 
@@ -49,6 +47,10 @@ public class ComponentMapping implements Serializable {
 
 	@Column(name = "TAM05_LASTUPDATED_DT")
 	private Date lastupdatedDate;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "TAM03_SCREEN_ID") 
+	private Screen screen;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "TAM04_COMPONENT_ID", nullable = false)
@@ -69,13 +71,15 @@ public class ComponentMapping implements Serializable {
 	}
 
 
-	public Integer getScreen() {
+	public Screen getScreen() {
 		return screen;
 	}
 
-	public void setScreen(Integer screen) {
+
+	public void setScreen(Screen screen) {
 		this.screen = screen;
 	}
+
 
 	public Integer getTestOrder() {
 		return testOrder;

@@ -15,7 +15,7 @@ import org.springframework.web.filter.CorsFilter;
 
 @SpringBootApplication
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@ComponentScan(basePackages = {"com.testautomation.*"})
+@ComponentScan(basePackages = {"com.testautomation.*","com.testautomation"})
 @EntityScan(basePackages = "com.testautomation.model")
 @EnableJpaRepositories(basePackages = "com.testautomation.repositories")
 public class TestAutomationApplication extends SpringBootServletInitializer {

@@ -23,6 +23,9 @@ import java.util.logging.SimpleFormatter;
 
 import javax.servlet.http.HttpSession;
 
+import com.testautomation.repositories.ComponentMappingRepository;
+import com.testautomation.service.DataFromDatabaseService;
+import com.testautomation.service.TestComponentService;
 import com.testautomation.service.TestResultsReportingService;
 import com.testautomation.util.EmailUtil;
 import com.testautomation.util.ExcelAction;
@@ -33,6 +36,7 @@ import com.testautomation.util.SwingTest;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
 import org.testng.xml.XmlClass;
@@ -51,7 +55,6 @@ public class MainTestNG {
 	ReadConfigProperty config = new ReadConfigProperty();
 	static SwingTest swing;
 	static String dir = "user.dir";
-
 	/*
 	 * public static void main(String[] args) {
 	 * 
@@ -80,7 +83,7 @@ public class MainTestNG {
 			 * }
 			 */
 
-	public void startTest(TestResultsReportingService testReportService, String selectedApplication, List<String> selectedScreenList) {
+	public void startTest(TestResultsReportingService testReportService, String selectedApplication, List<String> selectedScreenList, String selectedComponentID,DataFromDatabaseService dataFromDbService) {
 
 		try {
 			filehandler = new FileHandler("./log.txt");
@@ -102,33 +105,50 @@ public class MainTestNG {
 		 */
 		// swing = new SwingTest();
 		MainTestNG test = new MainTestNG();
-
+		//ComponentMappingRepository componentMappingRepository = new ComponentMappingRepository();
 		/**
 		 * testNG execution starts here
 		 */
+		try {
+			ExecuteTestCases.selectedApplication = selectedApplication;
+			ExcelAction.selectedApplication = selectedApplication;
+			ExcelAction.dataFromDbService = dataFromDbService;
+			ExecuteTestCases.selectedScreenList = selectedScreenList;
+			if(selectedComponentID != null && !selectedComponentID.isEmpty() && !selectedComponentID.equals("undefined")) {
+				ExcelAction.operationType = "Automated";
+			}
+			else {
+				ExcelAction.operationType = "Manual";
+			}
 		
-		ExecuteTestCases.selectedApplication = selectedApplication;
-		ExcelAction.selectedApplication = selectedApplication;
-		for(String selectedScreen:selectedScreenList) {
-			try {
-			//test.updatePropertyFile(selectedScreen);
-			ExecuteTestCases.selectedScreen = selectedScreen;
-			ExcelAction.selectedScreen = selectedScreen;			
 			test.testng();
 			testResultMap = ExcelAction.testResultMap;
-			testReportService.persistTestResult(selectedApplication,selectedScreen,testResultMap);
+			testReportService.persistTestResult(selectedApplication,testResultMap);
 			
-			}catch (Exception e) {
-				try {
-					EmailUtil.sendWithAttachment("maheshkumar.p@thirdware.com", null, "Test Automation Error",
-							e.toString(),
-							"");
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+		}catch (Exception e) {
+			try {
+				EmailUtil.sendWithAttachment("maheshkumar.p@thirdware.com", null, "Test Automation Error",
+						e.toString(),
+						"");
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 		}
+		
+		/*
+		 * for(String selectedScreen:selectedScreenList) { try {
+		 * //test.updatePropertyFile(selectedScreen); ExecuteTestCases.selectedScreen =
+		 * selectedScreen; ExcelAction.selectedScreen = selectedScreen; test.testng();
+		 * testResultMap = ExcelAction.testResultMap;
+		 * testReportService.persistTestResult(selectedApplication,selectedScreen,
+		 * testResultMap);
+		 * 
+		 * }catch (Exception e) { try {
+		 * EmailUtil.sendWithAttachment("maheshkumar.p@thirdware.com", null,
+		 * "Test Automation Error", e.toString(), ""); } catch (Exception e1) { // TODO
+		 * Auto-generated catch block e1.printStackTrace(); } } }
+		 */
 		try {
 			
 			EmailUtil.sendWithAttachment("maheshkumar.p@thirdware.com", null, "Test Automation Result",

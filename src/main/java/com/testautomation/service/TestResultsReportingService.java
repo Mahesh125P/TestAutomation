@@ -145,12 +145,13 @@ public class TestResultsReportingService {
 		return testResultReports;
 	}
 	
-	public void persistTestResult(String selectedApp, String selectedScreen, HashMap<String,HashMap<String,String>> testResultMap) {
+	public void persistTestResult(String selectedApp, HashMap<String,HashMap<String,String>> testResultMap) {
 		
 		for (Map.Entry<String, HashMap<String,String>> testResult : testResultMap.entrySet()) {
 				TestResultsReporting testResultsReporting = new TestResultsReporting();
 				Application app = testReportRepository.getApplicationByName(selectedApp);
-				Screen screen = testReportRepository.getScreenByName(selectedScreen);
+				String[] screenName = testResult.getKey().split("~");
+				Screen screen = testReportRepository.getScreenByName(screenName[1]);
 				testResultsReporting = convertMaptoTestResultBean(app.getApplicationID(),screen.getScreenID(),testResult.getKey(),testResult.getValue());
 				saveOrUpdateTestResult(testResultsReporting);				
 		}

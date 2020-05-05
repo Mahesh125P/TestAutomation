@@ -53,6 +53,9 @@ public class Application implements Serializable{
 	@Column(name ="TAM02_LASTUPDATED_DT")
 	private Date lastupdatedDate;
 
+	@Column(name="TAM02_APPLICATION_DB")
+	private String applicationDataBase;
+	
 	public Date getCreatedDate() {
 		return createdDate;
 	}
@@ -141,5 +144,12 @@ public class Application implements Serializable{
 		this.testResultsReporting = testResultsReporting;
 	}
 	
-	
+	public String getApplicationDataBase() {
+		return applicationDataBase;
+	}
+
+	public void setApplicationDataBase(String applicationDataBase) {
+		this.applicationDataBase = applicationDataBase;
+
+	}
 }

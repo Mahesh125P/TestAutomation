@@ -1,10 +1,12 @@
 package com.testautomation.util;
+import java.io.File;
 /**
  * The ExcelAction class is used to store the data from the excel into map
  *
  * 
  */
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -19,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import com.testautomation.MainTestNG;
 import com.testautomation.models.CapturedObjectPropModel;
 import com.testautomation.models.TestCase;
+import com.testautomation.service.DataFromDatabaseService;
 import com.testautomation.service.LoginService;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -47,12 +50,17 @@ public class ExcelAction {
 	static String actionName = null;
 	String testcasepth = "TestCasePath";
 	static String fail = null;
+	public static DataFromDatabaseService dataFromDbService;
 	
 	public static String selectedApplication = null;
 	public static String selectedScreen = null;
+	public static String operationType = null;
+	public static String currentTestAutoUser = null;
 	HashMap<String,String> tempResultMap = new HashMap<String,String>();
 	public static HashMap<String,HashMap<String,String>> testResultMap = new HashMap<String,HashMap<String,String>>();
 	StringBuffer inputValue = new StringBuffer();
+	final static String projectfilePath = Paths.get("").toAbsolutePath().toString() + File.separator + "src"
+			+ File.separator + "main" + File.separator + "resources" + File.separator;
 	
 	/*
 	 * public static void main(String[] args) throws Exception { ExcelAction action
@@ -69,7 +77,7 @@ public class ExcelAction {
 		
 		String sheetName;
 		StringBuffer dynamicFilePath = new StringBuffer();			
-		dynamicFilePath.append("C:\\Workspace_TestAutomation3\\TestAutomation\\src\\main\\resources\\TestCase\\")
+		dynamicFilePath.append(projectfilePath+ "TestCase\\")
 		.append(selectedApplication).append("\\").append("TestCase_").append(selectedApplication)
 		.append("_").append(selectedScreen).append(".xlsx");
 		
@@ -108,7 +116,9 @@ public class ExcelAction {
 				MainTestNG.LOGGER.info("Exception....."+e);
 				throw (e);
 			}
-			
+			if(sheetName.startsWith("TC00")) {
+				sheetName = sheetName+ "~" + selectedScreen;
+			}
 			testDataSheet.put(sheetName, temp1);
 		}
 	}
@@ -122,6 +132,7 @@ public class ExcelAction {
 		inputValue = new StringBuffer();
 		tempResultMap = new HashMap<String,String>();
 		String key = tcName;
+		String[] screenName = tcName.split("~");
 		fail = null;
 		TestCase temp = (TestCase) testCaseSheet.get(key);
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH24:mm:ss");
@@ -142,7 +153,7 @@ public class ExcelAction {
 					String data = temp.getTestData().get(i);
 					String[] testDataArray = data.split("\\.");
 					System.out.println("testDataArray...."+testDataArray.toString());
-					
+					testDataArray[0] = testDataArray[0] + "~" + screenName[1];
 					dataColValues = getColumnValue(testDataArray);
 					System.out.println("dataColValues...."+dataColValues.toString());
 					
@@ -166,7 +177,8 @@ public class ExcelAction {
 					String objectLocators = temp.getObjectNameFromPropertiesFile().get(i);
 					String actionType = temp.getActionType().get(i);
 					String header = temp.getHeaderValue().get(i);
-
+					String dataValue = "";
+					
 					// Data Sheet logic
 					if (temp.getTestData().get(i) != null) {
 						if (!(temp.getTestData().get(i).isEmpty())) {
@@ -177,9 +189,16 @@ public class ExcelAction {
 								//String header = temp.getHeader().get(i);
 								//String[] headerArray = header.split("\\.");
 								//List headerValue = getColumnValue(headerArray);
+								testDataArray[0] = testDataArray[0] + "~" + screenName[1];
 								List columnValue = getColumnValue(testDataArray);
-								Reporter.log("column value======" + columnValue.get(execution).toString());
-								inputValue.append("~").append(testDataArray[1]).append(" : ").append(columnValue.get(execution).toString());
+								if(header != null && header.equals("DB")) {
+									//dataValue = "CQT20022501";
+									dataValue = dataFromDbService.getDataFromDBForScenarioBuilding(screenName[1],columnValue.get(execution).toString());
+								} else {
+									dataValue = columnValue.get(execution).toString();
+								}
+								Reporter.log("column value======" + dataValue);
+								inputValue.append("~").append(testDataArray[1]).append(" : ").append(dataValue);
 								//Reporter.log("column value size==========="+ columnValue.size());
 								try {
 									//Reporter.log("testCaseExecution======================"+ noOfExecution);
@@ -188,15 +207,15 @@ public class ExcelAction {
 									objectLocators=list.get(1);
 									MainTestNG.LOGGER.info("methodType="+methodType);
 									MainTestNG.LOGGER.info("objectLocators as name="+objectLocators);
-									methodtype.methodExecutor(methodType,objectLocators, actionType, columnValue.get(execution).toString(), header);
+									methodtype.methodExecutor(methodType,objectLocators, actionType, dataValue, header);
 									/*System.out.println("Statu fail.....");
 									statusInfo.put("Status", "Pass");
 									statusInfo.put("ActionType", actionName);
 									statusInfo.put("objectLocators", objectLocators);
 									testCaseStatus.put(temp.getTestCaseName(), statusInfo);*/
 								} catch (Exception e) {
-									Reporter.log("Process failed for this test record : " + columnValue.get(execution).toString());
-									tempResultMap.put("FailedTestData", "methodType: "+methodTypeTemp+", actionType: "+actionType + ", InputValue: "+ columnValue.get(execution).toString());
+									Reporter.log("Process failed for this test record : " + dataValue);
+									tempResultMap.put("FailedTestData", "methodType: "+methodTypeTemp+", actionType: "+actionType + ", InputValue: "+ dataValue);
 									tempResultMap.put("TestOutput","F");
 									tempResultMap.put("TestEndDate", df.format(calobj.getTime()));
 									tempResultMap.put("InputValue",inputValue.toString());
@@ -207,11 +226,11 @@ public class ExcelAction {
 									break;
 								}
 							}
-					    }
-						if (execution == noOfExecution) {
-							break;
-						}
-					} else {
+					    
+							if (execution == noOfExecution) {
+								break;
+							}
+						} else {
 						driver = WebDriverClass.getInstance();
 						List<String> list=readLocators(methodType,objectLocators);
 						methodType=list.get(0);
@@ -220,6 +239,7 @@ public class ExcelAction {
 						methodtype.methodExecutor(methodType, objectLocators,
 								actionType, null,null);
 				
+					   }
 					}
 				}
 				if (execution == noOfExecution) {
@@ -290,10 +310,18 @@ public class ExcelAction {
 		for (String suiteName : readFromConfigFile.values()) {
 
 			//${catalina.home}/
-			StringBuffer dynamicFilePath = new StringBuffer();			
-			dynamicFilePath.append("C:\\Workspace_TestAutomation3\\TestAutomation\\src\\main\\resources\\TestSuite\\")
-			.append(selectedApplication).append("\\").append("TestSuite_").append(selectedApplication)
-			.append("_").append(selectedScreen).append(".xlsx");
+			StringBuffer dynamicFilePath = new StringBuffer();	
+			if (operationType.equals("Manual")) {
+				dynamicFilePath.append(projectfilePath + "TestSuite\\")
+				.append(selectedApplication)
+				.append("\\").append("TestSuite_").append(selectedApplication)
+				.append("_").append(selectedScreen).append(".xlsx");
+			} else {
+				dynamicFilePath.append(projectfilePath + "TestSuite\\")
+				.append(selectedApplication).append("\\").append("Automatic")
+				.append("\\").append("TestSuite_").append(selectedApplication)
+				.append("_").append(selectedScreen).append(".xlsx");
+			}
 			//String testSuiteFilePath = config.getConfigValues("TestSuiteName"); 
 			String testSuiteFilePath = dynamicFilePath.toString();
 			System.out.println(testSuiteFilePath);
@@ -312,13 +340,13 @@ public class ExcelAction {
 							String testCaseName = ExcelLibrary.readCell(row, 0,suiteName.trim(), testSuiteFilePath);
 							String testCaseState = ExcelLibrary.readCell(row,1, suiteName.trim(), testSuiteFilePath);
 							if (("YES").equalsIgnoreCase(testCaseState)) {
-								listOfTestCases.add(testCaseName);
+								listOfTestCases.add(testCaseName+ "~" + selectedScreen);
 							}
-							temp1.put(testCaseName, testCaseState);
+							temp1.put(testCaseName + "~" + selectedScreen, testCaseState);
 
 						}
 						Reporter.log("listOfTestCases=============*****************"+ listOfTestCases);
-						testSuiteSheet.put(suiteName, temp1);
+						testSuiteSheet.put(suiteName+ "~" + selectedScreen , temp1);
 					} catch (InvalidFormatException | IOException e) {
 
 						MainTestNG.LOGGER.info("e"+e);
@@ -342,8 +370,8 @@ public class ExcelAction {
 	public void readTestCaseInExcel() throws Exception {
 
 		String testsheetnme = "TestCase_SheetName";
-		StringBuffer dynamicFilePath = new StringBuffer();			
-		dynamicFilePath.append("C:\\Workspace_TestAutomation3\\TestAutomation\\src\\main\\resources\\TestCase\\")
+		StringBuffer dynamicFilePath = new StringBuffer();	
+		dynamicFilePath.append(projectfilePath + "\\TestCase\\")
 		.append(selectedApplication).append("\\").append("TestCase_").append(selectedApplication)
 		.append("_").append(selectedScreen).append(".xlsx");
 		String testCasePath = dynamicFilePath.toString();
@@ -359,7 +387,7 @@ public class ExcelAction {
 							testCasePath).isEmpty())) {
 	
 						tc = new TestCase();
-						tc.setTestCaseName(ExcelLibrary.readCell(row, 0,testCaseSheetName, testCasePath));
+						tc.setTestCaseName(ExcelLibrary.readCell(row, 0,testCaseSheetName, testCasePath) + "~" + selectedScreen);
 						tc.setTestStepId(ExcelLibrary.readCell(row, 1,testCaseSheetName, testCasePath));
 						tc.setMethodType(ExcelLibrary.readCell(row, 3,testCaseSheetName, testCasePath));
 						tc.setObjectNameFromPropertiesFile(ExcelLibrary.readCell(row, 4, testCaseSheetName, testCasePath));
@@ -367,7 +395,7 @@ public class ExcelAction {
 						tc.setOnFail(ExcelLibrary.readCell(row, 6,testCaseSheetName, testCasePath));
 						tc.setTestData(ExcelLibrary.readCell(row, 7,testCaseSheetName, testCasePath));
 						tc.setHeaderValue(ExcelLibrary.readCell(row, 8,testCaseSheetName, testCasePath));
-						testCaseSheet.put(ExcelLibrary.readCell(row, 0,testCaseSheetName, testCasePath), tc);
+						testCaseSheet.put(ExcelLibrary.readCell(row, 0,testCaseSheetName, testCasePath) + "~" + selectedScreen, tc);
 					} else {
 	
 						tc.setTestStepId(ExcelLibrary.readCell(row, 1,
@@ -413,7 +441,7 @@ public class ExcelAction {
 	public void readCapturedObjectProperties() throws Exception {
 		String testSheetName = "CapturedObjectProperties";
 		StringBuffer dynamicFilePath = new StringBuffer();			
-		dynamicFilePath.append("C:\\Workspace_TestAutomation3\\TestAutomation\\src\\main\\resources\\TestCase\\")
+		dynamicFilePath.append(projectfilePath + "TestCase\\")
 		.append(selectedApplication).append("\\").append("TestCase_").append(selectedApplication)
 		.append("_").append(selectedScreen).append(".xlsx");
 		String testCasePath = dynamicFilePath.toString();

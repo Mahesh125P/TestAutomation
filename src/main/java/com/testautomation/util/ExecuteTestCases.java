@@ -49,6 +49,7 @@ public class ExecuteTestCases implements ITest {
 	static ExcelAction act = new ExcelAction();
 	public static String selectedApplication = null;
 	public static String selectedScreen = null;
+	public static List<String> selectedScreenList;
 
 
 	static List list;
@@ -65,12 +66,19 @@ public class ExecuteTestCases implements ITest {
 
 
 		try {
-			act.readTestSuite();
-		
-			act.readTestCaseInExcel();
-			act.readTestDataSheet();
-			act.readCapturedObjectProperties();
-	
+			
+			for(String selectedScreen:selectedScreenList) { 
+				
+				ExecuteTestCases.selectedScreen = selectedScreen; 
+				ExcelAction.selectedScreen = selectedScreen; 
+				
+				act.readTestSuite();
+				act.readTestCaseInExcel();
+				act.readTestDataSheet();
+				act.readCapturedObjectProperties();
+			}
+			
+			
 			/**
 			 * Selecting which browser to be executed
 			 **/
@@ -89,11 +97,11 @@ public class ExecuteTestCases implements ITest {
 			driver.get(applicationURL);
 			//driver.get(config.getConfigValues("http://localhost:9080/Login.action"));
 			WebDriverClass.setDriver(driver);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw (e);
-			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw (e);
+		}
 	}
 	
 	/**
@@ -266,6 +274,7 @@ public class ExecuteTestCases implements ITest {
 			lib.clean();
 			driver.close();
 			driver.quit();
+			ExcelAction.listOfTestCases.clear();
 			//SwingTest.frame.dispose();
 			//SwingTest.frame.dispatchEvent(new WindowEvent(SwingTest.frame,
 					//WindowEvent.WINDOW_CLOSING));
