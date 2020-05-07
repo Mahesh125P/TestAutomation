@@ -30,7 +30,6 @@ import com.testautomation.util.WebDriverClass;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -39,7 +38,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-
 
 public class MethodType extends GlobalVariables{
 
@@ -127,7 +125,7 @@ public class MethodType extends GlobalVariables{
 			String actionType, String data, MethodParameters model) throws Exception {
 		Class cl = null;
 		try {
-			cl = (Class) Class.forName("main.java.actions.MethodType");
+			cl = (Class) Class.forName("com.testautomation.actions.MethodType");
 			com.testautomation.actions.MethodType clName = (MethodType) cl.newInstance();
 			Method[] methods = cl.getMethods();
 			
@@ -240,6 +238,16 @@ public class MethodType extends GlobalVariables{
 		
 		wait1(500);
 		WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
+		wait.until(
+				ExpectedConditions.elementToBeClickable(model.getElement().get(
+						0))).click();
+		wait1(500);
+		MainTestNG.LOGGER.info("click method started"
+				+ model.getObjectLocators());
+		MainTestNG.LOGGER.info("click method completed");
+		
+		/*wait1(500);
+		WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
 		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
 		//executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())));
 		//wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(model.getObjectLocators()))); 
@@ -248,13 +256,13 @@ public class MethodType extends GlobalVariables{
 				ExpectedConditions.presenceOfElementLocated(By.xpath(model.getObjectLocators()))));
 		//WebDriverClass.getDriver().manage().window().maximize();	
 		executor.executeScript("window.scrollBy(0,600)");
-		/*wait.until(
+		wait.until(
 				ExpectedConditions.elementToBeClickable(model.getElement().get(
-						0))).click();*/
+						0))).click();
 		//wait1(500);
 		MainTestNG.LOGGER.info("click method started"
 				+ model.getObjectLocators());
-		MainTestNG.LOGGER.info("click method completed");
+		MainTestNG.LOGGER.info("click method completed");*/
 	}
 	
 	public void popupClickChrome(MethodParameters model) throws AWTException, InterruptedException {
