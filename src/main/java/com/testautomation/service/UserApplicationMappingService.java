@@ -2,6 +2,7 @@ package com.testautomation.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.testautomation.model.Login;
 import com.testautomation.model.TestResultsReporting;
+import com.testautomation.repositories.ApplicationRepository;
 import com.testautomation.repositories.LoginRepository;
 
 @Service
@@ -28,6 +30,9 @@ public class UserApplicationMappingService {
 
 	@Autowired
 	LoginRepository loginrepository;
+	
+	@Autowired
+	ApplicationRepository applicationrepository;
 	
 	@PersistenceContext
     private EntityManager em;
@@ -40,6 +45,13 @@ public class UserApplicationMappingService {
 	
 	public ArrayList<String> getAllApplicationNames(){		
 		return loginrepository.getAllApplicationNames();
+	}
+	
+	public ArrayList<String> getAppsByUser(String user){
+		
+		String userApps = loginrepository.getAppsByUserId(user);
+		ArrayList<String> userAppList = new ArrayList<String>(Arrays.asList(userApps.split(",")));
+		return userAppList;
 	}
 	
 	public boolean saveMappingDetails(MultipartFile file) {
@@ -105,19 +117,23 @@ public class UserApplicationMappingService {
 		List<Login> results = null;
 		try {
 			StringBuilder appBuilder = new StringBuilder();
-			for(String app : userMap.getApplicationsList()) {
-				if(appBuilder.length()==0){
-					appBuilder.append(" TAM01_APPLICATIONS like '%").append(app).append("%'");
-				}else{
-					appBuilder.append("  OR TAM01_APPLICATIONS like '%").append(app).append("%'");
+			if (userMap.getApplicationsList() != null && userMap.getApplicationsList().size() > 0) {
+				for(String app : userMap.getApplicationsList()) {
+					if(appBuilder.length()==0){
+						appBuilder.append(" TAM01_APPLICATIONS like '%").append(app).append("%'");
+					}else{
+						appBuilder.append("  OR TAM01_APPLICATIONS like '%").append(app).append("%'");
+					}
 				}
 			}
 			StringBuilder userBuilder = new StringBuilder();
-			for(String user : userMap.getUsersList()) {
-				if(userBuilder.length()==0){
-					userBuilder.append("'").append(user).append("'");
-				}else{
-					userBuilder.append(",'").append(user).append("'");
+			if (userMap.getUsersList() != null && userMap.getUsersList().size() > 0) {
+				for(String user : userMap.getUsersList()) {
+					if(userBuilder.length()==0){
+						userBuilder.append("'").append(user).append("'");
+					}else{
+						userBuilder.append(",'").append(user).append("'");
+					}
 				}
 			}
 			StringBuffer searchQuery = new StringBuffer(" SELECT  TAM01_USER_ID,TAM01_APPLICATIONS FROM KTAM01_USER WHERE 1=1  ");
@@ -140,5 +156,29 @@ public class UserApplicationMappingService {
         }
 		return results;	
 	
-	}	
+	}
+	
+	public ArrayList<LookupDTO> getAllAppsByUserDTO(String user) {
+		
+		ArrayList<LookupDTO> userAppListDTO = new ArrayList<LookupDTO>();
+		try {
+			String userApps = loginrepository.getAppsByUserId(user);
+			List<LookupDTO> results = null;
+			ArrayList<String> userAppList = new ArrayList<String>(Arrays.asList(userApps.split(",")));
+			userApps = "'" + userApps.replace(",", "','") + "'";
+			for(String app : userAppList) {
+				System.out.println("app::::"+app);
+				userAppListDTO.addAll(applicationrepository.getAllAppsByUserDTO(app));
+				for(LookupDTO app1 : userAppListDTO) {
+					System.out.println(app1.getName());
+				}
+			}
+			
+			
+		}catch(Exception e) {
+        	logger.error("Exception @UserApplicationMappingService - getAllAppsByUserDTO::::");
+    		e.printStackTrace();
+        }
+		return userAppListDTO;
+	}
 }

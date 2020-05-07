@@ -43,6 +43,7 @@ import com.testautomation.service.DataFromDatabaseService;
 import com.testautomation.service.LoginService;
 import com.testautomation.service.LookupDTO;
 import com.testautomation.service.TestResultsReportingService;
+import com.testautomation.service.UserApplicationMappingService;
 import com.testautomation.util.ExcelAction;
 
 /**
@@ -63,11 +64,13 @@ public class TestResultsReportingController {
     DataFromDatabaseService dataFromDbService;
     
     @Autowired
-    ComponentMappingRepository componentMappingRepository;
+    ComponentMappingRepository componentMappingRepository;    
     
-    
-    @Autowired 
-	HttpSession httpSession;
+    @Autowired
+	UserApplicationMappingService userAppService;
+	
+	@Autowired
+	LoginService loggedUserDetails;
     
     
     final static Logger logger = LoggerFactory.getLogger(TestResultsReportingController.class);
@@ -99,7 +102,8 @@ public class TestResultsReportingController {
 		System.out.println("Started startTest!!!");
 		System.out.println("Selected App: "+login.getSelectedApplicationName());
 		
-		System.out.println("isDataFromDBCheckbox(): "+login.isDataFromDBCheckbox());
+//		System.out.println("isDataFromDBCheckbox(): "+login.isDataFromDBCheckbox());
+		System.out.println("isDataFromDBCheckbox(): "+login.getDataFromDBCheckbox());
 				
 		ArrayList<String> applicationList = loginservice.getApplicationNames();
 		//login.setSelectedApplicationName("VDS");
@@ -120,7 +124,7 @@ public class TestResultsReportingController {
 		model.addAttribute("selectedScreenName",login.getSelectedScreenName());
 		System.out.println("Started executing Test!!!");
 		MainTestNG testStart = new MainTestNG();
-		if(login.isDataFromDBCheckbox()) {
+		if(login.getDataFromDBCheckbox().equalsIgnoreCase("true")) {//if(login.isDataFromDBCheckbox()) {
 			dataFromDbService.setuserNDataFromDBMap(login.getUserName(),"Yes");
 			dataFromDbService.doCopyFileToDbData(login.getUserName(),login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
 		} else {
@@ -232,11 +236,10 @@ public class TestResultsReportingController {
     	logger.info("Entering @TestResultsReportingController - loadTestReports::::");
     	TestAutomationModel tAModel = null;
 		try {
-	    	ArrayList<Integer> appsList = testReportService.getAllAppsList();		
-
-			ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
-			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(appsList.get(0)); 
-	    	ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(appsList.get(0));       
+	    	//ArrayList<Integer> appsList = testReportService.getAllAppsList();
+			ArrayList<LookupDTO> testAppsList = userAppService.getAllAppsByUserDTO(loggedUserDetails.currentUser.getUserName());//testReportService.getAllApplicationNames();
+			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(testAppsList.get(0).getId() );//appsList.get(0) 
+	    	ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(testAppsList.get(0).getId() );//appsList.get(0)       
 	        
 	        tAModel = new TestAutomationModel();
 	        tAModel.testUsersList = allTestedUsers;

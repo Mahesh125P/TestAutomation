@@ -40,4 +40,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 	
 	@Query("select applicationID from Application order by applicationName")
 	public ArrayList<Integer> getAllAppsList();
+	
+	@Query("select new com.testautomation.service.LookupDTO(applicationID,applicationName) from Application where applicationName in ( :app) order by applicationName")
+	public ArrayList<LookupDTO> getAllAppsByUserDTO(@Param("app")String app);
 }

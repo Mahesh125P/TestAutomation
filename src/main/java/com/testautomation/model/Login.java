@@ -31,7 +31,7 @@ public class Login {
 	private String selectedScreenName;
 	
 	@Transient 
-	private boolean dataFromDBCheckbox;
+	private String dataFromDBCheckbox;
 	
 	@Column(name="TAM01_APPLICATIONS")
 	private String userApplications;
@@ -105,13 +105,12 @@ public class Login {
 		this.selectedScreenName = selectedScreenName;
 	}
 
-	public boolean isDataFromDBCheckbox() {
-		return dataFromDBCheckbox;
-	}
-
-	public void setDataFromDBCheckbox(boolean dataFromDBCheckbox) {
-		this.dataFromDBCheckbox = dataFromDBCheckbox;
-	}
+	/*
+	 * public boolean isDataFromDBCheckbox() { return dataFromDBCheckbox; }
+	 * 
+	 * public void setDataFromDBCheckbox(boolean dataFromDBCheckbox) {
+	 * this.dataFromDBCheckbox = dataFromDBCheckbox; }
+	 */
 
 	public String getUserApplications() {
 		return userApplications;
@@ -151,5 +150,13 @@ public class Login {
 
 	public void setSelectedComponentID(String selectedComponentID) {
 		this.selectedComponentID = selectedComponentID;
+	}
+
+	public String getDataFromDBCheckbox() {
+		return dataFromDBCheckbox;
+	}
+
+	public void setDataFromDBCheckbox(String dataFromDBCheckbox) {
+		this.dataFromDBCheckbox = dataFromDBCheckbox;
 	}
 }
