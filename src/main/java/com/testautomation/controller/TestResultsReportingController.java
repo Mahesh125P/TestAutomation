@@ -131,7 +131,7 @@ public class TestResultsReportingController {
 			dataFromDbService.setuserNDataFromDBMap(login.getUserName(),"No");
 		}
 		
-		if(login.getSelectedComponentID()!= null && !login.getSelectedComponentID().isEmpty() &&  !login.getSelectedComponentID().equals("undefined")) {
+		if(login.getSelectedComponentID()!= null && !login.getSelectedComponentID().isEmpty() &&  !login.getSelectedComponentID().equals("Choose Component")) {
 			selectedScreenList = componentMappingRepository.findScreenNameByComponentId(Integer.parseInt(login.getSelectedComponentID()));
 		}
 		else
