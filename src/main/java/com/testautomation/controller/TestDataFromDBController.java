@@ -48,10 +48,14 @@ public class TestDataFromDBController {
     	logger.info("Entering @TestDataFromDBController - loadTestDataFromDBDetails::::");
     	TestAutomationModel tAModel = null;
 		try {
-	    	//ArrayList<Integer> appsList = testReportService.getAllAppsList();
+	    	
 			//ArrayList<LookupDTO> testAppsList = usermapping.getAppsByUser(loggedUserDetails.currentUser.getUserName());//testReportService.getAllApplicationNames();
-	    	ArrayList<LookupDTO> testAppsList = usermapping.getAllAppsByUserDTO(loggedUserDetails.currentUser.getUserName());//testReportService.getAllApplicationNames();
-			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(testAppsList.get(0).getId() );//appsList.get(0)
+	    	//ArrayList<LookupDTO> testAppsList = usermapping.getAllAppsByUserDTO(loggedUserDetails.currentUser.getUserName());//testReportService.getAllApplicationNames();
+			//ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(testAppsList.get(0).getId() );//appsList.get(0)
+			
+			//ArrayList<Integer> appsList = testReportService.getAllAppsList();
+			ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
+			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(testAppsList.get(0).getId());
 			
 	    	   
 	        tAModel = new TestAutomationModel();
