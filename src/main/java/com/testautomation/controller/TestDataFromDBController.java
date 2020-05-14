@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.testautomation.model.TestAutomationModel;
+import com.testautomation.service.LoginService;
 import com.testautomation.service.LookupDTO;
 import com.testautomation.service.ResponseDTO;
 import com.testautomation.service.TestDataFromDBService;
 import com.testautomation.service.TestResultsReportingService;
+import com.testautomation.service.UserApplicationMappingService;
 
 @RestController
 public class TestDataFromDBController {
@@ -31,6 +33,12 @@ public class TestDataFromDBController {
 	@Autowired
 	TestDataFromDBService testDataFromDbService;
 	
+	@Autowired
+	LoginService loggedUserDetails;
+	
+	@Autowired
+	UserApplicationMappingService usermapping;
+	
 	final static Logger logger = LoggerFactory.getLogger(TestDataFromDBController.class);
 	
 	
@@ -40,10 +48,11 @@ public class TestDataFromDBController {
     	logger.info("Entering @TestDataFromDBController - loadTestDataFromDBDetails::::");
     	TestAutomationModel tAModel = null;
 		try {
-	    	ArrayList<Integer> appsList = testReportService.getAllAppsList();		
-
-			ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
-			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(appsList.get(0)); 
+	    	//ArrayList<Integer> appsList = testReportService.getAllAppsList();
+			//ArrayList<LookupDTO> testAppsList = usermapping.getAppsByUser(loggedUserDetails.currentUser.getUserName());//testReportService.getAllApplicationNames();
+	    	ArrayList<LookupDTO> testAppsList = usermapping.getAllAppsByUserDTO(loggedUserDetails.currentUser.getUserName());//testReportService.getAllApplicationNames();
+			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(testAppsList.get(0).getId() );//appsList.get(0)
+			
 	    	   
 	        tAModel = new TestAutomationModel();
 	        tAModel.testAppsList = testAppsList;
@@ -100,13 +109,16 @@ public class TestDataFromDBController {
 	@PostMapping(value = "/updateScreenQuery")
 	public ResponseEntity<ResponseDTO> updateScreenQuery1(@RequestParam("screenAppID") String screen_id,
 			@RequestParam("screenQuery") String screenQuery) {
+		logger.info("Entering @TestDataFromDBController - updateScreenQuery1::::");
 		ResponseDTO response = new ResponseDTO();
+		logger.info("@TestDataFromDBController - updateScreenQuery1::::"+screen_id);
 		boolean isFlag = testDataFromDbService.saveQueryDetails(Integer.parseInt(screen_id), screenQuery);
 		if (isFlag) {
 			response.setStatus("error");
 		} else {
 			response.setStatus("success");
 		}
+		logger.info("Exiting @TestDataFromDBController - updateScreenQuery1::::"+response.getStatus());
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
