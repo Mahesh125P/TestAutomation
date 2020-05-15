@@ -83,6 +83,19 @@ public class TestComponentService {
 		Set<String> screenNameList = new HashSet<>();
 		appliationNameList.add(componentMappingDTO.applicationName);
 		
+		List<String> selectedScreenList = new ArrayList<>();
+		selectedScreenList = componentMappingRepository.findScreenNameByComponentId(testComponent.getTestComponentID());
+		
+		String automaticPath = projectfilePath + "TestSuite"+File.separator + 
+				componentMappingDTO.applicationName + File.separator + "Automatic" + File.separator;
+		
+		for(String selectedScreen:selectedScreenList) { 
+			File deletefile = new File(automaticPath +File.separator + "TestSuite_" + componentMappingDTO.applicationName + "_" + selectedScreen + ".xlsx"); 
+			deletefile.delete();
+			//delete folder recursively
+	        //recursiveDelete(deletefile);
+		}
+		
 		Multimap<String,List<String>> testCaseMap = ArrayListMultimap.create();
 		componentMappingDTO.getComponentMapping().stream().forEach(data -> {
 			List<String> values = new ArrayList<String>();
@@ -111,13 +124,6 @@ public class TestComponentService {
 			String manualPath = projectfilePath + "TestSuite"+File.separator + 
 					appliationName + File.separator;
 	
-			String automaticPath = projectfilePath + "TestSuite"+File.separator + 
-					appliationName + File.separator + "Automatic" + File.separator;
-			
-			File deletefile = new File(automaticPath); 
-	        //delete folder recursively
-	        recursiveDelete(deletefile);
-		
 			screenNameList.forEach(screenName -> { 
 			try {
 				
