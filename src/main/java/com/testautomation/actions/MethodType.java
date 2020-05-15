@@ -236,12 +236,11 @@ public class MethodType extends GlobalVariables{
 	 */
 	public void click(MethodParameters model) throws AWTException, InterruptedException {
 		
-		wait1(500);
+		wait1(100);
 		WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
 		wait.until(
 				ExpectedConditions.elementToBeClickable(model.getElement().get(
 						0))).click();
-		wait1(500);
 		MainTestNG.LOGGER.info("click method started"
 				+ model.getObjectLocators());
 		MainTestNG.LOGGER.info("click method completed");
@@ -267,13 +266,12 @@ public class MethodType extends GlobalVariables{
 	
 	public void popupClickChrome(MethodParameters model) throws AWTException, InterruptedException {
 		
-		wait1(500);
 		WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
 		
 		wait.until(
 				ExpectedConditions.elementToBeClickable(model.getElement().get(
 						0))).click();
-		//wait1(500);
+		//wait1(100);
 		MainTestNG.LOGGER.info("click method started"
 				+ model.getObjectLocators());
 		MainTestNG.LOGGER.info("click method completed");

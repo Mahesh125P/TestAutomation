@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 /**
  * @author Mahesh Kumar P
  *
@@ -27,8 +30,9 @@ public class Application implements Serializable{
 	@Column(name="TAM02_APPLICATION_NAME")
 	private String applicationName;
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "TAM02_APPLICATION_ID")
+	@JsonManagedReference
 	private List<Screen> screen; 
 	
 	@OneToMany(cascade = CascadeType.ALL)

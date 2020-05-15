@@ -30,4 +30,7 @@ public interface ScreenRepository extends JpaRepository<Screen, Integer>{
 	
 	@Query("select  application.applicationDataBase from Screen where screenName = :screenName")
 	public String getApplicationDbByScreenName(@Param("screenName") String screenName );
+	
+	@Query("select screenID from Screen where screenName = :screenName")
+	public Integer getScreenID(@Param("screenName") String screenName );
 }

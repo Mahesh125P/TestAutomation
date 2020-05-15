@@ -6,24 +6,27 @@ import com.testautomation.model.ComponentMapping;
 
 public class ComponentMappingDTO {
 
-	Integer componentId;
+	String componentId;
+	String applicationName;
+
 
 	Set<ComponentMapping> componentMapping;
 
-	public Integer getComponentId() {
+	public String getComponentId() {
 		return componentId;
 	}
 
-	public void setComponentId(Integer componentId) {
+	public void setComponentId(String componentId) {
 		this.componentId = componentId;
 	}
 
 	public ComponentMappingDTO() {
 	}
 
-	public ComponentMappingDTO(Integer componentId, Set<ComponentMapping> componentMapping) {
+	public ComponentMappingDTO(String componentId, String  applicationName, Set<ComponentMapping> componentMapping) {
 		super();
 		this.componentId = componentId;
+		this.applicationName = applicationName;
 		this.componentMapping = componentMapping;
 	}
 
@@ -33,6 +36,14 @@ public class ComponentMappingDTO {
 
 	public void setComponentMapping(Set<ComponentMapping> componentMapping) {
 		this.componentMapping = componentMapping;
+	}
+	
+	public String getApplicationName() {
+		return applicationName;
+	}
+
+	public void setApplicationName(String applicationName) {
+		this.applicationName = applicationName;
 	}
 
 }

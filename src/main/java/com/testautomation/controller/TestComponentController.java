@@ -83,7 +83,7 @@ public class TestComponentController {
 		return new ResponseEntity<List<ComponentMapping>>(result, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/testComponent/mapping", consumes = "application/json", produces = "application/json")
+	@PostMapping(value = "/testComponent/mapping")
 	public ResponseEntity<List<ComponentMapping>> saveTestComponentMapping(@RequestBody ComponentMappingDTO componentMapping) {
 
 		logger.info("Entering @TestComponentController - saveTestComponentMapping::::");
