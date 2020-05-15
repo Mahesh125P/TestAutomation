@@ -29,8 +29,11 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.testautomation.model.ComponentMapping;
+import com.testautomation.model.Screen;
 import com.testautomation.model.TestComponent;
+import com.testautomation.repositories.ApplicationRepository;
 import com.testautomation.repositories.ComponentMappingRepository;
+import com.testautomation.repositories.ScreenRepository;
 import com.testautomation.repositories.TestComponentRepository;
 
 @Service
@@ -42,6 +45,9 @@ public class TestComponentService {
 
 	@Autowired
 	private ComponentMappingRepository componentMappingRepository;
+	
+	@Autowired
+	ScreenRepository screenRepository;
 	
 	final static String projectfilePath = Paths.get("").toAbsolutePath().toString() + File.separator + "src"
 			+ File.separator + "main" + File.separator + "resources" + File.separator;
@@ -70,22 +76,28 @@ public class TestComponentService {
 	public List<ComponentMapping> saveComponentMapping(ComponentMappingDTO componentMappingDTO) {
 		List<ComponentMapping> componentMappingList = new ArrayList<>();
 		TestComponent testComponent = new TestComponent();
-		testComponent.setTestComponentID(componentMappingDTO.componentId);
+		testComponent.setTestComponentID(Integer.parseInt(componentMappingDTO.componentId));
+		Screen screen = new Screen();
 		Set<String> appliationNameList = new HashSet<>();
 		Set<String> screenNameList = new HashSet<>();
+		appliationNameList.add(componentMappingDTO.applicationName);
+		
 		Multimap<String,List<String>> testCaseMap = ArrayListMultimap.create();
 		componentMappingDTO.getComponentMapping().stream().forEach(data -> {
 			List<String> values = new ArrayList<String>();
+			
 			ComponentMapping componentMapping = data;
 			componentMapping.setCreatedBy("Mahesh4");
 			componentMapping.setLastupdatedBy("Mahesh4");
 			componentMapping.setCreatedDate(new Date());
 			componentMapping.setLastupdatedDate(new Date());
 			componentMapping.setTestComponent(testComponent);
+			Integer screenID = screenRepository.getScreenID(data.getScreen().getScreenName());
+			screen.setScreenID(screenID);
+			componentMapping.setScreen(screen);
 			ComponentMapping result = componentMappingRepository.saveAndFlush(componentMapping);
 			componentMappingList.add(result);
 			
-			appliationNameList.add(data.getScreen().getApplication().getApplicationName());
 			screenNameList.add(data.getScreen().getScreenName());
 			values.add(data.getTestcase());
 			testCaseMap.put(data.getScreen().getScreenName(), values);
