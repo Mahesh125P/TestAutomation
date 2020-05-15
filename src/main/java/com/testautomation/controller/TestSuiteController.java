@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
 import java.nio.file.Paths;
+import java.nio.file.Files;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,8 +42,9 @@ public class TestSuiteController {
 		ResponseDTO response = new ResponseDTO();
 		try {
 			File saveFile = new File(filePath, "TestSuite_" + application + "_" + screen + ".xlsx");
-			saveFile.mkdir();
-			FileUtils.writeByteArrayToFile(saveFile, file.getBytes());
+			//saveFile.mkdir();
+			saveFile.createNewFile();
+			FileUtils.writeByteArrayToFile(saveFile,file.getBytes());
 		} catch (IllegalStateException | IOException e) {
 			e.printStackTrace();
 			response.setStatus("error");
@@ -81,7 +83,8 @@ public class TestSuiteController {
 		ResponseDTO response = new ResponseDTO();
 		try {
 			File saveFile = new File(filePath, "TestCase_" + application + "_" + screen + ".xlsx");
-			saveFile.mkdir();
+			//saveFile.mkdir();
+			saveFile.createNewFile();
 			FileUtils.writeByteArrayToFile(saveFile, file.getBytes());
 		} catch (IllegalStateException | IOException e) {
 			e.printStackTrace();
