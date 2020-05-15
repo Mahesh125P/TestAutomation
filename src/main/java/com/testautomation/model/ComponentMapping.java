@@ -50,7 +50,7 @@ public class ComponentMapping implements Serializable {
 	@Column(name = "TAM05_LASTUPDATED_DT")
 	private Date lastupdatedDate;
 	
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@JoinColumn(name = "TAM03_SCREEN_ID") 
 	private Screen screen;

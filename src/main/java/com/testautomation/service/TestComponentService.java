@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.mail.Folder;
 import javax.transaction.Transactional;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -94,6 +95,7 @@ public class TestComponentService {
 			componentMapping.setTestComponent(testComponent);
 			Integer screenID = screenRepository.getScreenID(data.getScreen().getScreenName());
 			screen.setScreenID(screenID);
+			screen.setScreenName(data.getScreen().getScreenName());
 			componentMapping.setScreen(screen);
 			ComponentMapping result = componentMappingRepository.saveAndFlush(componentMapping);
 			componentMappingList.add(result);
@@ -103,15 +105,21 @@ public class TestComponentService {
 			testCaseMap.put(data.getScreen().getScreenName(), values);
 		});
 		
+		
 		appliationNameList.forEach(appliationName -> { 
+			
+			String manualPath = projectfilePath + "TestSuite"+File.separator + 
+					appliationName + File.separator;
+	
+			String automaticPath = projectfilePath + "TestSuite"+File.separator + 
+					appliationName + File.separator + "Automatic" + File.separator;
+			
+			File deletefile = new File(automaticPath); 
+	        //delete folder recursively
+	        recursiveDelete(deletefile);
 		
 			screenNameList.forEach(screenName -> { 
 			try {
-	            String manualPath = projectfilePath + "TestSuite"+File.separator + 
-						appliationName + File.separator;
-		
-				String automaticPath = projectfilePath + "TestSuite"+File.separator + 
-						appliationName + File.separator + "Automatic" + File.separator;
 				
 				File file = new File(automaticPath +File.separator + "TestSuite_" + appliationName + "_" + screenName + ".xlsx"); 
 				file.delete();
@@ -163,6 +171,18 @@ public class TestComponentService {
 		});
 		return componentMappingList;
 	}
+	
+	 public static void recursiveDelete(File file) {
+	        //if directory, go inside and call recursively
+	        if (file.isDirectory()) {
+	            for (File f : file.listFiles()) {
+	            	 f.delete();
+	            }
+	        }
+	        //call delete to delete files and empty directory
+	       
+	        System.out.println("Deleted file/folder: "+file.getAbsolutePath());
+	    }
 
 	private boolean getRows(int i) {
 		// TODO Auto-generated method stub
