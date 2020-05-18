@@ -61,9 +61,8 @@ public class ApplicationService {
 
 	@Transactional
 	public boolean saveDetails(MultipartFile file,String appName, String appURL, String appBrowser) {
+		
 		Workbook workbook = getWorkBook(file);
-		Sheet sheet = workbook.getSheetAt(0);
-		Iterator<Row> rows = sheet.iterator();
 		Application application = new Application();
 		Screen scr = new Screen(); //Add new Screen
 		ArrayList<Screen> screenList = new ArrayList<Screen>(); 
@@ -80,30 +79,34 @@ public class ApplicationService {
 			application = new Application();
 		}
 		 
-		rows.next();
-		if (sheet.getRow(0) != null) {
-			while(rows.hasNext()) {
-		
-				Row row = rows.next();
-					
-				if(row.getCell(1).getCellType() != null) {
-					if(!screenNamesList.contains(row.getCell(1).getStringCellValue())) {
-						scr = new Screen();
-						scr.setScreenName(row.getCell(1).getStringCellValue());
-						scr.setCreatedBy("Manual");
-						screenList.add(scr);
-					} 
-				}
-			} 
-			application.setApplicationBrowser(appBrowser);
-			application.setApplicationName(appName);
-			application.setApplicationURL(appURL);
-			application.setCreatedBy("Manual");
+		if(workbook != null) {
+			Sheet sheet = workbook.getSheetAt(0);
+			Iterator<Row> rows = sheet.iterator();
+			rows.next();
+			if (sheet.getRow(0) != null) {
+				while(rows.hasNext()) {
 			
-			application.setScreen(screenList);		
-			applicationrepository.save(application);
+					Row row = rows.next();
+						
+					if(row.getCell(1).getCellType() != null) {
+						if(!screenNamesList.contains(row.getCell(1).getStringCellValue())) {
+							scr = new Screen();
+							scr.setScreenName(row.getCell(1).getStringCellValue());
+							scr.setCreatedBy("Manual");
+							screenList.add(scr);
+						} 
+					}
+				} 
+				application.setApplicationBrowser(appBrowser);
+				application.setApplicationName(appName);
+				application.setApplicationURL(appURL);
+				application.setCreatedBy("Manual");
+				
+				application.setScreen(screenList);		
+				applicationrepository.save(application);
+			} 
 		} else {
-			application = applicationrepository.getApplicationValues(appName);
+			//application = applicationrepository.getApplicationValues(appName);
 			application.setApplicationBrowser(appBrowser);
 			application.setApplicationName(appName);
 			application.setApplicationURL(appURL);
@@ -114,20 +117,21 @@ public class ApplicationService {
 	}	
 
 	private Workbook getWorkBook(MultipartFile file) {
-		Workbook workbook = null;
-		//String extension  = FilenameUtils.getExtension(file.getOriginalFilename());
-		try {
-			workbook = new XSSFWorkbook(file.getInputStream());
-			/*
-			 * if(extension.equalsIgnoreCase("xls")) { workbook = new
-			 * HSSFWorkbook(file.getInputStream()); } else if
-			 * (extension.equalsIgnoreCase("xlsx")) { workbook = new
-			 * XSSFWorkbook(file.getInputStream()); }
-			 */
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		
+		Workbook workbook = null;
+		if(file != null) {
+			try {
+				workbook = new XSSFWorkbook(file.getInputStream());
+				/*
+				 * if(extension.equalsIgnoreCase("xls")) { workbook = new
+				 * HSSFWorkbook(file.getInputStream()); } else if
+				 * (extension.equalsIgnoreCase("xlsx")) { workbook = new
+				 * XSSFWorkbook(file.getInputStream()); }
+				 */
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return workbook;
 	}
 	

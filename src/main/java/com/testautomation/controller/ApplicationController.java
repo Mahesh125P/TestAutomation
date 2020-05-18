@@ -68,9 +68,9 @@ public class ApplicationController {
 	}
 
 	@PostMapping(value = "/updateApplicationDetails")
-	public ResponseEntity<ResponseDTO> updateApplicationDetails(@RequestParam("file") MultipartFile file,
+	public ResponseEntity<ResponseDTO> updateApplicationDetails(@RequestParam(name = "file", required = false) MultipartFile file,
 			@RequestParam("appName") String appName, @RequestParam("appURL") String appURL,
-			@RequestParam("appBrowser") String appBrowser) {
+			@RequestParam("appBrowser") String appBrowser) throws IOException {
 		
 		logger.info("Entering @ApplicationController - updateApplicationDetails::::");
 	      
