@@ -1,6 +1,5 @@
 package com.testautomation.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.testautomation.model.Login;
-import com.testautomation.model.TestResultsReporting;
 import com.testautomation.repositories.ApplicationRepository;
 import com.testautomation.repositories.LoginRepository;
 
@@ -147,7 +145,7 @@ public class UserApplicationMappingService {
 			}
 			logger.info("@UserApplicationMappingService - getAllMappingsResults::searchQuery::"+searchQuery);
 			Query qry = em.createNativeQuery(searchQuery.toString());
-			results =qry.getResultList();
+			results = qry.getResultList();
 			logger.info("Exiting @UserApplicationMappingService - getAllMappingsResults::::"+searchQuery.toString());
 		
 		}catch(Exception e) {
@@ -160,21 +158,16 @@ public class UserApplicationMappingService {
 	
 	public ArrayList<LookupDTO> getAllAppsByUserDTO(String user) {
 		
+		logger.info("Entering @UserApplicationMappingService - getAllAppsByUserDTO::::"+user);
 		ArrayList<LookupDTO> userAppListDTO = new ArrayList<LookupDTO>();
 		try {
 			String userApps = loginrepository.getAppsByUserId(user);
-			List<LookupDTO> results = null;
 			ArrayList<String> userAppList = new ArrayList<String>(Arrays.asList(userApps.split(",")));
 			userApps = "'" + userApps.replace(",", "','") + "'";
 			for(String app : userAppList) {
-				System.out.println("app::::"+app);
+				logger.info("apps list::::"+app);
 				userAppListDTO.addAll(applicationrepository.getAllAppsByUserDTO(app));
-				for(LookupDTO app1 : userAppListDTO) {
-					System.out.println(app1.getName());
-				}
 			}
-			
-			
 		}catch(Exception e) {
         	logger.error("Exception @UserApplicationMappingService - getAllAppsByUserDTO::::");
     		e.printStackTrace();

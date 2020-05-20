@@ -34,6 +34,7 @@ import com.testautomation.model.ApplicationDTO;
 import com.testautomation.service.ApplicationService;
 import com.testautomation.service.LookupDTO;
 import com.testautomation.service.ResponseDTO;
+import com.testautomation.service.UserApplicationMappingService;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,6 +49,9 @@ public class ApplicationController {
 	@Autowired
 	ApplicationService applicationService;
 	
+	@Autowired
+	UserApplicationMappingService userAppService;
+	
 	 final static Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
 	/*
@@ -60,6 +64,11 @@ public class ApplicationController {
 	@GetMapping(value = "/applicationNames")
 	public ArrayList<LookupDTO> loadApplicationNames() {
 		return this.applicationService.getAllApplicationNames();
+	}
+	
+	@GetMapping(value = "/applicationNames/{userName}")
+	public ArrayList<LookupDTO> loadApplicationNames_app(@PathVariable String userName) {
+		return userAppService.getAllAppsByUserDTO(userName);
 	}
 
 	@GetMapping(value = "/applicationDetails/{id}")

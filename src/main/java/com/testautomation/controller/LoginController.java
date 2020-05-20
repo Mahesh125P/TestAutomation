@@ -34,7 +34,7 @@ public class LoginController {
 	LoginService loginservice;
 	
 	final static Logger logger = LoggerFactory.getLogger(LoginController.class);
-	
+		
 	@RequestMapping(value = "/welcome", method = RequestMethod.GET)
 	public String showWelcomePage(ModelMap model) {
 		return "welcome";
@@ -48,7 +48,7 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value = "/loginSubmit", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String LoginSubmit(@RequestBody Login login) {
+	public String LoginSubmit(@RequestBody Login login,HttpServletRequest request) {
 		logger.info("Started LoginSubmit!!!");
 		logger.info("Username:"+login.getUserName() + "Password:  "+login.getPassword());
 		if(!loginservice.isaValidUser(login.getUserName())){

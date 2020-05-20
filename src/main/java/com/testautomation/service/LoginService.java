@@ -26,7 +26,6 @@ public class LoginService {
 	public static ArrayList<String> screenDetailsList = new ArrayList<String>(); 		
 	public static HashMap<String,ArrayList<String>> screenDetailsMap = new HashMap<String,ArrayList<String>>();
 	public static HashMap<String,HashMap<String,String>> applicationDtlsMap = new HashMap<String,HashMap<String,String>>();
-	public static Login currentUser = new Login();
 	
 	public boolean isaValidUser(String userName) {
 		
@@ -34,8 +33,6 @@ public class LoginService {
 		Optional<Login> loginUser = loginrepository.findById(userName);
 		if(!loginUser.isPresent()) {
 			validUser = false;
-		} else {
-			currentUser = loginUser.get();			
 		}
 		return validUser;
 	}

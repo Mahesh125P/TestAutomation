@@ -1,6 +1,5 @@
 package com.testautomation.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -42,20 +41,22 @@ public class TestDataFromDBController {
 	final static Logger logger = LoggerFactory.getLogger(TestDataFromDBController.class);
 	
 	
-	@RequestMapping(value ="/loadTestDataFromDBDetails")
-    public TestAutomationModel loadTestDataFromDBDetails() {
+	@RequestMapping(value ="/loadTestDataFromDBDetails/{userName}")
+    public TestAutomationModel loadTestDataFromDBDetails(@PathVariable String userName) {
         
     	logger.info("Entering @TestDataFromDBController - loadTestDataFromDBDetails::::");
     	TestAutomationModel tAModel = null;
 		try {
 	    	
 			//ArrayList<LookupDTO> testAppsList = usermapping.getAppsByUser(loggedUserDetails.currentUser.getUserName());//testReportService.getAllApplicationNames();
-	    	//ArrayList<LookupDTO> testAppsList = usermapping.getAllAppsByUserDTO(loggedUserDetails.currentUser.getUserName());//testReportService.getAllApplicationNames();
-			//ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(testAppsList.get(0).getId() );//appsList.get(0)
+	    	
+			//UserApp Mapping changes::::::::::
+			ArrayList<LookupDTO> testAppsList = usermapping.getAllAppsByUserDTO(userName);//(loggedUserDetails.currentUser.getUserName());//testReportService.getAllApplicationNames();
+			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(testAppsList.get(0).getId() );//appsList.get(0)
 			
 			//ArrayList<Integer> appsList = testReportService.getAllAppsList();
-			ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
-			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(testAppsList.get(0).getId());
+			//ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
+			//ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(testAppsList.get(0).getId());
 			
 	    	   
 	        tAModel = new TestAutomationModel();
@@ -76,6 +77,9 @@ public class TestDataFromDBController {
     	TestAutomationModel tAModel = null;
 		try {
 
+			//UserApp Mapping changes::::::::::
+			//ArrayList<LookupDTO> testAppsList = usermapping.getAllAppsByUserDTO(loggedUserDetails.currentUser.getUserName());//testReportService.getAllApplicationNames();
+			
 			ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
 			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(applicationId);
 			String searchResults = testDataFromDbService.getQueryDetails(testScreensList.get(0).getId());
@@ -117,7 +121,7 @@ public class TestDataFromDBController {
 		ResponseDTO response = new ResponseDTO();
 		logger.info("@TestDataFromDBController - updateScreenQuery1::::"+screen_id);
 		boolean isFlag = testDataFromDbService.saveQueryDetails(Integer.parseInt(screen_id), screenQuery);
-		if (isFlag) {
+		if (!isFlag) {
 			response.setStatus("error");
 		} else {
 			response.setStatus("success");

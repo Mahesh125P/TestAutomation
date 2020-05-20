@@ -98,15 +98,15 @@ public class DataFromDatabaseService {
 			
 				for (int i = 0; i < listOfSheets.size(); i++) {
 					sheetName = listOfSheets.get(i);					
-					Reporter.log("Test Case Sheet Name...." + sheetName + "----" + "pathOFFile" + pathOFFile);
+					logger.info("Test Case Sheet Name...." + sheetName + "----" + "pathOFFile" + pathOFFile);
 					List listColumnNames = getColumnNames(sheetName, workbook,workbook.getSheet(sheetName).getRow(0).getLastCellNum());
 					columnsBySheets.put(sheetName, listColumnNames);
 				}
 				
 		} catch (InvalidFormatException | IOException e) {
-			MainTestNG.LOGGER.info("InvalidFormatException,IOException,FileNotFoundException...." + e);
+			logger.info("InvalidFormatException,IOException,FileNotFoundException...." + e);
 		} catch (Exception e) {
-			MainTestNG.LOGGER.info("Exception....." + e);
+			logger.info("Exception....." + e);
 			throw (e);
 		}finally {
 			workbook.close();				
@@ -147,7 +147,7 @@ public class DataFromDatabaseService {
 								}
 						}
 					 }
-					System.out.println(currentSheetName.getKey() + " = " + currentSheetName.getValue());
+					 logger.info(currentSheetName.getKey() + " = " + currentSheetName.getValue());
 				}
 			//}
 			fip.close();
@@ -157,7 +157,7 @@ public class DataFromDatabaseService {
 				outputStream.close();
 			}
 		} catch (Exception e) {
-			MainTestNG.LOGGER.info("Exception....." + e);
+			logger.info("Exception....." + e);
 			throw (e);
 		}finally {
 			workbook.close();				
@@ -224,7 +224,7 @@ public class DataFromDatabaseService {
 		for (int i = 0; i <= j; i++) {
 			if (sheet.getRow(0).getCell(i) != null) {
 				list.add(sheet.getRow(0).getCell(i).getStringCellValue().toString());
-				System.out.println("...."+sheet.getRow(0).getCell(i).getStringCellValue().toString());
+				logger.info("...."+sheet.getRow(0).getCell(i).getStringCellValue().toString());
 			}
 		}
 		return list;
@@ -278,10 +278,10 @@ public class DataFromDatabaseService {
 			
 			File directory = new File(to);
 			if (directory.exists()) {
-				System.out.println("Directory already exists ...");
+				logger.info("Directory already exists ...");
 				Files.copy(src.toFile(), dest.toFile());
 			} else {
-				System.out.println("Directory not exists, creating now");
+				logger.info("Directory not exists, creating now");
 				File saveFile = new File(to,  "DbData_TestCase_" + application + "_" + scr + ".xlsx");
 				saveFile.mkdir();
 				Files.copy(src.toFile(), dest.toFile());
@@ -303,17 +303,17 @@ public class DataFromDatabaseService {
 			Row removingRow = sheet.getRow(rowIndex);
 			if (removingRow != null) {
 				sheet.removeRow(removingRow);
-				System.out.println("Deleting.... ");
+				logger.info("Deleting.... ");
 			}
 		}
 	}
 	
 	public void setuserNDataFromDBMap(String username,String isDbData){
 		
-		//ExcelAction.currentTestAutoUser = username;
-		//userNDataFromDBMap.put(userName, "Yes");
-		ExcelAction.currentTestAutoUser = "sowmiya";
-		userNDataFromDBMap.put("sowmiya", isDbData);
+		ExcelAction.currentTestAutoUser = username;
+		userNDataFromDBMap.put(username, isDbData);
+		//ExcelAction.currentTestAutoUser = "sowmiya";
+		//userNDataFromDBMap.put("sowmiya", isDbData);
 	}
 	
 	public String getDataFromDBForScenarioBuilding(String screenName, String queryToGetData) {
@@ -333,7 +333,7 @@ public class DataFromDatabaseService {
 			for (Map<String, Object> map : rows) {
 				HashMap<String, String> eachRow = new HashMap<String, String>();
 				for (Map.Entry<String, Object> entry : map.entrySet()) {
-					System.out.println(entry.getKey() + ":" + entry.getValue().toString());
+					logger.info(entry.getKey() + ":" + entry.getValue().toString());
 					data = entry.getValue().toString();
 				}
 			}

@@ -13,7 +13,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -44,7 +43,6 @@ import com.testautomation.service.LoginService;
 import com.testautomation.service.LookupDTO;
 import com.testautomation.service.TestResultsReportingService;
 import com.testautomation.service.UserApplicationMappingService;
-import com.testautomation.util.ExcelAction;
 
 /**
  * @author sowmiya.r
@@ -102,8 +100,7 @@ public class TestResultsReportingController {
 		System.out.println("Started startTest!!!");
 		System.out.println("Selected App: "+login.getSelectedApplicationName());
 		
-//		System.out.println("isDataFromDBCheckbox(): "+login.isDataFromDBCheckbox());
-		System.out.println("isDataFromDBCheckbox(): "+login.getDataFromDBCheckbox());
+		logger.info("isDataFromDBCheckbox(): UserName:::::::::"+login.getDataFromDBCheckbox()+login.getUserName());
 				
 		ArrayList<String> applicationList = loginservice.getApplicationNames();
 		//login.setSelectedApplicationName("VDS");
@@ -124,7 +121,7 @@ public class TestResultsReportingController {
 		model.addAttribute("selectedScreenName",login.getSelectedScreenName());
 		System.out.println("Started executing Test!!!");
 		MainTestNG testStart = new MainTestNG();
-		if(login.getDataFromDBCheckbox().equalsIgnoreCase("true")) {//if(login.isDataFromDBCheckbox()) {
+		if(login.getDataFromDBCheckbox().equalsIgnoreCase("true")) {
 			dataFromDbService.setuserNDataFromDBMap(login.getUserName(),"Yes");
 			dataFromDbService.doCopyFileToDbData(login.getUserName(),login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
 		} else {
@@ -210,7 +207,7 @@ public class TestResultsReportingController {
 		            
 		            reportRow.createCell(5).setCellValue(resultReport.getTestedBy());
 		            reportRow.createCell(6).setCellValue(resultReport.getTestInputs());
-		            reportRow.createCell(7).setCellValue(resultReport.getTestOutput() != null && resultReport.getTestOutput().equalsIgnoreCase("P") ? "Pass" :"Fail");
+		            reportRow.createCell(7).setCellValue(resultReport.getTestOutput() != null && (resultReport.getTestOutput().equalsIgnoreCase("P") || resultReport.getTestOutput().equalsIgnoreCase("Pass") )? "Pass" :"Fail");
 	            }
 	        }
 	        
@@ -230,20 +227,21 @@ public class TestResultsReportingController {
     }
     
     
-    @RequestMapping(value ="/loadTestReportDetails")
-    public TestAutomationModel loadTestReports() {
+    @RequestMapping(value ="/loadTestReportDetails/{userName}")
+    public TestAutomationModel loadTestReports(@PathVariable String userName) {
         
     	logger.info("Entering @TestResultsReportingController - loadTestReports::::");
     	TestAutomationModel tAModel = null;
 		try {
-	    	ArrayList<Integer> appsList = testReportService.getAllAppsList();
-			//ArrayList<LookupDTO> testAppsList = userAppService.getAllAppsByUserDTO(loggedUserDetails.currentUser.getUserName());
-	    	//ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(testAppsList.get(0).getId() ); 
-	    	//ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(testAppsList.get(0).getId() );//appsList.get(0)       
-	        
-	    	ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
-			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(appsList.get(0));
-	    	ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(appsList.get(0));       
+	    	
+	    	ArrayList<LookupDTO> testAppsList = userAppService.getAllAppsByUserDTO(userName);
+	    	ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(testAppsList.get(0).getId() ); 
+	    	ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(testAppsList.get(0).getId() );       
+	    	
+	    	//ArrayList<Integer> appsList = testReportService.getAllAppsList();
+	    	//ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
+	    	//ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(appsList.get(0));
+	    	//ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(appsList.get(0));       
 	        
 	        tAModel = new TestAutomationModel();
 	        tAModel.testUsersList = allTestedUsers;
@@ -257,16 +255,17 @@ public class TestResultsReportingController {
         return tAModel;
     }
     
-    @GetMapping(value ="/loadTestReportDetails/{applicationId}")
-    public TestAutomationModel reloadTestReports(@PathVariable Integer applicationId) {
+    
+    @GetMapping(value ="/reloadloadTestReportDetails/{userName}/{applicationId}")
+    public TestAutomationModel reloadTestReports(@PathVariable String userName,@PathVariable Integer applicationId) {
         
     	logger.info("Entering @TestResultsReportingController - reloadTestReports::::");
     	TestAutomationModel tAModel = null;
 		try {
 
-			//ArrayList<LookupDTO> testAppsList = userAppService.getAllAppsByUserDTO(loggedUserDetails.currentUser.getUserName());
+			ArrayList<LookupDTO> testAppsList = userAppService.getAllAppsByUserDTO(userName);
 	    	
-			ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
+			//ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
 			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(applicationId);
 			ArrayList<String> allTestedUsers = testReportService.getAllTestedUsersByApp(applicationId);       
 	        

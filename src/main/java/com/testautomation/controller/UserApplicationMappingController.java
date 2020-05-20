@@ -18,9 +18,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -30,20 +28,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.testautomation.model.Login;
 import com.testautomation.model.TestAutomationModel;
-import com.testautomation.model.TestResultsReporting;
-import com.testautomation.service.DataFromDatabaseService;
 import com.testautomation.service.LoginService;
-import com.testautomation.service.LookupDTO;
 import com.testautomation.service.ResponseDTO;
 import com.testautomation.service.TestResultsReportingService;
 import com.testautomation.service.UserApplicationMappingService;
@@ -59,11 +54,13 @@ public class UserApplicationMappingController {
 	
 	@Autowired
 	UserApplicationMappingService usermapping;
-	 
-
+	
 	@Autowired
 	TestResultsReportingService testReportService;
 
+	@Autowired
+	LoginService loggedUserDetails;
+	
 	final static Logger logger = LoggerFactory.getLogger(UserApplicationMappingController.class);
 	
 	final static String templatefilePath = Paths.get("").toAbsolutePath().toString() + File.separator + "src"
@@ -98,21 +95,14 @@ public class UserApplicationMappingController {
 		 OutputStream out = null;
 	        XSSFWorkbook wb = null;
 	        try {
-	        	userMapDetails = new Login();
-	        	ArrayList<String> applicationsList = new ArrayList<String>();applicationsList.add("VDS");
-	        	ArrayList<String> usersList = new ArrayList<String>();usersList.add("Sowmiya");usersList.add("Mahesh1");
-	        	userMapDetails.setApplicationsList(applicationsList);userMapDetails.setUsersList(usersList);
-	        	
-	        	List<Login> userAppMappingsResult = usermapping.getUserApplicationMappings(userMapDetails);
-	        	
+	        	List<Login> userAppMappingsResult = usermapping.getUserApplicationMappings(userMapDetails);	        	
 	        	LocalDateTime localDate = LocalDateTime.now();      
 	 	        ZonedDateTime zdt = localDate.atZone(ZoneId.systemDefault());
 	 	        Date output = Date.from(zdt.toInstant());
 	 	        SimpleDateFormat format2 = new SimpleDateFormat("dd-MMM-yyyy");       
 	 	        String outputDate = format2.format(output);	 	        
 	 	        
-	        	//String fileName = "UserApplicationMappings-" + outputDate.toString() + ".xlsx"; 
-	 	       String fileName = "UserAndApplicationMappingDetails.xlsx";
+	        	String fileName = "UserAndApplicationMappingDetails.xlsx";
 	        	
 	 	       	response.setContentType("application/vnd.ms-excel");
 		        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
@@ -149,6 +139,7 @@ public class UserApplicationMappingController {
 		logger.info("Exiting @UserApplicationMappingController - downloadUserAppMappingDetails()::::");
 	}
 
+	
 	@PostMapping(value = "/uploadUserAppMappingDetails")
 	public ResponseEntity<ResponseDTO> updateApplicationDetails(@RequestParam("file") MultipartFile file) {
 		
@@ -167,14 +158,16 @@ public class UserApplicationMappingController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/loadUserAppMappings")
-	public TestAutomationModel loadUserAppMappings() {
+	
+	@RequestMapping(value = "/loadUserAppMappings/{userName}")
+	public TestAutomationModel loadUserAppMappings(HttpServletRequest request,@PathVariable String userName) {
 		logger.info("Entering @UserApplicationMappingController - loadUserAppMappings()::::");
-		//session.getAttribute("userName");HttpSession session
-    	
+		
+		logger.info("UserName::::"+userName);
+		
 		TestAutomationModel tAModel = null;
 		
-		ArrayList<String> allAppsList = usermapping.getAllApplicationNames();
+		ArrayList<String> allAppsList = usermapping.getAppsByUser(userName);//usermapping.getAllApplicationNames();
 		ArrayList<String> allUsersList = usermapping.getAllUsers();
 		
 		tAModel = new TestAutomationModel();
