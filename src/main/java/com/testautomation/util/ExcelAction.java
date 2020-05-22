@@ -303,15 +303,16 @@ public class ExcelAction {
 	}
 
 	private List getColumnValue(String[] testDataArray) {
-
 		Map<String, Object> dataSheet = (HashMap<String, Object>) testDataSheet
 				.get(testDataArray[0]);
 		String value = null;
-		if(testDataArray.length > 2)
+		List coulmnValue = null;
+		if(testDataArray.length > 2) {
 			value =  dataSheet.get(testDataArray[1]).toString().replace("[", "").replace("]", "").concat(",").concat(dataSheet.get(testDataArray[3]).toString().replace("[", "").replace("]", ""));
-		else
-			value =  dataSheet.get(testDataArray[1]).toString().replace("[", "").replace("]", "");
-		List coulmnValue =  Arrays.asList(value);
+			coulmnValue =  Arrays.asList(value);
+		}else {
+			coulmnValue = (ArrayList) dataSheet.get(testDataArray[1]);
+		}
 		return coulmnValue;
 	}
 
@@ -353,6 +354,7 @@ public class ExcelAction {
 			System.out.println(testSuiteFilePath);
 			List<String> suiteSheets = ExcelLibrary.getNumberOfSheetsinSuite(testSuiteFilePath);
 			System.out.println(suiteSheets.size());
+			testSuiteSheet.clear();
 
 			for (int i = 0; i < suiteSheets.size(); i++) {
 				String sheetName = suiteSheets.get(i);

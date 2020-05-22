@@ -1137,7 +1137,7 @@ public class MethodType extends GlobalVariables{
 	 * Update the multiple column on on same row
 	 * Based on Static input value name
 	 */
-	public void dynamicTableEdit(MethodParameters model) {
+	public void dynamicTableEditValue(MethodParameters model) {
 
 		List<WebElement> rowsHeader =  WebDriverClass.getDriver().findElements(By.tagName("th"));
 		
@@ -1149,18 +1149,19 @@ public class MethodType extends GlobalVariables{
 								By.xpath(".//tr/td[contains(text(), '"+ data[0] + "')]/ancestor::tr[1]/td/input[@name='"+model.getObjectLocators()+"']")).clear();
 				WebDriverClass.getDriver().findElement(
 							    By.xpath(".//tr/td[contains(text(), '"+ data[0] + "')]/ancestor::tr[1]/td/input[@name='"+model.getObjectLocators()+"']")).sendKeys(data[1]);
-				//JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
-				//executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(
-				//		By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/input[@type='text']")));
-				//WebDriverClass.getDriver().findElement(
-				//		By.xpath(".//tr/td[contains(text(), '"+ data[0] + "')]/ancestor::tr[1]/td/input[@id='SaveFreightCostForm_insuranceFee']")).clear();
-				//WebDriverClass.getDriver().findElement(
-				//		By.xpath(".//tr/td[contains(text(), '"+ data[0] + "')]/ancestor::tr[1]/td[" +index+ "]/a")).sendKeys(data[1]);
-		
-				/*WebDriverClass.getDriver().findElement(
-						By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td[" +index+ "]/a")).click();*/
 			}
 		}
+	}
+	
+	/**
+	 * @param model
+	 * Click which row wants to edit
+	 * Based on Static input value 
+	 */
+	public void dynamicTableEdit(MethodParameters model) {
+		wait1(1000);
+		WebDriverClass.getDriver().findElement(
+				By.xpath(".//tr/td[contains(text(), '"+ model.getData() + "')]/ancestor::tr[1]/td/a[contains(text(), '"+ model.getHeaderValue() + "')]")).click();
 	}
 	
 	/**

@@ -1,5 +1,7 @@
 package com.testautomation.service;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
@@ -26,6 +28,9 @@ public class LoginService {
 	public static ArrayList<String> screenDetailsList = new ArrayList<String>(); 		
 	public static HashMap<String,ArrayList<String>> screenDetailsMap = new HashMap<String,ArrayList<String>>();
 	public static HashMap<String,HashMap<String,String>> applicationDtlsMap = new HashMap<String,HashMap<String,String>>();
+
+	final static String projectfilePath = Paths.get("").toAbsolutePath().toString() + File.separator + "src"
+			+ File.separator + "main" + File.separator + "resources" + File.separator;
 	
 	public boolean isaValidUser(String userName) {
 		
@@ -92,11 +97,16 @@ public class LoginService {
 		ArrayList<Application> applicationDtlsList = loginrepository.getApplicationDetails();
 		HashMap<String,ArrayList<String>> screenDetailsMapNew = new HashMap<String,ArrayList<String>>();
 		ArrayList<String> screenDetailsListNew = new ArrayList<String>();
+		String manualPath = projectfilePath + "TestSuite"+File.separator;
+		
 		String AppName = null;
 		for(Application application:applicationDtlsList) {
 			AppName = application.getApplicationName();
 			for(Screen screen: application.getScreen()) {
-				screenDetailsListNew.add(screen.getScreenName());			
+				File file = new File(manualPath +File.separator + AppName +File.separator + "TestSuite_" + AppName + "_" + screen.getScreenName() + ".xlsx"); 
+				if (file.exists()) {
+					screenDetailsListNew.add(screen.getScreenName());		
+				}
 			}
 			screenDetailsMapNew.put(AppName, screenDetailsListNew);
 			screenDetailsListNew = new ArrayList<String>();
