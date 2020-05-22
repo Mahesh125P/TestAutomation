@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -95,6 +96,21 @@ public class TestComponentController {
 			e.printStackTrace();
 		}
 		logger.info("Completed @TestComponentController - saveTestComponentMapping::::");
+		return new ResponseEntity<List<ComponentMapping>>(savedData, HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/testComponent/deleteMapping")
+	public ResponseEntity<List<ComponentMapping>> deleteTestComponentMapping(@RequestBody ComponentMappingDTO componentMapping) {
+
+		logger.info("Entering @TestComponentController - saveTestComponentMapping::::");
+		List<ComponentMapping> savedData = null;
+		try {
+			savedData = testComponentService.deleteComponentMapping(componentMapping);
+		} catch (Exception e) {
+			logger.error("Exception @TestComponentController - deleteComponentMapping::::");
+			e.printStackTrace();
+		}
+		logger.info("Completed @TestComponentController - deleteComponentMapping::::");
 		return new ResponseEntity<List<ComponentMapping>>(savedData, HttpStatus.OK);
 	}
 }

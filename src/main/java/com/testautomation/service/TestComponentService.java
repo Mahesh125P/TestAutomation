@@ -178,6 +178,37 @@ public class TestComponentService {
 		return componentMappingList;
 	}
 	
+	public List<ComponentMapping> deleteComponentMapping(ComponentMappingDTO componentMappingDTO) {
+		List<ComponentMapping> componentMappingList = new ArrayList<>();
+		TestComponent testComponent = new TestComponent();
+		testComponent.setTestComponentID(Integer.parseInt(componentMappingDTO.componentId));
+		Screen screen = new Screen();
+		
+		
+		String automaticPath = projectfilePath + "TestSuite"+File.separator + 
+				componentMappingDTO.applicationName + File.separator + "Automatic" + File.separator;
+		
+		Multimap<String,List<String>> testCaseMap = ArrayListMultimap.create();
+		componentMappingDTO.getComponentMapping().stream().forEach(data -> {
+			List<String> values = new ArrayList<String>();
+			
+			ComponentMapping componentMapping = data;
+			componentMapping.setTestComponent(testComponent);
+			Integer screenID = screenRepository.getScreenID(data.getScreen().getScreenName());
+			screen.setScreenID(screenID);
+			screen.setScreenName(data.getScreen().getScreenName());
+			componentMapping.setScreen(screen);
+			componentMappingRepository.delete(componentMapping);
+			
+			File deletefile = new File(automaticPath +File.separator + "TestSuite_" + componentMappingDTO.applicationName + "_" + data.getScreen().getScreenName() + ".xlsx"); 
+			deletefile.delete();
+		
+			values.add(data.getTestcase());
+			testCaseMap.put(data.getScreen().getScreenName(), values);
+		});
+		return componentMappingList;
+	}
+	
 	 public static void recursiveDelete(File file) {
 	        //if directory, go inside and call recursively
 	        if (file.isDirectory()) {

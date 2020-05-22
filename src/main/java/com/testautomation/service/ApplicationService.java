@@ -20,6 +20,7 @@ import com.testautomation.model.Application;
 import com.testautomation.model.ApplicationDTO;
 import com.testautomation.model.Screen;
 import com.testautomation.repositories.ApplicationRepository;
+import com.testautomation.repositories.ScreenRepository;
 
 /**
  * @author Mahesh Kumar P
@@ -36,6 +37,9 @@ public class ApplicationService {
 	public List<Application> findAllApplication() {
 		return applicationrepository.findAll();
 	}
+	
+	@Autowired
+	ScreenRepository screenRepository;
 	
 	/*
 	 * public void persistApplication() { //Sample Persist Application app =
@@ -66,6 +70,7 @@ public class ApplicationService {
 		Application application = new Application();
 		Screen scr = new Screen(); //Add new Screen
 		ArrayList<Screen> screenList = new ArrayList<Screen>(); 
+		ArrayList<Screen> screenRemoveList = new ArrayList<Screen>(); 
 		ArrayList<String> screenNamesList = new ArrayList<String>(); 
 		
 		application = applicationrepository.getApplicationValues(appName);
@@ -89,12 +94,27 @@ public class ApplicationService {
 					Row row = rows.next();
 						
 					if(row.getCell(1).getCellType() != null) {
-						if(!screenNamesList.contains(row.getCell(1).getStringCellValue())) {
-							scr = new Screen();
-							scr.setScreenName(row.getCell(1).getStringCellValue());
-							scr.setCreatedBy("Manual");
-							screenList.add(scr);
-						} 
+						if(!screenNamesList.contains(row.getCell(1).getStringCellValue()) 
+								&& row.getCell(2) != null 
+								&& !row.getCell(2).getStringCellValue().equals("Delete")) {
+							Screen screen = screenRepository.getScreenByName(row.getCell(1).getStringCellValue());
+							if(screen != null) {
+								screenList.add(screen);
+							} else {
+								scr = new Screen();
+								scr.setScreenName(row.getCell(1).getStringCellValue());
+								scr.setCreatedBy("Manual");
+								screenList.add(scr);
+							}
+						} else if(screenNamesList.contains(row.getCell(1).getStringCellValue()) 
+								&& row.getCell(2) != null 
+								&& row.getCell(2).getStringCellValue().equals("Delete")) {
+							for(Screen screens: application.getScreen()) { //Update existing Screen
+								if(screens.getScreenName().equals(row.getCell(1).getStringCellValue())) {
+									screenList.remove(screens);
+								}
+							}
+						}
 					}
 				} 
 				application.setApplicationBrowser(appBrowser);

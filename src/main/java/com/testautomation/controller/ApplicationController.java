@@ -120,6 +120,7 @@ public class ApplicationController {
 			Row header = sheet.createRow(0);
 			header.createCell(0).setCellValue("Application Name");
 			header.createCell(1).setCellValue("Screen Name");
+			header.createCell(2).setCellValue("Process");
 	
 			// Create data cells
 			int rowCount = 1;
@@ -128,6 +129,7 @@ public class ApplicationController {
 					Row reportRow = sheet.createRow(rowCount++);
 					reportRow.createCell(0).setCellValue(resultReport.getApplicationName());
 					reportRow.createCell(1).setCellValue(resultReport.getScreenName());
+					reportRow.createCell(2).setCellValue("Update");
 				}
 			}
 	
