@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.transaction.Transactional;
 
@@ -114,7 +115,7 @@ public class DataFromDatabaseService {
 		
 		try {
 			
-			ArrayList<HashMap<String,String>> data = getDataFromDB(screenName);
+			HashMap<String, ArrayList<HashMap<String,String>>> dataBySheets = getDataFromDB(screenName);
 			boolean iswrite = false;
 			File file = null;
 			FileInputStream fip = null ;
@@ -126,28 +127,41 @@ public class DataFromDatabaseService {
 				fip = new FileInputStream(file);
 				workbook = new XSSFWorkbook(fip);
 				for (Map.Entry<String, List> currentSheetName : columnsBySheets.entrySet()) {
-					Sheet sheet = workbook.getSheet(currentSheetName.getKey());
-					List listColumnNames = currentSheetName.getValue();
-					if(!currentSheetName.getKey().equalsIgnoreCase("CapturedObjectProperties") && !currentSheetName.getKey().equalsIgnoreCase("TestCaseSheet") ) {
-						 for(int i=1; i<= sheet.getLastRowNum(); i++){
-					            Row row = sheet.getRow(i);
-					            deleteRow(sheet, row);
-					        }
-					}
-					 if(!columnsBySheets.isEmpty() && data.size()>0) { 
-						// Create data cells
-				        int rowCount = 1;
-				        	for(int db_data = 0; db_data < data.size(); db_data++ ) {
-					        	Row excelRow = sheet.createRow(rowCount++);	
-					        	for (int j = 0; j < listColumnNames.size(); j++) {
-					        	if(!currentSheetName.getKey().equalsIgnoreCase("CapturedObjectProperties")) {
-										excelRow.createCell(j).setCellValue(getValueFromMap(data.get(db_data),listColumnNames.get(j).toString()));
-										iswrite = true;
+					logger.info("Current Sheet Name....." + currentSheetName);
+					ArrayList<HashMap<String,String>> data = new ArrayList<HashMap<String,String>>();
+					for (Entry<String, ArrayList<HashMap<String, String>>> currentKey : dataBySheets.entrySet()) {			
+						if (currentSheetName.getKey().equalsIgnoreCase(currentKey.getKey())) {
+							data = currentKey.getValue();
+							Sheet sheet = workbook.getSheet(currentSheetName.getKey());
+							List listColumnNames = currentSheetName.getValue();
+							if (!currentSheetName.getKey().equalsIgnoreCase("CapturedObjectProperties")
+									&& !currentSheetName.getKey().equalsIgnoreCase("TestCaseSheet")) {
+								for (int i = data.size() + 1; i <= sheet.getLastRowNum(); i++) {
+									Row row = sheet.getRow(i);
+									deleteRow(sheet, row);
+								}
+							}
+							if (!columnsBySheets.isEmpty() && data.size() > 0) {
+								// Create data cells
+								int rowCount = 1;
+								for (int db_data = 0; db_data < data.size(); db_data++) {
+									//Row excelRow = sheet.createRow(rowCount++); //to create new row
+									Row excelRow = sheet.getRow(rowCount++); // to get the existing row 
+									for (int j = 0; j < listColumnNames.size(); j++) {
+										if (!currentSheetName.getKey().equalsIgnoreCase("CapturedObjectProperties")) {
+											logger.info("Column Value....." +listColumnNames.get(j)+ ".....::" + getValueFromMap(data.get(db_data), listColumnNames.get(j).toString()));
+											if(!getValueFromMap(data.get(db_data), listColumnNames.get(j).toString()).equals("")){
+												//excelRow.createCell(j).setCellValue(getValueFromMap(data.get(db_data), listColumnNames.get(j).toString()));//to set values to new row
+												excelRow.getCell(j).setCellValue(getValueFromMap(data.get(db_data), listColumnNames.get(j).toString())); // to update the existing cell value
+											}
+											iswrite = true;
+										}
 									}
 								}
+							}
+							logger.info(currentSheetName.getKey() + " = " + currentSheetName.getValue());
 						}
-					 }
-					 logger.info(currentSheetName.getKey() + " = " + currentSheetName.getValue());
+					}						
 				}
 			//}
 			fip.close();
@@ -165,30 +179,43 @@ public class DataFromDatabaseService {
 	}
 	
 	
-	public ArrayList<HashMap<String,String>>  getDataFromDB(String screenName) {		
+	public HashMap<String, ArrayList<HashMap<String,String>>>  getDataFromDB(String screenName) {	
 		
-		ArrayList<HashMap<String,String>> data = new ArrayList<HashMap<String,String>>();
+		
+		HashMap<String, ArrayList<HashMap<String,String>>> eachSheet = new HashMap<String, ArrayList<HashMap<String,String>>>();
 		try {			
 			  // To get Data from DB 
 			String application_db = getApplicationDb(screenName);
 			String queryToGetData = getQueryFromDB(screenName);
-			List<Map<String, Object>> rows = new ArrayList<Map<String,Object>>();
-			if(!application_db.equals("") && application_db.equalsIgnoreCase("Oracle")) {
-				rows = jdbcOracleTemplate.queryForList(queryToGetData);
-			}else if(!application_db.equals("") && application_db.equalsIgnoreCase("MySql")) {
-				rows = jdbcMySqlTemplate.queryForList(queryToGetData);
-			}else if(!application_db.equals("") && application_db.equalsIgnoreCase("SqlSever")) {
-				rows = jdbcSqlSeverTemplate.queryForList(queryToGetData);
+			
+			String[] queryArrays = getQueryFromDB(screenName).split("@_@");
+			for(int i = 0; i < queryArrays.length; i++){
+				String[] sheetNameQueries = queryArrays[i].split("@#@"); //0=Sheetname,1=query TC001@#@SELECT@_@TC002@#@SELECT@_@
+				logger.info("sheetNameQueries_sheetName....." + sheetNameQueries[0] + "    sheetNameQueries_Queries....." + sheetNameQueries[1]);
+				List<Map<String, Object>> rows = new ArrayList<Map<String,Object>>();
+				if(!application_db.equals("") && application_db.equalsIgnoreCase("Oracle")) {
+					//rows = jdbcOracleTemplate.queryForList(queryToGetData);
+					rows = jdbcOracleTemplate.queryForList(sheetNameQueries[1]);
+				}else if(!application_db.equals("") && application_db.equalsIgnoreCase("MySql")) {
+					//rows = jdbcMySqlTemplate.queryForList(queryToGetData);
+					rows = jdbcMySqlTemplate.queryForList(sheetNameQueries[1]);
+				}else if(!application_db.equals("") && application_db.equalsIgnoreCase("SqlSever")) {
+					//rows = jdbcSqlSeverTemplate.queryForList(queryToGetData);
+					rows = jdbcSqlSeverTemplate.queryForList(sheetNameQueries[1]);
+				}
+				
+				ArrayList<HashMap<String,String>> data = new ArrayList<HashMap<String,String>>();
+				for (Map<String, Object> map : rows) {
+					HashMap<String, String> eachRow = new HashMap<String, String>();
+					for (Map.Entry<String, Object> entry : map.entrySet()) {
+					    System.out.println(sheetNameQueries[0] +":"+entry.getKey() + ":" + entry.getValue().toString());
+					    eachRow.put(entry.getKey(), entry.getValue().toString());
+					}
+					data.add(eachRow);
+				}
+				eachSheet.put(sheetNameQueries[0], data);
+				
 			}
-			for (Map<String, Object> map : rows) {
-				HashMap<String, String> eachRow = new HashMap<String, String>();
-				for (Map.Entry<String, Object> entry : map.entrySet()) {
-				    System.out.println(entry.getKey() + ":" + entry.getValue().toString());
-				    eachRow.put(entry.getKey(), entry.getValue().toString());
-				}			
-				data.add(eachRow);
-			}
-			 
 			 //Compound Transfer - Hot Coded Values
 			/*
 			 * HashMap<String,String> eachRow = new HashMap<String,String>();
@@ -211,7 +238,7 @@ public class DataFromDatabaseService {
 			e.printStackTrace();
 		}
 		
-		return data;
+		return eachSheet;
 	}
 	
 	
@@ -282,8 +309,10 @@ public class DataFromDatabaseService {
 				Files.copy(src.toFile(), dest.toFile());
 			} else {
 				logger.info("Directory not exists, creating now");
-				File saveFile = new File(to,  "DbData_TestCase_" + application + "_" + scr + ".xlsx");
-				saveFile.mkdir();
+				directory.mkdirs();
+				File saveFile = new File(to,"DbData_TestCase_" + application + "_" + scr + ".xlsx");
+				//saveFile.mkdirs();
+				saveFile.createNewFile();
 				Files.copy(src.toFile(), dest.toFile());
 			}
 		} catch (IOException e) {
@@ -295,17 +324,21 @@ public class DataFromDatabaseService {
 	public void deleteRow(Sheet sheet, Row row) {
 		int lastRowNum = sheet.getLastRowNum();
 		int rowIndex = row.getRowNum();
-		/*
-		 * if (rowIndex >= 0 && rowIndex < lastRowNum) { sheet.shiftRows(rowIndex + 1,
-		 * lastRowNum, -1); }
-		 */
-		if (rowIndex == lastRowNum) {
+		
+		if (rowIndex > 0 && rowIndex <= lastRowNum) {
+			//sheet.shiftRows(rowIndex + 1, lastRowNum, -1);
 			Row removingRow = sheet.getRow(rowIndex);
 			if (removingRow != null) {
 				sheet.removeRow(removingRow);
-				logger.info("Deleting.... ");
+				logger.info("Deleting.... "+rowIndex);
 			}
 		}
+		 
+		/*
+		 * if (rowIndex == lastRowNum) { Row removingRow = sheet.getRow(rowIndex); if
+		 * (removingRow != null) { sheet.removeRow(removingRow);
+		 * logger.info("Deleting.... "+rowIndex); } }
+		 */
 	}
 	
 	public void setuserNDataFromDBMap(String username,String isDbData){
