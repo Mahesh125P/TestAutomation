@@ -13,7 +13,7 @@ import com.testautomation.model.Screen;
 @Repository
 public interface ComponentMappingRepository extends JpaRepository<ComponentMapping, Integer>{
 
-	@Query("select c from ComponentMapping c where c.testComponent.testComponentID= :componentId")
+	@Query("select c from ComponentMapping c where c.testComponent.testComponentID= :componentId ORDER BY c.testOrder")
 	List<ComponentMapping> findAllByComponentId(@Param("componentId") Integer componentId);
 	
 	@Query("select screen.screenName from ComponentMapping c where c.testComponent.testComponentID= :componentId ORDER BY c.testOrder")

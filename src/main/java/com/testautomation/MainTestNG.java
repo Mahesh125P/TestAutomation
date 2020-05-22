@@ -114,7 +114,7 @@ public class MainTestNG {
 			ExcelAction.selectedApplication = selectedApplication;
 			ExcelAction.dataFromDbService = dataFromDbService;
 			ExecuteTestCases.selectedScreenList = selectedScreenList;
-			if(selectedComponentID != null && !selectedComponentID.isEmpty() && !selectedComponentID.equals("undefined")) {
+			if(selectedComponentID != null && !selectedComponentID.isEmpty() && !selectedComponentID.equals("Choose Component")) {
 				ExcelAction.operationType = "Automated";
 			}
 			else {
