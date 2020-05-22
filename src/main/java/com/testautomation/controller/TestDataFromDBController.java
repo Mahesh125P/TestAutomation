@@ -70,19 +70,22 @@ public class TestDataFromDBController {
         return tAModel;
     }
 	
-	@GetMapping(value ="/loadScreensForApps/{applicationId}")
-    public TestAutomationModel reloadTestScreensForApps(@PathVariable Integer applicationId) {
+	@GetMapping(value ="/loadScreensForApps/{applicationId}/{userName}")
+    public TestAutomationModel reloadTestScreensForApps(@PathVariable Integer applicationId, @PathVariable String userName) {
         
     	logger.info("Entering @TestDataFromDBController - reloadTestScreensForApps::::");
     	TestAutomationModel tAModel = null;
 		try {
 
 			//UserApp Mapping changes::::::::::
-			//ArrayList<LookupDTO> testAppsList = usermapping.getAllAppsByUserDTO(loggedUserDetails.currentUser.getUserName());//testReportService.getAllApplicationNames();
+			ArrayList<LookupDTO> testAppsList = usermapping.getAllAppsByUserDTO(userName);//(loggedUserDetails.currentUser.getUserName());//testReportService.getAllApplicationNames();
+			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(testAppsList.get(0).getId() );//appsList.get(0)
 			
-			ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
-			ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(applicationId);
+			//ArrayList<LookupDTO> testAppsList = testReportService.getAllApplicationNames();
+			//ArrayList<LookupDTO> testScreensList = testReportService.getAllScreensByApp(applicationId);
 			String searchResults = testDataFromDbService.getQueryDetails(testScreensList.get(0).getId());
+			
+			
 	        tAModel = new TestAutomationModel();
 	        tAModel.testAppsList = testAppsList;
 	        tAModel.testScreensList = testScreensList;

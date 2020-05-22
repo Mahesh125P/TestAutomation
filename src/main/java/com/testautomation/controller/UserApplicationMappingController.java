@@ -146,7 +146,7 @@ public class UserApplicationMappingController {
 		logger.info("Entering @UserApplicationMappingController - updateApplicationDetails()::::");
 		ResponseDTO response = new ResponseDTO();
 		try {
-			boolean isFlag = usermapping.saveMappingDetails(file);			
+			boolean isFlag = usermapping.saveMappingDetails(file);		
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 			response.setStatus("error");
