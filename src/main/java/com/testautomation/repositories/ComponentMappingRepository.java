@@ -16,6 +16,6 @@ public interface ComponentMappingRepository extends JpaRepository<ComponentMappi
 	@Query("select c from ComponentMapping c where c.testComponent.testComponentID= :componentId ORDER BY c.testOrder")
 	List<ComponentMapping> findAllByComponentId(@Param("componentId") Integer componentId);
 	
-	@Query("select screen.screenName from ComponentMapping c where c.testComponent.testComponentID= :componentId ORDER BY c.testOrder")
+	@Query("select distinct screen.screenName from ComponentMapping c where c.testComponent.testComponentID= :componentId ORDER BY c.testOrder")
 	List<String> findScreenNameByComponentId(@Param("componentId") Integer selectedComponentID);
 }

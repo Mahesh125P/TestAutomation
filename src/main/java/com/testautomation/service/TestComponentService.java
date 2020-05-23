@@ -183,7 +183,9 @@ public class TestComponentService {
 		TestComponent testComponent = new TestComponent();
 		testComponent.setTestComponentID(Integer.parseInt(componentMappingDTO.componentId));
 		Screen screen = new Screen();
-		
+		Set<String> appliationNameList = new HashSet<>();
+		Set<String> screenNameList = new HashSet<>();
+		appliationNameList.add(componentMappingDTO.applicationName);
 		
 		String automaticPath = projectfilePath + "TestSuite"+File.separator + 
 				componentMappingDTO.applicationName + File.separator + "Automatic" + File.separator;
@@ -200,11 +202,55 @@ public class TestComponentService {
 			componentMapping.setScreen(screen);
 			componentMappingRepository.delete(componentMapping);
 			
-			File deletefile = new File(automaticPath +File.separator + "TestSuite_" + componentMappingDTO.applicationName + "_" + data.getScreen().getScreenName() + ".xlsx"); 
-			deletefile.delete();
+			//File deletefile = new File(automaticPath +File.separator + "TestSuite_" + componentMappingDTO.applicationName + "_" + data.getScreen().getScreenName() + ".xlsx"); 
+			//deletefile.delete();
 		
+			screenNameList.add(data.getScreen().getScreenName());
 			values.add(data.getTestcase());
 			testCaseMap.put(data.getScreen().getScreenName(), values);
+		});
+		
+	     appliationNameList.forEach(appliationName -> { 
+			
+			screenNameList.forEach(screenName -> { 
+			try {
+				
+				FileInputStream fip;
+				File file = new File(automaticPath +File.separator + "TestSuite_" 
+							+ appliationName + "_" +
+							screenName + ".xlsx");
+				fip = new FileInputStream(file);
+				Workbook workbook = new XSSFWorkbook(fip);
+				Sheet sheet = workbook.getSheetAt(0);
+				
+				Set<String> keys = testCaseMap.keySet();
+			
+				sheet.forEach(row -> {
+					if(!row.getCell(0).getStringCellValue().equals("TestCase Name")) {
+						for (String key : keys) {
+							if(key.equals(screenName)) {
+						    	Iterator<List<String>> testcase = testCaseMap.get(key).iterator();
+								while(testcase.hasNext()) {
+								    	if(('[' +row.getCell(0).getStringCellValue() + ']').equals(testcase.next().toString())) {
+								    		row.getCell(1).setCellValue("NO");
+								    	} 
+							    	}
+								}
+						    }
+					}
+		        });
+				
+				fip.close();
+				FileOutputStream output_file =new FileOutputStream(automaticPath +File.separator + "TestSuite_" 
+						+ appliationName + "_" +
+						screenName + ".xlsx");//Open FileOutputStream to write updates
+				workbook.write(output_file); //write changes
+		        output_file.close();  //close the stream
+		        workbook.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
 		});
 		return componentMappingList;
 	}
