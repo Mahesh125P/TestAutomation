@@ -99,6 +99,7 @@ public class MainTestNG {
 		LOGGER.info("Logger Name: " + LOGGER.getName());
 		HashMap<String,HashMap<String,String>> testResultMap = new HashMap<String,HashMap<String,String>> ();
 		ReadConfigProperty.configpath = System.getProperty(dir);
+		ExcelAction.listOfTestCases.clear();
 
 		/**
 		 * SwingTest UI for properties file (Config.properties)
@@ -114,6 +115,7 @@ public class MainTestNG {
 			ExcelAction.selectedApplication = selectedApplication;
 			ExcelAction.dataFromDbService = dataFromDbService;
 			ExecuteTestCases.selectedScreenList = selectedScreenList;
+			//ExcelAction.listOfTestCases.clear();
 			if(selectedComponentID != null && !selectedComponentID.isEmpty() && !selectedComponentID.equals("Choose Component")) {
 				ExcelAction.operationType = "Automated";
 			}

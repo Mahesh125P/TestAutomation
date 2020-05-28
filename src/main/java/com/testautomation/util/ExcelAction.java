@@ -44,7 +44,7 @@ public class ExcelAction {
 	static Map<String, Object> testDataSheet = new HashMap<String, Object>();
 	static Map<String, Object> capObjPropSheet = new HashMap<String, Object>();
 
-	static List listOfTestCases = new ArrayList();
+	public static List listOfTestCases = new ArrayList();
 	int numberOfTimeExecution = 0;
 	MethodType methodtype = new MethodType();
 	static String actionName = null;
