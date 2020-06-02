@@ -25,7 +25,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -82,6 +86,7 @@ public class TestComponentService {
 		Set<String> appliationNameList = new HashSet<>();
 		Set<String> screenNameList = new HashSet<>();
 		appliationNameList.add(componentMappingDTO.applicationName);
+		String testComponentName = testComponentRepository.findComponentName(testComponent.getTestComponentID());
 		
 		List<String> selectedScreenList = new ArrayList<>();
 		selectedScreenList = componentMappingRepository.findScreenNameByComponentId(testComponent.getTestComponentID());
@@ -126,18 +131,23 @@ public class TestComponentService {
 	
 			screenNameList.forEach(screenName -> { 
 			try {
+				 File directory = new File(String.valueOf(automaticPath +File.separator + testComponentName));
+
+				 if(!directory.exists()){
+		            directory.mkdir();
+				}
 				
-				File file = new File(automaticPath +File.separator + "TestSuite_" + appliationName + "_" + screenName + ".xlsx"); 
-				file.delete();
+				File file = new File(automaticPath + File.separator + testComponentName + 
+						File.separator + "TestSuite_" + appliationName + "_" + screenName + ".xlsx"); 
+				if(file.exists()){
+					file.delete();
+				}
 				
 				Files.copy 
-						 (Paths.get(manualPath +File.separator + "TestSuite_" + appliationName + "_" + screenName + ".xlsx"),  
-								 Paths.get(automaticPath +File.separator + "TestSuite_" + appliationName + "_" + screenName + ".xlsx")); 
+						 (Paths.get(manualPath + File.separator + "TestSuite_" + appliationName + "_" + screenName + ".xlsx"),  
+								 Paths.get(automaticPath + File.separator + testComponentName + File.separator + "TestSuite_" + appliationName + "_" + screenName + ".xlsx")); 
 				
 				FileInputStream fip;
-				file = new File(automaticPath +File.separator + "TestSuite_" 
-							+ appliationName + "_" +
-							screenName + ".xlsx");
 				fip = new FileInputStream(file);
 				Workbook workbook = new XSSFWorkbook(fip);
 				Sheet sheet = workbook.getSheetAt(0);
@@ -164,9 +174,7 @@ public class TestComponentService {
 		        });
 				
 				fip.close();
-				FileOutputStream output_file =new FileOutputStream(automaticPath +File.separator + "TestSuite_" 
-						+ appliationName + "_" +
-						screenName + ".xlsx");//Open FileOutputStream to write updates
+				FileOutputStream output_file =new FileOutputStream(file);//Open FileOutputStream to write updates
 				workbook.write(output_file); //write changes
 		        output_file.close();  //close the stream
 		        workbook.close();
@@ -186,6 +194,7 @@ public class TestComponentService {
 		Set<String> appliationNameList = new HashSet<>();
 		Set<String> screenNameList = new HashSet<>();
 		appliationNameList.add(componentMappingDTO.applicationName);
+		String testComponentName = testComponentRepository.findComponentName(testComponent.getTestComponentID());
 		
 		String automaticPath = projectfilePath + "TestSuite"+File.separator + 
 				componentMappingDTO.applicationName + File.separator + "Automatic" + File.separator;
@@ -216,7 +225,7 @@ public class TestComponentService {
 			try {
 				
 				FileInputStream fip;
-				File file = new File(automaticPath +File.separator + "TestSuite_" 
+				File file = new File(automaticPath + File.separator + testComponentName + File.separator + "TestSuite_" 
 							+ appliationName + "_" +
 							screenName + ".xlsx");
 				fip = new FileInputStream(file);
@@ -241,9 +250,7 @@ public class TestComponentService {
 		        });
 				
 				fip.close();
-				FileOutputStream output_file =new FileOutputStream(automaticPath +File.separator + "TestSuite_" 
-						+ appliationName + "_" +
-						screenName + ".xlsx");//Open FileOutputStream to write updates
+				FileOutputStream output_file =new FileOutputStream(file);//Open FileOutputStream to write updates
 				workbook.write(output_file); //write changes
 		        output_file.close();  //close the stream
 		        workbook.close();

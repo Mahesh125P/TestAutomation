@@ -97,18 +97,35 @@ public class LoginService {
 		ArrayList<Application> applicationDtlsList = loginrepository.getApplicationDetails();
 		HashMap<String,ArrayList<String>> screenDetailsMapNew = new HashMap<String,ArrayList<String>>();
 		ArrayList<String> screenDetailsListNew = new ArrayList<String>();
-		String manualPath = projectfilePath + "TestSuite"+File.separator;
 		
 		String AppName = null;
 		for(Application application:applicationDtlsList) {
 			AppName = application.getApplicationName();
 			for(Screen screen: application.getScreen()) {
-				File file = new File(manualPath +File.separator + AppName +File.separator + "TestSuite_" + AppName + "_" + screen.getScreenName() + ".xlsx"); 
+				screenDetailsListNew.add(screen.getScreenName());		
+			}
+			screenDetailsMapNew.put(AppName, screenDetailsListNew);
+			screenDetailsListNew = new ArrayList<String>();
+		}
+		return screenDetailsMapNew;
+	}
+	
+	public HashMap<String,ArrayList<String>> getAllScreenDetailsForTestSuite(){
+		ArrayList<Application> applicationDtlsList = loginrepository.getApplicationDetails();
+		HashMap<String,ArrayList<String>> screenDetailsMapNew = new HashMap<String,ArrayList<String>>();
+		ArrayList<String> screenDetailsListNew = new ArrayList<String>();
+		String manualPath = projectfilePath + "TestSuite"+File.separator;
+		
+		String appName = null;
+		for(Application application:applicationDtlsList) {
+			appName = application.getApplicationName();
+			for(Screen screen: application.getScreen()) {
+				File file = new File(manualPath +File.separator + appName +File.separator + "TestSuite_" + appName + "_" + screen.getScreenName() + ".xlsx"); 
 				if (file.exists()) {
 					screenDetailsListNew.add(screen.getScreenName());		
 				}
 			}
-			screenDetailsMapNew.put(AppName, screenDetailsListNew);
+			screenDetailsMapNew.put(appName, screenDetailsListNew);
 			screenDetailsListNew = new ArrayList<String>();
 		}
 		return screenDetailsMapNew;

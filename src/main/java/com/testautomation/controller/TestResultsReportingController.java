@@ -38,6 +38,7 @@ import com.testautomation.model.Login;
 import com.testautomation.model.TestAutomationModel;
 import com.testautomation.model.TestResultsReporting;
 import com.testautomation.repositories.ComponentMappingRepository;
+import com.testautomation.repositories.TestComponentRepository;
 import com.testautomation.service.DataFromDatabaseService;
 import com.testautomation.service.LoginService;
 import com.testautomation.service.LookupDTO;
@@ -70,6 +71,8 @@ public class TestResultsReportingController {
 	@Autowired
 	LoginService loggedUserDetails;
     
+	@Autowired
+	TestComponentRepository testComponentRepository;
     
     final static Logger logger = LoggerFactory.getLogger(TestResultsReportingController.class);
     
@@ -120,6 +123,7 @@ public class TestResultsReportingController {
 		model.addAttribute("selectedApplicationName", login.getSelectedApplicationName());
 		model.addAttribute("selectedScreenName",login.getSelectedScreenName());
 		System.out.println("Started executing Test!!!");
+		String testComponentName = "";
 		MainTestNG testStart = new MainTestNG();
 		if(login.getDataFromDBCheckbox().equalsIgnoreCase("true")) {
 			dataFromDbService.setuserNDataFromDBMap(login.getUserName(),"Yes");
@@ -130,11 +134,12 @@ public class TestResultsReportingController {
 		
 		if(login.getSelectedComponentID()!= null && !login.getSelectedComponentID().isEmpty() &&  !login.getSelectedComponentID().equals("Choose Component")) {
 			selectedScreenList = componentMappingRepository.findScreenNameByComponentId(Integer.parseInt(login.getSelectedComponentID()));
+			testComponentName = testComponentRepository.findComponentName(Integer.parseInt(login.getSelectedComponentID()));
 		}
 		else
 		selectedScreenList = Arrays.asList(login.getSelectedScreenName().split(","));
 		
-		testStart.startTest(testReportService,login.getSelectedApplicationName(),selectedScreenList,login.getSelectedComponentID(),dataFromDbService);
+		testStart.startTest(testReportService,login.getSelectedApplicationName(),selectedScreenList,testComponentName,dataFromDbService);
 		//testStart.startTest(testReportService,login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
 		//ApplicationService as = new ApplicationService();
 		//as.persistApplication();

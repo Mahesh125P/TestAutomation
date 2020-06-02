@@ -54,7 +54,7 @@ public class ExcelAction {
 	
 	public static String selectedApplication = null;
 	public static String selectedScreen = null;
-	public static String operationType = null;
+	public static String selectedComponent = null;
 	public static String currentTestAutoUser = null;
 	HashMap<String,String> tempResultMap = new HashMap<String,String>();
 	public static HashMap<String,HashMap<String,String>> testResultMap = new HashMap<String,HashMap<String,String>>();
@@ -340,14 +340,14 @@ public class ExcelAction {
 			//dynamicFilePath.append("C:\\SOWMIYA\\TESTING AUTOMATION\\TestAutomation_Workspace\\TestAutomation\\src\\main\\resources\\TestSuite\\")
             //String testSuiteFilePath = config.getConfigValues("TestSuiteName");
             
-            if (operationType.equals("Manual")) {
+			if(selectedComponent != null && !selectedComponent.isEmpty()) {
+                dynamicFilePath.append(testsuitprojectfilePath)
+                .append(selectedApplication).append("\\").append("Automatic").append("\\").append(selectedComponent).append("\\")
+                .append("TestSuite_").append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
+            } else {
                 dynamicFilePath.append(testsuitprojectfilePath)
                 .append(selectedApplication).append("\\").append("TestSuite_")
                 .append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
-            } else {
-                dynamicFilePath.append(testsuitprojectfilePath)
-                .append(selectedApplication).append("\\").append("Automatic").append("\\")
-                .append("TestSuite_").append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
             }
 			//String testSuiteFilePath = config.getConfigValues("TestSuiteName"); 
 			String testSuiteFilePath = dynamicFilePath.toString();

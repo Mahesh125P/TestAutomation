@@ -76,6 +76,12 @@ public class LoginController {
 	public HashMap<String,ArrayList<String>> getAllScreenDetails() {
 		return loginservice.getAllScreenDetails();
 	}
+	
+	@RequestMapping(value = "/getAllScreenDetailsForTestSuite", method = RequestMethod.GET)
+	public HashMap<String,ArrayList<String>> getAllScreenDetailsForTestSuite() {
+		return loginservice.getAllScreenDetailsForTestSuite();
+	}
+	
 	@RequestMapping(value = "/loginSubmit1", method = RequestMethod.GET)
 	public String LoginSubmit1(ModelMap model,@ModelAttribute("login") Login login) {
 		logger.info("Started LoginSubmit!!!");

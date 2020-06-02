@@ -83,7 +83,7 @@ public class MainTestNG {
 			 * }
 			 */
 
-	public void startTest(TestResultsReportingService testReportService, String selectedApplication, List<String> selectedScreenList, String selectedComponentID,DataFromDatabaseService dataFromDbService) {
+	public void startTest(TestResultsReportingService testReportService, String selectedApplication, List<String> selectedScreenList, String selectedComponent,DataFromDatabaseService dataFromDbService) {
 
 		try {
 			filehandler = new FileHandler("./log.txt");
@@ -113,16 +113,11 @@ public class MainTestNG {
 		try {
 			ExecuteTestCases.selectedApplication = selectedApplication;
 			ExcelAction.selectedApplication = selectedApplication;
+			ExcelAction.selectedComponent = selectedComponent;
 			ExcelAction.dataFromDbService = dataFromDbService;
 			ExecuteTestCases.selectedScreenList = selectedScreenList;
 			//ExcelAction.listOfTestCases.clear();
-			if(selectedComponentID != null && !selectedComponentID.isEmpty() && !selectedComponentID.equals("Choose Component")) {
-				ExcelAction.operationType = "Automated";
-			}
-			else {
-				ExcelAction.operationType = "Manual";
-			}
-		
+			
 			test.testng();
 			testResultMap = ExcelAction.testResultMap;
 			testReportService.persistTestResult(selectedApplication,testResultMap);

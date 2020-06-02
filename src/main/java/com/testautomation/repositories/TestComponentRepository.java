@@ -16,4 +16,8 @@ public interface TestComponentRepository extends JpaRepository<TestComponent, In
 	@Query("select new com.testautomation.service.LookupDTO(testComponentID,componentName) from TestComponent t where t.application=:appId")
 	public ArrayList<LookupDTO> findTestComponentByAppId(@Param("appId") Integer appId);
 
+	@Query("select componentName from TestComponent t where t.testComponentID = :componentId")
+	public String findComponentName(@Param("componentId") Integer componentID);
+	
+	
 }
