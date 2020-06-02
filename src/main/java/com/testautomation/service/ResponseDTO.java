@@ -1,11 +1,15 @@
 package com.testautomation.service;
 
+import java.util.ArrayList;
+
 public class ResponseDTO {
 
 	private String status;
 
 	private String message;
 
+	public ArrayList<String> errorUsersList = new ArrayList<String>();
+	
 	public String getStatus() {
 		return status;
 	}
@@ -29,6 +33,14 @@ public class ResponseDTO {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public ArrayList<String> getErrorUsersList() {
+		return errorUsersList;
+	}
+
+	public void setErrorUsersList(ArrayList<String> errorUsersList) {
+		this.errorUsersList = errorUsersList;
 	}
 
 }

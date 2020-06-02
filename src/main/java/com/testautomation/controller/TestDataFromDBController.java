@@ -89,6 +89,7 @@ public class TestDataFromDBController {
 	        tAModel.testAppsList = testAppsList;
 	        tAModel.testScreensList = testScreensList;
 	        tAModel.screenQuery = searchResults;
+	        tAModel.screenID_App = testScreensList.get(0).getId().toString();
 	    }catch(Exception e) {
         	logger.error("Exception @TestDataFromDBController - reloadTestScreensForApps::::");
     		e.printStackTrace();

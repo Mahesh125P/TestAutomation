@@ -146,17 +146,32 @@ public class UserApplicationMappingController {
 		logger.info("Entering @UserApplicationMappingController - updateApplicationDetails()::::");
 		ResponseDTO response = new ResponseDTO();
 		try {
-			boolean isFlag = usermapping.saveMappingDetails(file);		
+			String errorcounts = usermapping.saveMappingDetails(file);
+			if(Integer.parseInt(errorcounts.split("_")[0]) == 0 && Integer.parseInt(errorcounts.split("_")[1]) == 0) {
+				response.setStatus("success");
+				logger.info("Exiting @UserApplicationMappingController - updateApplicationDetails()::::");
+				return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
+			} else {
+				response.setStatus("error");
+				if(usermapping.getErrorUsersList().size() != 0) {
+					response.setErrorUsersList( usermapping.getErrorUsersList());
+					response.setMessage("There are some invalid Users in the upload"+usermapping.getErrorUsersList());
+				} else {
+					response.setErrorUsersList(usermapping.getErrorApplicationList());
+					response.setMessage("There are some invalid Applications in the upload"+usermapping.getErrorApplicationList());
+				}
+				logger.info("Exiting @UserApplicationMappingController - updateApplicationDetails()::::");
+				return new ResponseEntity<ResponseDTO>(response,  HttpStatus.BAD_REQUEST);
+			}
+			
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 			response.setStatus("error");
 			response.setMessage(e.getMessage());
 			return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 		}
-		response.setStatus("success");
-		logger.info("Exiting @UserApplicationMappingController - updateApplicationDetails()::::");
-		return new ResponseEntity<>(response, HttpStatus.OK);
-	}
+		
+    }
 
 	
 	@RequestMapping(value = "/loadUserAppMappings/{userName}")

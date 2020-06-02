@@ -205,14 +205,14 @@ public class TestResultsReportingService {
 		}
 	}
 	
-	public void persistTestResults() {
+	public void persistTestResults(String userName) {
 		
 		try {
 			Application app = testReportRepository.getApplicationById(1);
 			
 			TestResultsReporting testResultsReporting = new TestResultsReporting();
 			testResultsReporting.setTestedCaseName("TC004");
-			testResultsReporting.setTestedBy("Mahesh4");
+			testResultsReporting.setTestedBy(userName);
 			testResultsReporting.setTestInputs("TEST Input1");
 			testResultsReporting.setTestOutput("P");	
 			testResultsReporting.setApplicationID(1);

@@ -90,10 +90,10 @@ public class TestResultsReportingController {
 	}
 	
     
-    @RequestMapping(value = "/startTest2", method = RequestMethod.GET)
-	public void presistTestResults() {
-		testReportService.persistTestResults();
-	}
+	/*
+	 * @RequestMapping(value = "/startTest2", method = RequestMethod.GET) public
+	 * void presistTestResults() { testReportService.persistTestResults(); }
+	 */
 	
 	@PostMapping(value = "/startTest")
 	public String startTest(ModelMap model,@ModelAttribute("login") Login login) {
@@ -138,7 +138,7 @@ public class TestResultsReportingController {
 		//testStart.startTest(testReportService,login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
 		//ApplicationService as = new ApplicationService();
 		//as.persistApplication();
-		testReportService.persistTestResults();
+		testReportService.persistTestResults(login.getUserName());
 		System.out.println("Completed startTest!!!");
 		return "homePage";
 	}

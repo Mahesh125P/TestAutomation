@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.testautomation.model.Login;
+import com.testautomation.model.TestAutomationModel;
 import com.testautomation.repositories.ApplicationRepository;
 import com.testautomation.repositories.LoginRepository;
 
@@ -36,6 +38,10 @@ public class UserApplicationMappingService {
     private EntityManager em;
 	
 	final static Logger logger = LoggerFactory.getLogger(UserApplicationMappingService.class);
+	public ArrayList<String> errorUsersList = new ArrayList<String>();
+	public ArrayList<String> errorApplicationList = new ArrayList<String>();
+	
+	
 	
 	public ArrayList<String> getAllUsers(){		
 		return loginrepository.getAllUsers();
@@ -52,7 +58,7 @@ public class UserApplicationMappingService {
 		return userAppList;
 	}
 	
-	public boolean saveMappingDetails(MultipartFile file) {
+	public String saveMappingDetails(MultipartFile file) {
 		
 		logger.info("Entering @UserApplicationMappingService - saveMappingDetails()::::");
 		Workbook workbook = getWorkBook(file);
@@ -60,22 +66,42 @@ public class UserApplicationMappingService {
 		Iterator<Row> rows = sheet.iterator();
 		Login userAppMapping = new Login();
 		ArrayList<String> allUsersList = getAllUsers();
+		ArrayList<String> allApplicationList = getAllApplicationNames();
+		TreeSet<String> errorUsersSet = new TreeSet<String>();
+		TreeSet<String> errorApplicationSet = new TreeSet<String>();
+		
+		
+		String errorcount = "";
 		if (sheet.getRow(0) != null) {
 			rows.next();
 			while(rows.hasNext()) {
 				Row row = rows.next();
 				if(row.getCell(0).getCellType() != null) {
-					if(allUsersList.contains(row.getCell(0).getStringCellValue())) {
-						userAppMapping.setUserName(row.getCell(0).getStringCellValue());
-						userAppMapping.setUserApplications(row.getCell(1).getStringCellValue());
-						loginrepository.save(userAppMapping);
-					}
+					if (allUsersList.contains(row.getCell(0).getStringCellValue())) {
+							userAppMapping.setUserName(row.getCell(0).getStringCellValue());
+							ArrayList<String> appsList = new ArrayList<String>(Arrays.asList(row.getCell(1).getStringCellValue().split(",")));
+							if (allApplicationList.containsAll(appsList)) {
+								userAppMapping.setUserApplications(row.getCell(1).getStringCellValue());
+							}else {
+								appsList.removeAll(allApplicationList);
+								errorApplicationSet.addAll(appsList);
+								
+							}
+						} else {
+							errorUsersSet.add(row.getCell(0).getStringCellValue());
+						}
+						
+						if(userAppMapping.getUserApplications() != null && getErrorUsersList().size() == 0 && getErrorApplicationList().size() ==0)
+							loginrepository.save(userAppMapping);
 				}
-		 }			
-			
+		 }	
+			errorUsersList = new ArrayList<String>();errorApplicationList = new ArrayList<String>();
+			errorUsersList.addAll(errorUsersSet);errorApplicationList.addAll(errorApplicationSet);
+			setErrorUsersList(errorUsersList);setErrorApplicationList(errorApplicationList);
+			errorcount = getErrorApplicationList().size() + "_" + getErrorUsersList().size();
 		}
 		logger.info("Exiting @UserApplicationMappingService - saveMappingDetails()::::");
-		return true;
+		return errorcount;
 	}
 	
 	
@@ -173,5 +199,21 @@ public class UserApplicationMappingService {
     		e.printStackTrace();
         }
 		return userAppListDTO;
+	}
+
+	public ArrayList<String> getErrorUsersList() {
+		return errorUsersList;
+	}
+
+	public void setErrorUsersList(ArrayList<String> errorUsersList) {
+		this.errorUsersList = errorUsersList;
+	}
+
+	public ArrayList<String> getErrorApplicationList() {
+		return errorApplicationList;
+	}
+
+	public void setErrorApplicationList(ArrayList<String> errorApplicationList) {
+		this.errorApplicationList = errorApplicationList;
 	}
 }
