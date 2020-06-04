@@ -188,7 +188,7 @@ public class ExcelAction {
 				for (int i = 0; i < testStepId.size(); i++) {
 
 					String methodTypeTemp = temp.getMethodType().get(i);
-					String methodType = temp.getMethodType().get(i);
+					String methodType = temp.getMethodType().get(i)+ "~" + screenName[1];
 					String objectLocators = temp.getObjectNameFromPropertiesFile().get(i);
 					String actionType = temp.getActionType().get(i);
 					String header = temp.getHeaderValue().get(i);
@@ -265,7 +265,7 @@ public class ExcelAction {
 		} else {
 			for (int i = 0; i < testStepId.size(); i++) {
 
-				String methodType = temp.getMethodType().get(i);
+				String methodType = temp.getMethodType().get(i)+ "~" + screenName[1];
 				String objectLocators = temp.getObjectNameFromPropertiesFile()
 						.get(i);
 				String actionType = temp.getActionType().get(i);
@@ -514,7 +514,7 @@ public class ExcelAction {
 							testSheetName, testCasePath);
 					
 					CapturedObjectPropModel capModel = new CapturedObjectPropModel();
-					capModel.setPage(page);
+					capModel.setPage(page+ "~" + selectedScreen);
 					capModel.setName(name);
 					capModel.setProperty(property);
 					capModel.setValue(value);
@@ -524,7 +524,7 @@ public class ExcelAction {
 					
 				}else{
 					if(prevPagename!=null){
-						capObjPropSheet.put(prevPagename, pageInfo);
+						capObjPropSheet.put(prevPagename+ "~" + selectedScreen, pageInfo);
 					}
 					pageInfo=new HashMap<String, Object>();
 					String page=ExcelLibrary.readCell(j, 0,
@@ -537,7 +537,7 @@ public class ExcelAction {
 							testSheetName, testCasePath);
 					
 					CapturedObjectPropModel capModel = new CapturedObjectPropModel();
-					capModel.setPage(pagename);
+					capModel.setPage(pagename+ "~" + selectedScreen);
 					capModel.setName(name);
 					capModel.setProperty(property);
 					capModel.setValue(value);
@@ -550,7 +550,7 @@ public class ExcelAction {
 				
 				
 				if(prevPagename!=null){
-					capObjPropSheet.put(prevPagename, pageInfo);
+					capObjPropSheet.put(prevPagename+ "~" + selectedScreen, pageInfo);
 				}
 			}
 			
