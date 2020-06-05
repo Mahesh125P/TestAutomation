@@ -20,6 +20,8 @@ private Integer applicationID;
 	private String[] passedData;
 	private String[] failedData;
 	private String[] month;
+	private String[] passFail;
+	private String todayTotalCase;
 	private ArrayList<HashMap<String,String>> screenIDList;
 	
 	public String[] getTotalCase() {
@@ -110,4 +112,21 @@ private Integer applicationID;
 		this.monthDate = monthDate;
 	}
 
+	public String[] getPassFail() {
+		return passFail;
+	}
+
+	public void setPassFail(String[] passFail) {
+		this.passFail = passFail;
+	}
+
+	public String getTodayTotalCase() {
+		return todayTotalCase;
+	}
+
+	public void setTodayTotalCase(String todayTotalCase) {
+		this.todayTotalCase = todayTotalCase;
+	}
+
+	
 }

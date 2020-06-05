@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
+import java.math.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,14 +31,18 @@ public class DashBoardService {
 		List<DashBoard> testResult = new ArrayList<DashBoard>();
 		try {
 			List<DashBoard> testResults = getResultsForDashboard(searchFilter);
-			Iterator it = testResults.iterator();
+			List<DashBoard> testResultsForToday = getTodayResultsForDashboard();
+			Iterator dashBoardresults = testResults.iterator();
+			Iterator todayresults = testResultsForToday.iterator();
 			DashBoard dB = new DashBoard();
 			String failedData = "";
 			String passedData = "";
 			String month = "";
 			String totalCase = "";
-			while(it.hasNext()){
-			     Object[] rowObj = (Object[]) it.next();
+			String todayTestResult = "";
+			Integer todayTotalTest = 0;
+			while(dashBoardresults.hasNext()){
+			     Object[] rowObj = (Object[]) dashBoardresults.next();
 			     
 			     if(rowObj[3] != null) {
 			     if(totalCase != "")
@@ -61,10 +66,22 @@ public class DashBoardService {
 					 month =  rowObj[3].toString();
 			     }
 			}
+			
+			while(todayresults.hasNext()) {
+			     Object[] rowObject = (Object[]) todayresults.next();
+			     todayTotalTest = todayTotalTest + ((BigInteger)rowObject[0]).intValue();
+			     if(todayTestResult != "") 
+			    	 todayTestResult = todayTestResult + "," +  rowObject[0].toString();
+				 else
+					 todayTestResult =  rowObject[0].toString();
+			}
 			dB.setTotalCase(totalCase.split(","));
 			dB.setFailedData(failedData.split(","));
 			dB.setPassedData(passedData.split(","));
 			dB.setMonth(month.split(","));
+			dB.setMonth(month.split(","));
+			dB.setPassFail(todayTestResult.split(","));
+			dB.setTodayTotalCase(todayTotalTest.toString());
 			testResult.add(dB);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -74,7 +91,7 @@ public class DashBoardService {
 		return testResult;
 	}
 	
-public List<DashBoard> getResultsForDashboard(DashBoard searchFilter){
+    public List<DashBoard> getResultsForDashboard(DashBoard searchFilter){
 		
 		logger.info("Entering @TestResultsReportingService - getResultsForDashboard::::");
 		SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm");
@@ -83,16 +100,18 @@ public List<DashBoard> getResultsForDashboard(DashBoard searchFilter){
 		try {
 			if (searchFilter.getMonthDate() != null && searchFilter.getMonthDate().equals("Date")) {
 				searchQuery = new StringBuffer("\r\n" + 
-						"SELECT COUNT(*),(SELECT COUNT(tat01_test_output)FROM ktat01_test_result FD WHERE tat01_test_output = 'F' AND date(FD.tat01_test_start_dt) = date(TC.tat01_test_start_dt) AND  FD.TAM02_APPLICATION_ID =  TC.TAM02_APPLICATION_ID AND  FD.TAM03_SCREEN_ID  = TC.TAM03_SCREEN_ID) as failedData, "
-						+ "(Select count(tat01_test_output) FROM ktat01_test_result PD WHERE tat01_test_output = 'P' AND date(PD.tat01_test_start_dt) = date(TC.tat01_test_start_dt) AND PD.TAM02_APPLICATION_ID =  TC.TAM02_APPLICATION_ID AND  PD.TAM03_SCREEN_ID  = TC.TAM03_SCREEN_ID) as passedData, "
-						+ "date_format(date(tat01_test_start_dt),\"%M %d %Y\")  \r\n" + ""
-						+ "from ktat01_test_result TC WHERE 1= 1 ");
+						"SELECT COUNT(*),COUNT(FD.tat01_test_output) as failedData, COUNT(PD.tat01_test_output) as passedData, "
+						+ "date_format(date(TC.tat01_test_start_dt),\"%M %d %Y\")  \r\n" + ""
+						+ "FROM ktat01_test_result TC LEFT OUTER JOIN ktat01_test_result FD ON FD.tat01_test_output = 'F' AND FD.TAT01_TEST_RESULT_ID = TC.TAT01_TEST_RESULT_ID "
+						+ "LEFT OUTER JOIN ktat01_test_result PD ON PD.tat01_test_output = 'P' AND PD.TAT01_TEST_RESULT_ID = TC.TAT01_TEST_RESULT_ID "
+						+ "WHERE 1= 1 ");
 			} else {
 			    searchQuery = new StringBuffer("\r\n" + 
-					"SELECT COUNT(*),(SELECT COUNT(tat01_test_output)FROM ktat01_test_result FD WHERE tat01_test_output = 'F' AND MONTHNAME(FD.tat01_test_start_dt) = MONTHNAME(TC.tat01_test_start_dt) AND  FD.TAM02_APPLICATION_ID =  TC.TAM02_APPLICATION_ID AND  FD.TAM03_SCREEN_ID  = TC.TAM03_SCREEN_ID) as failedData, "
-					+ "(Select count(tat01_test_output) FROM ktat01_test_result PD WHERE tat01_test_output = 'P' AND MONTHNAME(PD.tat01_test_start_dt) = MONTHNAME(TC.tat01_test_start_dt) AND PD.TAM02_APPLICATION_ID =  TC.TAM02_APPLICATION_ID AND  PD.TAM03_SCREEN_ID  = TC.TAM03_SCREEN_ID) as passedData, "
-					+ "MONTHNAME(tat01_test_start_dt)  "
-					+ "from ktat01_test_result TC WHERE 1= 1 ");
+					"SELECT COUNT(*),COUNT(FD.tat01_test_output) as failedData, COUNT(PD.tat01_test_output) as passedData, "
+					+ "MONTHNAME(TC.tat01_test_start_dt)  "
+					+ "FROM ktat01_test_result TC LEFT OUTER JOIN ktat01_test_result FD ON FD.tat01_test_output = 'F' AND FD.TAT01_TEST_RESULT_ID = TC.TAT01_TEST_RESULT_ID "
+					+ "LEFT OUTER JOIN ktat01_test_result PD ON PD.tat01_test_output = 'P' AND PD.TAT01_TEST_RESULT_ID = TC.TAT01_TEST_RESULT_ID "
+					+ "WHERE 1= 1 ");
 			}
 			if (searchFilter.getApplicationID() != null && searchFilter.getApplicationID() != 0) {
 				searchQuery.append(" AND TC.TAM02_APPLICATION_ID IN(" + searchFilter.getApplicationID() + ")");
@@ -107,9 +126,9 @@ public List<DashBoard> getResultsForDashboard(DashBoard searchFilter){
 						+ " AND STR_TO_DATE('" + (format1.format(searchFilter.getTestEndDate().getTime())) + "', '%d-%m-%Y %H:%i') ");
 			}
 			if (searchFilter.getMonthDate() != null && searchFilter.getMonthDate().equals("Date")) {
-				searchQuery.append(" GROUP BY date(tat01_test_start_dt) ORDER BY tat01_test_start_dt ");
+				searchQuery.append(" GROUP BY date(TC.tat01_test_start_dt) ORDER BY TC.tat01_test_start_dt ");
 			} else {
-				searchQuery.append(" GROUP BY MONTHNAME(tat01_test_start_dt) ORDER BY tat01_test_start_dt ");
+				searchQuery.append(" GROUP BY MONTHNAME(TC.tat01_test_start_dt) ORDER BY TC.tat01_test_start_dt ");
 			}
 			
 			logger.info("Entering @DashBoardService - getResultsForDashboard::::"+searchQuery.toString());
@@ -121,6 +140,31 @@ public List<DashBoard> getResultsForDashboard(DashBoard searchFilter){
     		e.printStackTrace();
         }
 		return dashBoardDetails;	
+	
+	}
+    
+    public List<DashBoard> getTodayResultsForDashboard(){
+		
+		logger.info("Entering @TestResultsReportingService - getTodayResultsForDashboard::::");
+		SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+		List<DashBoard> todayResults = null;
+		StringBuffer queryResult = null;
+		try {
+		
+		    queryResult = new StringBuffer("\r\n" + 
+				"SELECT count(tat01_test_output),tat01_test_output FROM ktat01_test_result \r\n" + 
+				"WHERE tat01_test_start_dt =CURDATE()\r\n" + 
+				"GROUP BY tat01_test_output ORDER BY tat01_test_output desc ");
+			
+			logger.info("Entering @DashBoardService - getTodayResultsForDashboard::::"+queryResult.toString());
+			Query query = em.createNativeQuery(queryResult.toString());
+			todayResults =query.getResultList();
+		
+		}catch(Exception e) {
+        	logger.error("Exception @DashBoardService - getTodayResultsForDashboard::::");
+    		e.printStackTrace();
+        }
+		return todayResults;	
 	
 	}
 
