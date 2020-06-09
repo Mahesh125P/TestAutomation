@@ -6,37 +6,24 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import javax.mail.Folder;
 import javax.transaction.Transactional;
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.testautomation.model.ComponentMapping;
 import com.testautomation.model.Screen;
 import com.testautomation.model.TestComponent;
-import com.testautomation.repositories.ApplicationRepository;
 import com.testautomation.repositories.ComponentMappingRepository;
 import com.testautomation.repositories.ScreenRepository;
 import com.testautomation.repositories.TestComponentRepository;
@@ -210,6 +197,8 @@ public class TestComponentService {
 			screen.setScreenName(data.getScreen().getScreenName());
 			componentMapping.setScreen(screen);
 			componentMappingRepository.delete(componentMapping);
+			int testOrderNo = data.getTestOrder();
+			componentMappingRepository.updateTestOrder(data.getTestComponent().getTestComponentID(),testOrderNo);
 			
 			//File deletefile = new File(automaticPath +File.separator + "TestSuite_" + componentMappingDTO.applicationName + "_" + data.getScreen().getScreenName() + ".xlsx"); 
 			//deletefile.delete();
