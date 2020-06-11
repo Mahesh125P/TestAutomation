@@ -43,13 +43,14 @@ public class TestComponentController {
 		return new ResponseEntity<List<LookupDTO>>(testcomponentList, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/testComponent")
-	public ResponseEntity<TestComponent> saveTestComponent(@RequestBody TestComponent testComponent) {
+	@PostMapping(value = "/testComponent/{userName}")
+	public ResponseEntity<TestComponent> saveTestComponent(@RequestBody TestComponent testComponent,
+			@PathVariable String userName) {
 
 		logger.info("Entering @TestComponentController - saveTestComponent::::");
 		TestComponent savedData = null;
 		try {
-			savedData = testComponentService.saveTestComponent(testComponent);
+			savedData = testComponentService.saveTestComponent(testComponent,userName);
 		} catch (Exception e) {
 			logger.error("Exception @TestComponentController - saveTestComponent::::");
 			e.printStackTrace();
@@ -73,13 +74,14 @@ public class TestComponentController {
 		return new ResponseEntity<List<ComponentMapping>>(result, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/testComponent/mapping")
-	public ResponseEntity<List<ComponentMapping>> saveTestComponentMapping(@RequestBody ComponentMappingDTO componentMapping) {
+	@PostMapping(value = "/testComponent/mapping/{userName}")
+	public ResponseEntity<List<ComponentMapping>> saveTestComponentMapping(@RequestBody ComponentMappingDTO componentMapping,
+			@PathVariable String userName) {
 
 		logger.info("Entering @TestComponentController - saveTestComponentMapping::::");
 		List<ComponentMapping> savedData = null;
 		try {
-			savedData = testComponentService.saveComponentMapping(componentMapping);
+			savedData = testComponentService.saveComponentMapping(componentMapping,userName);
 		} catch (Exception e) {
 			logger.error("Exception @TestComponentController - saveTestComponentMapping::::");
 			e.printStackTrace();

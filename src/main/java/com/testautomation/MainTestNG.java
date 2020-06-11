@@ -83,7 +83,8 @@ public class MainTestNG {
 			 * }
 			 */
 
-	public void startTest(TestResultsReportingService testReportService, String selectedApplication, List<String> selectedScreenList, String selectedComponent,DataFromDatabaseService dataFromDbService) {
+	public void startTest(TestResultsReportingService testReportService, String selectedApplication, 
+			List<String> selectedScreenList, String selectedComponent,DataFromDatabaseService dataFromDbService, String userName) {
 
 		try {
 			filehandler = new FileHandler("./log.txt");
@@ -116,6 +117,7 @@ public class MainTestNG {
 			ExcelAction.selectedComponent = selectedComponent;
 			ExcelAction.dataFromDbService = dataFromDbService;
 			ExecuteTestCases.selectedScreenList = selectedScreenList;
+			ExcelAction.user = userName;
 			//ExcelAction.listOfTestCases.clear();
 			
 			test.testng();
