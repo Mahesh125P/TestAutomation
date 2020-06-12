@@ -333,20 +333,6 @@ public class MethodType extends GlobalVariables{
 		MainTestNG.LOGGER.info("completed alertAccept()");
 	}
 	
-	public void clickWithAlertAccept(MethodParameters model) {
-
-		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
-		executor.executeScript("window.confirm = function(){ return true;}");
-		executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())));
-	}
-	
-	public void clickWithAlertDismiss(MethodParameters model) {
-
-		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
-		executor.executeScript("window.confirm = function(){return false;}");
-		executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())));
-	}
-	
 	/**
 	 *Alert dismiss meaning click on Cancel button
 	 */
@@ -360,6 +346,53 @@ public class MethodType extends GlobalVariables{
 		Alert alert = WebDriverClass.getInstance().switchTo().alert();
 		wait1(1000);
 		alert.dismiss();
+	}
+	
+	/**
+	 *Alert accept meaning click on OK button as optional
+	 */
+	public void alertAcceptOptional(MethodParameters model) {
+
+		WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
+		wait1(1000);
+		MainTestNG.LOGGER.info("inside alertAcceptOptional()");
+		if(ExpectedConditions.alertIsPresent() != null) {
+	
+			Alert alert = WebDriverClass.getInstance().switchTo().alert();
+			wait1(1000);
+	
+			alert.accept();
+			MainTestNG.LOGGER.info("completed alertAcceptOptional()");
+		}
+	}
+	
+	/**
+	 *Alert dismiss meaning click on Cancel button as optional
+	 */
+	public void alertDismissOptional(MethodParameters model) {
+		WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
+		MainTestNG.LOGGER.info("inside alertDismissOptional()");
+		if(ExpectedConditions.alertIsPresent() != null) {
+			wait1(1000);
+			model.getElement().get(0).click();
+			Alert alert = WebDriverClass.getInstance().switchTo().alert();
+			wait1(1000);
+			alert.dismiss();
+		}
+	}
+	
+	public void clickWithAlertAcceptIE(MethodParameters model) {
+
+		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
+		executor.executeScript("window.confirm = function(){ return true;}");
+		executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())));
+	}
+	
+	public void clickWithAlertDismissIE(MethodParameters model) {
+
+		JavascriptExecutor executor = (JavascriptExecutor) WebDriverClass.getDriver();
+		executor.executeScript("window.confirm = function(){return false;}");
+		executor.executeScript("arguments[0].click();", WebDriverClass.getDriver().findElement(By.xpath(model.getObjectLocators())));
 	}
 
 	/**

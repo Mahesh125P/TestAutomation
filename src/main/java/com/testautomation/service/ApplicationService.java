@@ -64,7 +64,7 @@ public class ApplicationService {
 	}
 
 	@Transactional
-	public boolean saveDetails(MultipartFile file,String appName, String appURL, String appBrowser,String userName) {
+	public boolean saveDetails(MultipartFile file,String appName, String appURL, String appBrowser,String userName,String appDB) {
 		
 		Workbook workbook = getWorkBook(file);
 		Application application = new Application();
@@ -121,7 +121,7 @@ public class ApplicationService {
 				application.setApplicationName(appName);
 				application.setApplicationURL(appURL);
 				application.setCreatedBy(userName);
-				
+				application.setApplicationDataBase(appDB);
 				application.setScreen(screenList);		
 				applicationrepository.save(application);
 			} 
@@ -131,6 +131,7 @@ public class ApplicationService {
 			application.setApplicationName(appName);
 			application.setApplicationURL(appURL);
 			application.setCreatedBy(userName);
+			application.setApplicationDataBase(appDB);
 			applicationrepository.save(application);
 		}
 		return true;
