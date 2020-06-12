@@ -30,6 +30,7 @@ import com.testautomation.util.WebDriverClass;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -356,14 +357,16 @@ public class MethodType extends GlobalVariables{
 		WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
 		wait1(1000);
 		MainTestNG.LOGGER.info("inside alertAcceptOptional()");
-		if(ExpectedConditions.alertIsPresent() != null) {
-	
+		//wait.until(ExpectedConditions.alertIsPresent());
+		try {
 			Alert alert = WebDriverClass.getInstance().switchTo().alert();
 			wait1(1000);
 	
 			alert.accept();
-			MainTestNG.LOGGER.info("completed alertAcceptOptional()");
+		} catch(NoAlertPresentException e) {
+			
 		}
+		MainTestNG.LOGGER.info("completed alertAcceptOptional()");
 	}
 	
 	/**
@@ -372,13 +375,15 @@ public class MethodType extends GlobalVariables{
 	public void alertDismissOptional(MethodParameters model) {
 		WebDriverWait wait = new WebDriverWait(WebDriverClass.getDriver(), 30);
 		MainTestNG.LOGGER.info("inside alertDismissOptional()");
-		if(ExpectedConditions.alertIsPresent() != null) {
-			wait1(1000);
-			model.getElement().get(0).click();
+		try {
 			Alert alert = WebDriverClass.getInstance().switchTo().alert();
 			wait1(1000);
+	
 			alert.dismiss();
+		} catch(NoAlertPresentException e) {
+			
 		}
+		MainTestNG.LOGGER.info("completed alertDismissOptional()");
 	}
 	
 	public void clickWithAlertAcceptIE(MethodParameters model) {
