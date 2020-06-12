@@ -3,11 +3,8 @@ package com.testautomation.service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -70,7 +67,6 @@ public class ApplicationService {
 		Application application = new Application();
 		Screen scr = new Screen(); //Add new Screen
 		ArrayList<Screen> screenList = new ArrayList<Screen>(); 
-		ArrayList<Screen> screenRemoveList = new ArrayList<Screen>(); 
 		ArrayList<String> screenNamesList = new ArrayList<String>(); 
 		
 		application = applicationrepository.getApplicationValues(appName);
