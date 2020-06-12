@@ -56,6 +56,7 @@ public class ExcelAction {
 	public static String selectedScreen = null;
 	public static String selectedComponent = null;
 	public static String currentTestAutoUser = null;
+	public static String user = null;
 	HashMap<String,String> tempResultMap = new HashMap<String,String>();
 	public static HashMap<String,HashMap<String,String>> testResultMap = new HashMap<String,HashMap<String,String>>();
 	StringBuffer inputValue = new StringBuffer();

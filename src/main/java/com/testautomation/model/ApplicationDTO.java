@@ -13,12 +13,16 @@ public class ApplicationDTO {
 
 	private String screenName;
 	
-	public ApplicationDTO(Integer applicationID, String applicationName, String applicationURL, String applicationBrowser, String screenName) {
+	private String applicationDataBase;
+	
+	public ApplicationDTO(Integer applicationID, String applicationName, String applicationURL, 
+			String applicationBrowser, String applicationDataBase, String screenName) {
 		super();
 		this.applicationID = applicationID;
 		this.applicationName = applicationName;
 		this.applicationURL = applicationURL;
 		this.applicationBrowser = applicationBrowser;
+		this.applicationDataBase = applicationDataBase;
 		this.screenName = screenName;
 	}
 
@@ -67,6 +71,14 @@ public class ApplicationDTO {
 
 	public void setApplicationBrowser(String applicationBrowser) {
 		this.applicationBrowser = applicationBrowser;
+	}
+
+	public String getApplicationDataBase() {
+		return applicationDataBase;
+	}
+
+	public void setApplicationDataBase(String applicationDataBase) {
+		this.applicationDataBase = applicationDataBase;
 	}
 
 }

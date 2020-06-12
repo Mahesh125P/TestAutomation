@@ -139,7 +139,7 @@ public class TestResultsReportingController {
 		else
 		selectedScreenList = Arrays.asList(login.getSelectedScreenName().split(","));
 		
-		testStart.startTest(testReportService,login.getSelectedApplicationName(),selectedScreenList,testComponentName,dataFromDbService);
+		testStart.startTest(testReportService,login.getSelectedApplicationName(),selectedScreenList,testComponentName,dataFromDbService,login.getUserName());
 		//testStart.startTest(testReportService,login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
 		//ApplicationService as = new ApplicationService();
 		//as.persistApplication();

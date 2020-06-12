@@ -64,7 +64,7 @@ public class ApplicationService {
 	}
 
 	@Transactional
-	public boolean saveDetails(MultipartFile file,String appName, String appURL, String appBrowser) {
+	public boolean saveDetails(MultipartFile file,String appName, String appURL, String appBrowser,String userName,String appDB) {
 		
 		Workbook workbook = getWorkBook(file);
 		Application application = new Application();
@@ -103,7 +103,7 @@ public class ApplicationService {
 							} else {
 								scr = new Screen();
 								scr.setScreenName(row.getCell(1).getStringCellValue());
-								scr.setCreatedBy("Manual");
+								scr.setCreatedBy(userName);
 								screenList.add(scr);
 							}
 						} else if(screenNamesList.contains(row.getCell(1).getStringCellValue()) 
@@ -120,8 +120,8 @@ public class ApplicationService {
 				application.setApplicationBrowser(appBrowser);
 				application.setApplicationName(appName);
 				application.setApplicationURL(appURL);
-				application.setCreatedBy("Manual");
-				
+				application.setCreatedBy(userName);
+				application.setApplicationDataBase(appDB);
 				application.setScreen(screenList);		
 				applicationrepository.save(application);
 			} 
@@ -130,7 +130,8 @@ public class ApplicationService {
 			application.setApplicationBrowser(appBrowser);
 			application.setApplicationName(appName);
 			application.setApplicationURL(appURL);
-			application.setCreatedBy("Manual");
+			application.setCreatedBy(userName);
+			application.setApplicationDataBase(appDB);
 			applicationrepository.save(application);
 		}
 		return true;

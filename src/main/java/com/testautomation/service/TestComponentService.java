@@ -48,9 +48,9 @@ public class TestComponentService {
 		return testComponentRepository.findTestComponentByAppId(appid);
 	}
 
-	public TestComponent saveTestComponent(TestComponent testComponent) {
-		testComponent.setCreatedBy("Mahesh4");
-		testComponent.setLastupdatedBy("Mahesh4");
+	public TestComponent saveTestComponent(TestComponent testComponent,String userName) {
+		testComponent.setCreatedBy(userName);
+		testComponent.setLastupdatedBy(userName);
 		testComponent.setCreatedDate(new Date());
 		testComponent.setLastupdatedDate(new Date());
 		return testComponentRepository.save(testComponent);
@@ -65,7 +65,7 @@ public class TestComponentService {
 	 * }
 	 */
 
-	public List<ComponentMapping> saveComponentMapping(ComponentMappingDTO componentMappingDTO) {
+	public List<ComponentMapping> saveComponentMapping(ComponentMappingDTO componentMappingDTO,String userName) {
 		List<ComponentMapping> componentMappingList = new ArrayList<>();
 		TestComponent testComponent = new TestComponent();
 		testComponent.setTestComponentID(Integer.parseInt(componentMappingDTO.componentId));
@@ -93,8 +93,8 @@ public class TestComponentService {
 			List<String> values = new ArrayList<String>();
 			
 			ComponentMapping componentMapping = data;
-			componentMapping.setCreatedBy("Mahesh4");
-			componentMapping.setLastupdatedBy("Mahesh4");
+			componentMapping.setCreatedBy(userName);
+			componentMapping.setLastupdatedBy(userName);
 			componentMapping.setCreatedDate(new Date());
 			componentMapping.setLastupdatedDate(new Date());
 			componentMapping.setTestComponent(testComponent);
