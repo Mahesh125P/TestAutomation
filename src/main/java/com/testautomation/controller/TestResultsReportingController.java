@@ -143,7 +143,7 @@ public class TestResultsReportingController {
 		//testStart.startTest(testReportService,login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
 		//ApplicationService as = new ApplicationService();
 		//as.persistApplication();
-		testReportService.persistTestResults(login.getUserName());
+		//testReportService.persistTestResults(login.getUserName());
 		System.out.println("Completed startTest!!!");
 		return "homePage";
 	}

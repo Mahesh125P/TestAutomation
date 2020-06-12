@@ -176,8 +176,8 @@ public class TestResultsReportingService {
 		Date testStartDt = null;
 		Date testEndDt = null;
 		try {
-			testStartDt = new SimpleDateFormat("dd/MM/yyyy").parse(testResultDtls.get("TestStartDate"));
-			testEndDt = new SimpleDateFormat("dd/MM/yyyy").parse(testResultDtls.get("TestEndDate"));
+			testStartDt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(testResultDtls.get("TestStartDate"));
+			testEndDt = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(testResultDtls.get("TestEndDate"));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -150,12 +150,12 @@ public class ExcelAction {
 		String[] screenName = tcName.split("~");
 		fail = null;
 		TestCase temp = (TestCase) testCaseSheet.get(key);
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH24:mm:ss");
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		Calendar calobj = Calendar.getInstance();
 		try{					
 		
 		tempResultMap.put("TestStartDate", df.format(calobj.getTime()));
-		tempResultMap.put("LoggedInUser","Mahesh");
+		tempResultMap.put("LoggedInUser",currentTestAutoUser);
 		List testStepId = temp.getTestStepId();
 		Reporter.log("size====" + testStepId.size());
 		List dataColValues = null;
