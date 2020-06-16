@@ -122,12 +122,21 @@ public class TestResultsReportingController {
 		model.addAttribute("testCaseList", login.getTestCaseList());
 		model.addAttribute("selectedApplicationName", login.getSelectedApplicationName());
 		model.addAttribute("selectedScreenName",login.getSelectedScreenName());
+		
 		System.out.println("Started executing Test!!!");
+		
+		List<String> screenComponentList = new ArrayList<String>();
+		if(login.getSelectedScreenName().equalsIgnoreCase("Choose Screen")) {
+			screenComponentList = dataFromDbService.getScreensByComponentId(Integer.parseInt(login.getSelectedComponentID()));
+		} else {
+			screenComponentList = Arrays.asList(login.getSelectedScreenName().split(","));
+		}
+		
 		String testComponentName = "";
 		MainTestNG testStart = new MainTestNG();
 		if(login.getDataFromDBCheckbox().equalsIgnoreCase("true")) {
 			dataFromDbService.setuserNDataFromDBMap(login.getUserName(),"Yes");
-			dataFromDbService.doCopyFileToDbData(login.getUserName(),login.getSelectedApplicationName(),Arrays.asList(login.getSelectedScreenName().split(",")));
+			dataFromDbService.doCopyFileToDbData(login.getUserName(),login.getSelectedApplicationName(),screenComponentList);
 		} else {
 			dataFromDbService.setuserNDataFromDBMap(login.getUserName(),"No");
 		}

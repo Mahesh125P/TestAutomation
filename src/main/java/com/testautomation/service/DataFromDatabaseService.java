@@ -30,7 +30,9 @@ import org.testng.Reporter;
 
 import com.google.common.io.Files;
 import com.testautomation.MainTestNG;
+import com.testautomation.repositories.ComponentMappingRepository;
 import com.testautomation.repositories.ScreenRepository;
+import com.testautomation.repositories.TestComponentRepository;
 import com.testautomation.util.ExcelAction;
 import com.testautomation.util.ReadConfigProperty;
 
@@ -57,6 +59,9 @@ public class DataFromDatabaseService {
 	
 	@Autowired
 	ScreenRepository scrRepository;
+	
+	@Autowired
+	private ComponentMappingRepository componentMappingRepository;
 	
 	final static Logger logger = LoggerFactory.getLogger(DataFromDatabaseService.class);
 	
@@ -377,4 +382,12 @@ public class DataFromDatabaseService {
 		return data;
 	}
 	
+	
+	
+	public List<String> getScreensByComponentId(Integer componentId) {
+		
+		List<String> screenComponentList = new ArrayList<String>();
+		screenComponentList = componentMappingRepository.findScreenNameByComponentId(componentId);
+		return screenComponentList;
+	}
 }
