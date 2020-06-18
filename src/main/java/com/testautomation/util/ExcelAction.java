@@ -209,7 +209,7 @@ public class ExcelAction {
 								List columnValue = getColumnValue(testDataArray);
 								if(header != null && header.equals("DB")) {
 									//dataValue = "CQT20022501";
-									dataValue = dataFromDbService.getDataFromDBForScenarioBuilding(screenName[1],columnValue.get(execution).toString());
+									dataValue = dataFromDbService.getDataFromDBForScenarioBuilding(selectedApplication,columnValue.get(execution).toString());
 								} else {
 									dataValue = columnValue.get(execution).toString();
 								}

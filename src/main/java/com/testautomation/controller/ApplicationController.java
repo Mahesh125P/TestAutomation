@@ -76,16 +76,18 @@ public class ApplicationController {
 		return this.applicationService.getApplicationDetails(id);
 	}
 
-	@PostMapping(value = "/updateApplicationDetails/{userName}")
-	public ResponseEntity<ResponseDTO> updateApplicationDetails(@RequestParam(name = "file", required = false) MultipartFile file,
+	@PostMapping(value = "/saveApplicationDetails/{userName}")
+	public ResponseEntity<ResponseDTO> saveApplicationDetails(@RequestParam(name = "file", required = false) MultipartFile file,
 			@RequestParam("appName") String appName, @RequestParam("appURL") String appURL,
 			@RequestParam("appBrowser") String appBrowser,@RequestParam("appDB") String appDB,
-			@PathVariable String userName) throws IOException {
+			@PathVariable String userName,@RequestParam("dataBaseURL") String dataBaseURL,
+			@RequestParam("dataBaseUserName") String dataBaseUserName,@RequestParam("dataBasePassword") String dataBasePassword) throws IOException {
 		
-		logger.info("Entering @ApplicationController - updateApplicationDetails::::");
+		logger.info("Entering @ApplicationController - saveApplicationDetails::::");
 	      
 		ResponseDTO response = new ResponseDTO();
-		boolean isFlag = applicationService.saveDetails(file, appName, appURL, appBrowser,userName,appDB);
+		boolean isFlag = applicationService.saveDetails(file, appName, appURL, appBrowser,userName,appDB,
+				dataBaseURL,dataBaseUserName,dataBasePassword);
 		if (isFlag) {
 			response.setStatus("error");
 //			return "FileUpload suceesfully";

@@ -15,14 +15,24 @@ public class ApplicationDTO {
 	
 	private String applicationDataBase;
 	
+	private String dataBaseURL;
+	
+	private String dataBaseUserName;
+	
+	private String dataBasePassword;
+	
 	public ApplicationDTO(Integer applicationID, String applicationName, String applicationURL, 
-			String applicationBrowser, String applicationDataBase, String screenName) {
+			String applicationBrowser, String applicationDataBase, 
+			String dataBaseURL,String dataBaseUserName,String dataBasePassword,String screenName) {
 		super();
 		this.applicationID = applicationID;
 		this.applicationName = applicationName;
 		this.applicationURL = applicationURL;
 		this.applicationBrowser = applicationBrowser;
 		this.applicationDataBase = applicationDataBase;
+		this.dataBaseURL = dataBaseURL;
+		this.dataBaseUserName = dataBaseUserName;
+		this.dataBasePassword = dataBasePassword;
 		this.screenName = screenName;
 	}
 
@@ -79,6 +89,30 @@ public class ApplicationDTO {
 
 	public void setApplicationDataBase(String applicationDataBase) {
 		this.applicationDataBase = applicationDataBase;
+	}
+
+	public String getDataBaseURL() {
+		return dataBaseURL;
+	}
+
+	public void setDataBaseURL(String dataBaseURL) {
+		this.dataBaseURL = dataBaseURL;
+	}
+
+	public String getDataBaseUserName() {
+		return dataBaseUserName;
+	}
+
+	public void setDataBaseUserName(String dataBaseUserName) {
+		this.dataBaseUserName = dataBaseUserName;
+	}
+
+	public String getDataBasePassword() {
+		return dataBasePassword;
+	}
+
+	public void setDataBasePassword(String dataBasePassword) {
+		this.dataBasePassword = dataBasePassword;
 	}
 
 }

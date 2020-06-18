@@ -25,11 +25,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Service;
 import org.testng.Reporter;
 
 import com.google.common.io.Files;
 import com.testautomation.MainTestNG;
+import com.testautomation.repositories.ApplicationRepository;
 import com.testautomation.repositories.ComponentMappingRepository;
 import com.testautomation.repositories.ScreenRepository;
 import com.testautomation.repositories.TestComponentRepository;
@@ -61,6 +63,9 @@ public class DataFromDatabaseService {
 	ScreenRepository scrRepository;
 	
 	@Autowired
+	ApplicationRepository applicationRepository;
+	
+	@Autowired
 	private ComponentMappingRepository componentMappingRepository;
 	
 	final static Logger logger = LoggerFactory.getLogger(DataFromDatabaseService.class);
@@ -76,7 +81,7 @@ public class DataFromDatabaseService {
 	 * Read test data sheet
 	 * @throws Exception 
 	 */
-	public void readLoadTestDataSheet(String from,String screenName) throws Exception {
+	public void readLoadTestDataSheet(String from,String screenName, String applicationName) throws Exception {
 
 		String sheetName;
 		StringBuffer dynamicFilePath = new StringBuffer();			
@@ -120,7 +125,7 @@ public class DataFromDatabaseService {
 		
 		try {
 			
-			HashMap<String, ArrayList<HashMap<String,String>>> dataBySheets = getDataFromDB(screenName);
+			HashMap<String, ArrayList<HashMap<String,String>>> dataBySheets = getDataFromDB(screenName, applicationName);
 			boolean iswrite = false;
 			File file = null;
 			FileInputStream fip = null ;
@@ -184,28 +189,37 @@ public class DataFromDatabaseService {
 	}
 	
 	
-	public HashMap<String, ArrayList<HashMap<String,String>>>  getDataFromDB(String screenName) {	
+	public HashMap<String, ArrayList<HashMap<String,String>>>  getDataFromDB(String screenName,String applicationName) {	
 		
 		
 		HashMap<String, ArrayList<HashMap<String,String>>> eachSheet = new HashMap<String, ArrayList<HashMap<String,String>>>();
 		try {			
 			  // To get Data from DB 
-			String application_db = getApplicationDb(screenName);
-			String queryToGetData = getQueryFromDB(screenName);
+			//String application_db = getApplicationDb(screenName);
+			String application_db = getApplicationDbDetails(applicationName);
+			String[] application_db_Details = application_db.split(",");
+			DriverManagerDataSource dataSource = new DriverManagerDataSource();
+			dataSource.setUrl(application_db_Details[1]);
+			dataSource.setUsername(application_db_Details[2]);
+			dataSource.setPassword(application_db_Details[3]);
 			
+			String queryToGetData = getQueryFromDB(screenName);
 			String[] queryArrays = getQueryFromDB(screenName).split("@_@");
 			for(int i = 0; i < queryArrays.length; i++){
 				String[] sheetNameQueries = queryArrays[i].split("@#@"); //0=Sheetname,1=query TC001@#@SELECT@_@TC002@#@SELECT@_@
 				logger.info("sheetNameQueries_sheetName....." + sheetNameQueries[0] + "    sheetNameQueries_Queries....." + sheetNameQueries[1]);
 				List<Map<String, Object>> rows = new ArrayList<Map<String,Object>>();
-				if(!application_db.equals("") && application_db.equalsIgnoreCase("Oracle")) {
+				if(!application_db_Details[0].equals("") && application_db_Details[0].equalsIgnoreCase("Oracle")) {
 					//rows = jdbcOracleTemplate.queryForList(queryToGetData);
+					jdbcOracleTemplate.setDataSource(dataSource);
 					rows = jdbcOracleTemplate.queryForList(sheetNameQueries[1]);
-				}else if(!application_db.equals("") && application_db.equalsIgnoreCase("MySql")) {
+				}else if(!application_db_Details[0].equals("") && application_db_Details[0].equalsIgnoreCase("MySql")) {
 					//rows = jdbcMySqlTemplate.queryForList(queryToGetData);
+					jdbcMySqlTemplate.setDataSource(dataSource);
 					rows = jdbcMySqlTemplate.queryForList(sheetNameQueries[1]);
-				}else if(!application_db.equals("") && application_db.equalsIgnoreCase("SqlSever")) {
+				}else if(!application_db_Details[0].equals("") && application_db_Details[0].equalsIgnoreCase("SqlSever")) {
 					//rows = jdbcSqlSeverTemplate.queryForList(queryToGetData);
+					jdbcSqlSeverTemplate.setDataSource(dataSource);
 					rows = jdbcSqlSeverTemplate.queryForList(sheetNameQueries[1]);
 				}
 				
@@ -294,7 +308,7 @@ public class DataFromDatabaseService {
 					from = projectfilePath + "TestCase" + File.separator + application + File.separator + "TestCase_" + application + "_" + scr + ".xlsx";
 					to =  projectfilePath + "DBData"+ File.separator  + application + File.separator ;
 					copyFile(application,scr,from,to);
-					readLoadTestDataSheet(to + "DbData_TestCase_" + application + "_" + scr + ".xlsx",scr);				
+					readLoadTestDataSheet(to + "DbData_TestCase_" + application + "_" + scr + ".xlsx",scr,application);				
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -354,19 +368,27 @@ public class DataFromDatabaseService {
 		//userNDataFromDBMap.put("sowmiya", isDbData);
 	}
 	
-	public String getDataFromDBForScenarioBuilding(String screenName, String queryToGetData) {
+	public String getDataFromDBForScenarioBuilding(String applicationName, String queryToGetData) {
 
 		String data = "";
 		try {
 			// To get Data from DB
-			String application_db = getApplicationDb(screenName);
+			String application_db = getApplicationDbDetails(applicationName);
+			String[] application_db_Details = application_db.split(",");
 			List<Map<String, Object>> rows = new ArrayList<Map<String, Object>>();
-			if (!application_db.equals("") && application_db.equalsIgnoreCase("Oracle")) {
-				 rows = jdbcOracleTemplate.queryForList(queryToGetData);
-			} else if (!application_db.equals("") && application_db.equalsIgnoreCase("MySql")) {
-				 rows = jdbcMySqlTemplate.queryForList(queryToGetData);
-			} else if (!application_db.equals("") && application_db.equalsIgnoreCase("SqlSever")) {
-				// rows = jdbcSqlSeverTemplate.queryForList(queryToGetData);
+			DriverManagerDataSource dataSource = new DriverManagerDataSource();
+			dataSource.setUrl(application_db_Details[1]);
+			dataSource.setUsername(application_db_Details[2]);
+			dataSource.setPassword(application_db_Details[3]);
+			if (!application_db_Details[0].equals("") && application_db_Details[0].equalsIgnoreCase("Oracle")) {
+				jdbcOracleTemplate.setDataSource(dataSource);
+				rows = jdbcOracleTemplate.queryForList(queryToGetData);
+			} else if (!application_db_Details[0].equals("") && application_db_Details[0].equalsIgnoreCase("MySql")) {
+				jdbcMySqlTemplate.setDataSource(dataSource);
+				rows = jdbcMySqlTemplate.queryForList(queryToGetData);
+			} else if (!application_db_Details[0].equals("") && application_db_Details[0].equalsIgnoreCase("SqlSever")) {
+				jdbcSqlSeverTemplate.setDataSource(dataSource);
+				rows = jdbcSqlSeverTemplate.queryForList(queryToGetData);
 			}
 			for (Map<String, Object> map : rows) {
 				HashMap<String, String> eachRow = new HashMap<String, String>();
@@ -382,7 +404,10 @@ public class DataFromDatabaseService {
 		return data;
 	}
 	
-	
+    public String getApplicationDbDetails(String applicationName) {
+		
+		return applicationRepository.getApplicationDbDetails(applicationName);
+	}
 	
 	public List<String> getScreensByComponentId(Integer componentId) {
 		

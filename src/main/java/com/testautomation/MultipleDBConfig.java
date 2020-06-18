@@ -45,10 +45,10 @@ public class MultipleDBConfig {
 	public DataSource createSqlServerDataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		dataSource.setUrl("jdbc:sqlserver://127.0.0.1:1433;databaseName=springbootdb");
-		dataSource.setUsername("sa");
-		dataSource.setPassword("tspl@123");
-
+		/*
+		 * dataSource.setUrl("jdbc:sqlserver://127.0.0.1:1433;databaseName=springbootdb"
+		 * ); dataSource.setUsername("sa"); dataSource.setPassword("tspl@123");
+		 */
 		return dataSource;
 	}
 
@@ -64,10 +64,10 @@ public class MultipleDBConfig {
 	public DataSource oracleDataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
-		dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:orcl");
-		dataSource.setUsername("cfmavds");
-		dataSource.setPassword("vdslite");
-
+		/*
+		 * dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:orcl");
+		 * dataSource.setUsername("cfmavds"); dataSource.setPassword("vdslite");
+		 */
 		return dataSource;
 	}
 

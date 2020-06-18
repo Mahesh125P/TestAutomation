@@ -60,6 +60,15 @@ public class Application implements Serializable{
 	@Column(name="TAM02_APPLICATION_DB")
 	private String applicationDataBase;
 	
+	@Column(name="TAM02_APPLICATION_DB_URL")
+	private String dataBaseURL;
+	
+	@Column(name="TAM02_APPLICATION_DB_USERNAME")
+	private String dataBaseUserName;
+	
+	@Column(name="TAM02_APPLICATION_DB_PASSWORD")
+	private String dataBasePassword;
+	
 	public Date getCreatedDate() {
 		return createdDate;
 	}
@@ -154,6 +163,31 @@ public class Application implements Serializable{
 
 	public void setApplicationDataBase(String applicationDataBase) {
 		this.applicationDataBase = applicationDataBase;
-
 	}
+
+	public String getDataBaseURL() {
+		return dataBaseURL;
+	}
+
+	public void setDataBaseURL(String dataBaseURL) {
+		this.dataBaseURL = dataBaseURL;
+	}
+
+	public String getDataBaseUserName() {
+		return dataBaseUserName;
+	}
+
+	public void setDataBaseUserName(String dataBaseUserName) {
+		this.dataBaseUserName = dataBaseUserName;
+	}
+
+	public String getDataBasePassword() {
+		return dataBasePassword;
+	}
+
+	public void setDataBasePassword(String dataBasePassword) {
+		this.dataBasePassword = dataBasePassword;
+	}
+	
+	
 }
