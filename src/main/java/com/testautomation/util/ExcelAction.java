@@ -151,7 +151,7 @@ public class ExcelAction {
 		String[] screenName = tcName.split("~");
 		fail = null;
 		TestCase temp = (TestCase) testCaseSheet.get(key);
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH24:mm:ss");
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		Calendar calobj = Calendar.getInstance();
 		try{					
 		
