@@ -36,12 +36,15 @@ public class LoginService {
 	final static String projectfilePath = Paths.get("").toAbsolutePath().toString() + File.separator + "src"
 			+ File.separator + "main" + File.separator + "resources" + File.separator;
 	
-	public boolean isaValidUser(String userName) {
+	public boolean isaValidUser(String userName, String password) {
 		
 		boolean validUser = true;
 		Optional<Login> loginUser = loginrepository.findById(userName);
-		if(!loginUser.isPresent()) {
+		if(!loginUser.isPresent()){
 			validUser = false;
+		} else {
+			Login userdetails = loginUser.get();
+			validUser = (userdetails.getPassword() != null && userdetails.getPassword().equals(password)) ? true : false;
 		}
 		return validUser;
 	}
@@ -199,7 +202,7 @@ public class LoginService {
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		Calendar calobj = Calendar.getInstance();
 		try {
-			user.setUserName(user.getUserName().toUpperCase());
+			user.setUserName(user.getUserName());
 			user.setCreatedBy(user.getUserName());
 			user.setCreatedDate(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(df.format(calobj.getTime())));
 			loginrepository.save(user);

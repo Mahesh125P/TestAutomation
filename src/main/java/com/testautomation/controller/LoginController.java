@@ -54,7 +54,7 @@ public class LoginController {
 	public String LoginSubmit(@RequestBody Login login,HttpServletRequest request) {
 		logger.info("Started LoginSubmit!!!");
 		logger.info("Username:"+login.getUserName() + "Password:  "+login.getPassword());
-		if(!loginservice.isaValidUser(login.getUserName())){
+		if(!loginservice.isaValidUser(login.getUserName(),login.getPassword())){
 			logger.info("Completed LoginSubmit! Login Failed!");
 			return "FAILURE";
 		}
@@ -89,7 +89,7 @@ public class LoginController {
 	public String LoginSubmit1(ModelMap model,@ModelAttribute("login") Login login) {
 		logger.info("Started LoginSubmit!!!");
 		logger.info("Username:"+login.getUserName() + "Password:  "+login.getPassword());
-		if(!loginservice.isaValidUser(login.getUserName())){
+		if(!loginservice.isaValidUser(login.getUserName(),login.getPassword())){
 			model.put("errorMessage", "Invalid Credentials");
 			return "login";
 		}
@@ -148,7 +148,7 @@ public class LoginController {
 		
 		ResponseDTO response = new ResponseDTO();
 		try {
-			if(!loginservice.isaValidUser(login.getUserName())){
+			if(!loginservice.isaValidUser(login.getUserName(),login.getPassword())){
 				loginservice.saveUserDetails(login);
 				response.setStatus("success");
 			}else {

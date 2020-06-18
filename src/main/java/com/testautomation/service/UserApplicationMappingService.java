@@ -54,7 +54,12 @@ public class UserApplicationMappingService {
 	public ArrayList<String> getAppsByUser(String user){
 		
 		String userApps = loginrepository.getAppsByUserId(user);
-		ArrayList<String> userAppList = new ArrayList<String>(Arrays.asList(userApps.split(",")));
+		ArrayList<String> userAppList = new ArrayList<String>();
+		if(userApps != null && !userApps.equals("")) {
+			userAppList = new ArrayList<String>(Arrays.asList(userApps.split(",")));
+		} else {
+			userAppList = getAllApplicationNames();
+		}
 		return userAppList;
 	}
 	
@@ -188,8 +193,14 @@ public class UserApplicationMappingService {
 		ArrayList<LookupDTO> userAppListDTO = new ArrayList<LookupDTO>();
 		try {
 			String userApps = loginrepository.getAppsByUserId(user);
-			ArrayList<String> userAppList = new ArrayList<String>(Arrays.asList(userApps.split(",")));
-			userApps = "'" + userApps.replace(",", "','") + "'";
+			ArrayList<String> userAppList = new ArrayList<String>();
+			if(userApps != null && !userApps.equals("")) {
+				userAppList = new ArrayList<String>(Arrays.asList(userApps.split(",")));
+				userApps = "'" + userApps.replace(",", "','") + "'";
+			} else {
+				userAppList = getAllApplicationNames();
+			}						
+			
 			for(String app : userAppList) {
 				logger.info("apps list::::"+app);
 				userAppListDTO.addAll(applicationrepository.getAllAppsByUserDTO(app));
