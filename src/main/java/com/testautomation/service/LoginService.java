@@ -2,7 +2,11 @@ package com.testautomation.service;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.TreeSet;
@@ -190,4 +194,17 @@ public class LoginService {
 		return finalStr.trim(); 
 	}
 	
+	public void saveUserDetails(Login user) {
+		
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		Calendar calobj = Calendar.getInstance();
+		try {
+			user.setUserName(user.getUserName().toUpperCase());
+			user.setCreatedBy(user.getUserName());
+			user.setCreatedDate(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(df.format(calobj.getTime())));
+			loginrepository.save(user);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
 }

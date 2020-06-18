@@ -11,7 +11,9 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.testautomation.model.Login;
 import com.testautomation.service.LoginService;
+import com.testautomation.service.ResponseDTO;
 
 
 /**
@@ -135,4 +138,29 @@ public class LoginController {
 	   }	
 	 return   "redirect:/login";
 	}
+	
+	
+	@RequestMapping(value = "/userSignUp", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public  ResponseEntity<ResponseDTO> userSignUp(@RequestBody Login login,HttpServletRequest request) {
+		
+		logger.info("Entering @LoginController - userSignUp::::");
+		logger.info("Username:"+login.getUserName() + "  Password:  "+login.getPassword()+ "  fullName:  "+login.getUserFullName());
+		
+		ResponseDTO response = new ResponseDTO();
+		try {
+			if(!loginservice.isaValidUser(login.getUserName())){
+				loginservice.saveUserDetails(login);
+				response.setStatus("success");
+			}else {
+				response.setStatus("error");
+				response.setMessage("User "+login.getUserName()+" is already available");
+				return new ResponseEntity<ResponseDTO>(response,  HttpStatus.BAD_REQUEST);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		logger.info("Exiting @LoginController - userSignUp::::");
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 }

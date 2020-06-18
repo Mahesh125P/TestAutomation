@@ -1,6 +1,7 @@
 package com.testautomation.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import javax.persistence.*;
 
@@ -12,7 +13,7 @@ public class Login {
 	@Column(name="TAM01_USER_ID")
 	private String userName;
 
-	@Transient
+	@Column(name="TAM01_USER_PASSWORD")
     private String password	;
 	
 	@Transient
@@ -47,6 +48,15 @@ public class Login {
 	
 	@Transient
 	private String selectedComponentID;
+	
+	@Column(name="TAM01_USER_NAME")
+	private String userFullName;
+	
+	@Column(name="TAM01_CREATED_BY")
+	private String createdBy;
+	
+	@Column(name="TAM01_CREATED_DT")
+	private Date createdDate;
 	
 	public String getUserName() {
 		return userName;
@@ -158,5 +168,29 @@ public class Login {
 
 	public void setDataFromDBCheckbox(String dataFromDBCheckbox) {
 		this.dataFromDBCheckbox = dataFromDBCheckbox;
+	}
+
+	public String getUserFullName() {
+		return userFullName;
+	}
+
+	public void setUserFullName(String userFullName) {
+		this.userFullName = userFullName;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 }
