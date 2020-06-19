@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.TreeSet;
 
 import javax.persistence.EntityManager;
@@ -96,8 +97,15 @@ public class UserApplicationMappingService {
 							errorUsersSet.add(row.getCell(0).getStringCellValue());
 						}
 						
-						if(userAppMapping.getUserApplications() != null && getErrorUsersList().size() == 0 && getErrorApplicationList().size() ==0)
+						if(userAppMapping.getUserApplications() != null && getErrorUsersList().size() == 0 && getErrorApplicationList().size() ==0) {
+							Optional<Login> userDetails = loginrepository.findById(userAppMapping.getUserName());
+							Login user = userDetails.get();
+							userAppMapping.setUserFullName(user.getUserFullName());
+							userAppMapping.setCreatedBy(user.getCreatedBy());
+							userAppMapping.setCreatedDate(user.getCreatedDate());
+							userAppMapping.setPassword(user.getPassword());
 							loginrepository.save(userAppMapping);
+						}
 				}
 		 }	
 			errorUsersList = new ArrayList<String>();errorApplicationList = new ArrayList<String>();
@@ -198,7 +206,7 @@ public class UserApplicationMappingService {
 				userAppList = new ArrayList<String>(Arrays.asList(userApps.split(",")));
 				userApps = "'" + userApps.replace(",", "','") + "'";
 			} else {
-				userAppList = getAllApplicationNames();
+				//userAppList = getAllApplicationNames();
 			}						
 			
 			for(String app : userAppList) {
