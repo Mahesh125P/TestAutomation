@@ -59,7 +59,7 @@ public class UserApplicationMappingService {
 		if(userApps != null && !userApps.equals("")) {
 			userAppList = new ArrayList<String>(Arrays.asList(userApps.split(",")));
 		} else {
-			userAppList = getAllApplicationNames();
+			//userAppList = getAllApplicationNames();
 		}
 		return userAppList;
 	}
