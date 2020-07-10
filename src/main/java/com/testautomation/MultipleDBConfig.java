@@ -20,7 +20,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 public class MultipleDBConfig {
 
 	// MySQL Database
-	@Primary
+	//@Primary //MySql
 	@Bean(name = "mySqlDb")
 	@ConfigurationProperties(prefix = "spring.datasourcemysql")
 	public DataSource mySqlDataSource() {
@@ -40,6 +40,7 @@ public class MultipleDBConfig {
 	}
 
 	// SQL SERVER	
+	@Primary //SQL Server
 	@Bean(name = "dbSqlServer")
 	@ConfigurationProperties(prefix = "spring.sqlserverdatasource")
 	public DataSource createSqlServerDataSource() {
@@ -49,6 +50,9 @@ public class MultipleDBConfig {
 		 * dataSource.setUrl("jdbc:sqlserver://127.0.0.1:1433;databaseName=springbootdb"
 		 * ); dataSource.setUsername("sa"); dataSource.setPassword("tspl@123");
 		 */
+		dataSource.setUrl("jdbc:sqlserver://innovations.cij4hzpxsump.ap-south-1.rds.amazonaws.com:1433;databaseName=Testing_Automation");
+		dataSource.setUsername("tsplsa");
+		dataSource.setPassword("tspl123sa");
 		return dataSource;
 	}
 

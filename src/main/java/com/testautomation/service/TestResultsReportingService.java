@@ -62,8 +62,9 @@ public class TestResultsReportingService {
 		List<TestResultsReporting> testResults = null;
 		SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 		try {
-			StringBuffer searchQuery = new StringBuffer(" SELECT APP.TAM02_APPLICATION_NAME,   SCR.TAM03_SCREEN_NAME,   TR.TAT01_TEST_CASE_NAME,   TR.TAT01_TESTED_BY,   TR.TAT01_TEST_INPUT,  "
-					+ " TR.TAT01_TEST_OUTPUT,   DATE_FORMAT(TR.TAT01_TEST_START_DT, '%d-%m-%Y %H:%i:%s') AS TAT01_TEST_START_DT,  DATE_FORMAT(TR.TAT01_TEST_END_DT, '%d-%m-%Y %H:%i:%s') AS TAT01_TEST_END_DT "
+			StringBuffer searchQuery = new StringBuffer(" SELECT APP.TAM02_APPLICATION_NAME,   SCR.TAM03_SCREEN_NAME,   TR.TAT01_TEST_CASE_NAME,   TR.TAT01_TESTED_BY,   TR.TAT01_TEST_INPUT,  TR.TAT01_TEST_OUTPUT,    "
+					//+ "  DATE_FORMAT(TR.TAT01_TEST_START_DT, '%d-%m-%Y %H:%i:%s') AS TAT01_TEST_START_DT,  DATE_FORMAT(TR.TAT01_TEST_END_DT, '%d-%m-%Y %H:%i:%s') AS TAT01_TEST_END_DT " //MySql
+					+ " CONVERT(VARCHAR(10),TR.TAT01_TEST_START_DT, 105) + ' '  + convert(VARCHAR(8), TR.TAT01_TEST_START_DT, 14) AS TAT01_TEST_START_DT, CONVERT(VARCHAR(10),TR.TAT01_TEST_END_DT, 105) + ' '  + convert(VARCHAR(8), TR.TAT01_TEST_END_DT, 14) AS TAT01_TEST_END_DT  " // SQL Server
 					+ " FROM KTAT01_TEST_RESULT TR JOIN KTAM02_APPLICATION APP ON APP.TAM02_APPLICATION_ID = TR.TAM02_APPLICATION_ID JOIN KTAM03_SCREEN SCR ON SCR.TAM03_SCREEN_ID = TR.TAM03_SCREEN_ID  WHERE 1=1  ");
 			
 			if (trReport.getApplicationID() != null && trReport.getApplicationID() != 0) {
@@ -80,8 +81,8 @@ public class TestResultsReportingService {
 			}
 			
 			if (trReport.getTestStartDate() != null && trReport.getTestEndDate() != null) {
-				searchQuery.append(" AND TR.TAT01_TEST_START_DT BETWEEN STR_TO_DATE('" + (format1.format(trReport.getTestStartDate().getTime())) + "', '%d-%m-%Y %H:%i')  "
-						+ " AND STR_TO_DATE('" + (format1.format(trReport.getTestEndDate().getTime())) + "', '%d-%m-%Y %H:%i') ");
+				//searchQuery.append(" AND TR.TAT01_TEST_START_DT BETWEEN STR_TO_DATE('" + (format1.format(trReport.getTestStartDate().getTime())) + "', '%d-%m-%Y %H:%i')  AND STR_TO_DATE('" + (format1.format(trReport.getTestEndDate().getTime())) + "', '%d-%m-%Y %H:%i') "); // MySql
+				//searchQuery.append(" AND TR.TAT01_TEST_START_DT BETWEEN CONVERT(Datetime,  '" + (format1.format(trReport.getTestStartDate().getTime())) + "', 105)  AND CONVERT(Datetime,  '" + (format1.format(trReport.getTestEndDate().getTime())) + "', 105) " );//SQL Server
 			}
 			
 			if (trReport.getTestedByUser() != null && trReport.getTestedByUser().size() > 0) {

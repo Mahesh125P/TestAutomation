@@ -69,7 +69,8 @@ public class DashBoardService {
 			
 			while(todayresults.hasNext()) {
 			     Object[] rowObject = (Object[]) todayresults.next();
-			     todayTotalTest = todayTotalTest + ((BigInteger)rowObject[0]).intValue();
+			     //todayTotalTest = todayTotalTest + ((BigInteger)rowObject[0]).intValue();
+			     todayTotalTest = todayTotalTest + (((Integer)rowObject[0]));
 			     if(todayTestResult != "") 
 			    	 todayTestResult = todayTestResult + "," +  rowObject[0].toString();
 				 else
@@ -101,14 +102,16 @@ public class DashBoardService {
 			if (searchFilter.getMonthDate() != null && searchFilter.getMonthDate().equals("Date")) {
 				searchQuery = new StringBuffer("\r\n" + 
 						"SELECT COUNT(*),COUNT(FD.tat01_test_output) as failedData, COUNT(PD.tat01_test_output) as passedData, "
-						+ "date_format(date(TC.tat01_test_start_dt),\"%M %d %Y\")  \r\n" + ""
+						//+ "date_format(date(TC.tat01_test_start_dt),\"%M %d %Y\")  \r\n" + "" //MySql
+						+ " replace(convert(varchar, TC.tat01_test_start_dt, 107),',','') as testStartDate  \r\n" + "" //SQL Server
 						+ "FROM ktat01_test_result TC LEFT OUTER JOIN ktat01_test_result FD ON FD.tat01_test_output = 'F' AND FD.TAT01_TEST_RESULT_ID = TC.TAT01_TEST_RESULT_ID "
 						+ "LEFT OUTER JOIN ktat01_test_result PD ON PD.tat01_test_output = 'P' AND PD.TAT01_TEST_RESULT_ID = TC.TAT01_TEST_RESULT_ID "
 						+ "WHERE 1= 1 ");
 			} else {
 			    searchQuery = new StringBuffer("\r\n" + 
 					"SELECT COUNT(*),COUNT(FD.tat01_test_output) as failedData, COUNT(PD.tat01_test_output) as passedData, "
-					+ "MONTHNAME(TC.tat01_test_start_dt)  "
+					//+ "MONTHNAME(TC.tat01_test_start_dt)  "//MySql
+					+ " DATENAME(MONTH,TC.tat01_test_start_dt) As Month "//SQL Server
 					+ "FROM ktat01_test_result TC LEFT OUTER JOIN ktat01_test_result FD ON FD.tat01_test_output = 'F' AND FD.TAT01_TEST_RESULT_ID = TC.TAT01_TEST_RESULT_ID "
 					+ "LEFT OUTER JOIN ktat01_test_result PD ON PD.tat01_test_output = 'P' AND PD.TAT01_TEST_RESULT_ID = TC.TAT01_TEST_RESULT_ID "
 					+ "WHERE 1= 1 ");
@@ -126,9 +129,11 @@ public class DashBoardService {
 						+ " AND STR_TO_DATE('" + (format1.format(searchFilter.getTestEndDate().getTime())) + "', '%d-%m-%Y %H:%i') ");
 			}
 			if (searchFilter.getMonthDate() != null && searchFilter.getMonthDate().equals("Date")) {
-				searchQuery.append(" GROUP BY date(TC.tat01_test_start_dt) ORDER BY TC.tat01_test_start_dt ");
+				//searchQuery.append(" GROUP BY date(TC.tat01_test_start_dt) ORDER BY TC.tat01_test_start_dt "); //MySql
+				searchQuery.append(" GROUP BY convert(varchar, TC.tat01_test_start_dt, 107)  ORDER BY convert(varchar, TC.tat01_test_start_dt, 107) "); // SQL Server
 			} else {
-				searchQuery.append(" GROUP BY MONTHNAME(TC.tat01_test_start_dt) ORDER BY TC.tat01_test_start_dt ");
+				//searchQuery.append(" GROUP BY MONTHNAME(TC.tat01_test_start_dt) ORDER BY TC.tat01_test_start_dt ");//MySql
+				searchQuery.append(" GROUP BY DATENAME(MONTH,TC.tat01_test_start_dt) ORDER BY  DATENAME(MONTH,TC.tat01_test_start_dt) ");//Sql Server
 			}
 			
 			logger.info("Entering @DashBoardService - getResultsForDashboard::::"+searchQuery.toString());
@@ -153,7 +158,8 @@ public class DashBoardService {
 		
 		    queryResult = new StringBuffer("\r\n" + 
 				"SELECT count(tat01_test_output),tat01_test_output FROM ktat01_test_result \r\n" + 
-				"WHERE tat01_test_start_dt =CURDATE()\r\n" + 
+				//"WHERE tat01_test_start_dt =CURDATE()\r\n" + //MySql
+				"WHERE CONVERT(DATE,tat01_test_start_dt) = CONVERT(DATE, GETDATE())\r\n" + //SqlServer
 				"GROUP BY tat01_test_output ORDER BY tat01_test_output desc ");
 			
 			logger.info("Entering @DashBoardService - getTodayResultsForDashboard::::"+queryResult.toString());

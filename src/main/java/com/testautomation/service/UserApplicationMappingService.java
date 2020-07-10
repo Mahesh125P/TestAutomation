@@ -139,8 +139,8 @@ public class UserApplicationMappingService {
 		while(it.hasNext()){
 		     Object[] rowObj = (Object[]) it.next();
 		     Login userAppMaps = new Login();
-		     userAppMaps.setUserName(rowObj[0].toString());
-		     userAppMaps.setApplicationsMappedToUser(rowObj[1].toString());
+		     userAppMaps.setUserName(rowObj[0]!= null ? rowObj[0].toString(): " ");
+		     userAppMaps.setApplicationsMappedToUser(rowObj[1] == null ? " " :rowObj[1].toString());
 		     userAppMappings.add(userAppMaps);
 		}
 		logger.info("Exiting @UserApplicationMappingService - getUserApplicationMappings()::::");
