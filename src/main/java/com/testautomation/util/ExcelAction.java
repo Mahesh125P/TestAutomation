@@ -103,40 +103,41 @@ public class ExcelAction {
 		for (int i = 0; i < list.size(); i++) {
 			sheetName = list.get(i);
 			Map<String, Object> temp1 = new HashMap<String, Object>();
-
-			try {
-				Reporter.log("Test Case Sheet Name...." + sheetName + "----"
-						+ "pathOFFile" + pathOFFile);
-				List listColumnNames = ExcelLibrary.getColumnNames(
-						sheetName, pathOFFile,
-						ExcelLibrary.getColumns(sheetName, pathOFFile));
-				// iterate through columns in sheet
-				for (int j = 0; j < listColumnNames.size(); j++) {
-					// get Last Row for each Column
-					int row = 1;
-					List listColumnValues = new ArrayList();
-					do {
-						listColumnValues.add(ExcelLibrary.readCell(row, j,
-								sheetName, pathOFFile));
-						row++;
-					} while ((ExcelLibrary.readCell(row, j, sheetName,
-							pathOFFile)) != null);
-					temp1.put((String) listColumnNames.get(j), listColumnValues);
+				if(!sheetName.equals("Standard ActionType")) {
+					try {
+						Reporter.log("Test Case Sheet Name...." + sheetName + "----"
+								+ "pathOFFile" + pathOFFile);
+						List listColumnNames = ExcelLibrary.getColumnNames(
+								sheetName, pathOFFile,
+								ExcelLibrary.getColumns(sheetName, pathOFFile));
+						// iterate through columns in sheet
+						for (int j = 0; j < listColumnNames.size(); j++) {
+							// get Last Row for each Column
+							int row = 1;
+							List listColumnValues = new ArrayList();
+							do {
+								listColumnValues.add(ExcelLibrary.readCell(row, j,
+										sheetName, pathOFFile));
+								row++;
+							} while ((ExcelLibrary.readCell(row, j, sheetName,
+									pathOFFile)) != null);
+							temp1.put((String) listColumnNames.get(j), listColumnValues);
+						}
+						listColumnNames.clear();
+					} catch (InvalidFormatException | IOException e) {
+						// check after run
+						MainTestNG.LOGGER.info("InvalidFormatException,IOException...."+e);
+					} catch (Exception e) {
+						// check after run
+						MainTestNG.LOGGER.info("Exception....."+e);
+						throw (e);
+					}
+					if(sheetName.startsWith("TC00")) {
+						sheetName = sheetName+ "~" + selectedScreen;
+					}
+					testDataSheet.put(sheetName, temp1);
 				}
-				listColumnNames.clear();
-			} catch (InvalidFormatException | IOException e) {
-				// check after run
-				MainTestNG.LOGGER.info("InvalidFormatException,IOException...."+e);
-			} catch (Exception e) {
-				// check after run
-				MainTestNG.LOGGER.info("Exception....."+e);
-				throw (e);
-			}
-			if(sheetName.startsWith("TC00")) {
-				sheetName = sheetName+ "~" + selectedScreen;
-			}
-			testDataSheet.put(sheetName, temp1);
-		}
+		  }
 	}
 
 	/**
@@ -171,11 +172,12 @@ public class ExcelAction {
 					System.out.println("testDataArray...."+testDataArray.toString());
 					testDataArray[0] = testDataArray[0] + "~" + screenName[1];
 					dataColValues = getColumnValue(testDataArray);
-					System.out.println("dataColValues...."+dataColValues.toString());
-					
-					noOfExecution = dataColValues.size();
-
-					break;
+					if(dataColValues != null) {
+						System.out.println("dataColValues...."+dataColValues.toString());
+						noOfExecution = dataColValues.size();
+						break;
+					} else
+						noOfExecution = 0;
 				}
 			} else {
 				noOfExecution = 0;
@@ -189,7 +191,7 @@ public class ExcelAction {
 				for (int i = 0; i < testStepId.size(); i++) {
 
 					String methodTypeTemp = temp.getMethodType().get(i);
-					String methodType = temp.getMethodType().get(i)+ "~" + screenName[1];
+					String methodType = screenName[0] + "~" + temp.getMethodType().get(i)+ "~" + screenName[1];
 					String objectLocators = temp.getObjectNameFromPropertiesFile().get(i);
 					String actionType = temp.getActionType().get(i);
 					String header = temp.getHeaderValue().get(i);
@@ -211,10 +213,15 @@ public class ExcelAction {
 									//dataValue = "CQT20022501";
 									dataValue = dataFromDbService.getDataFromDBForScenarioBuilding(selectedApplication,columnValue.get(execution).toString());
 								} else {
-									dataValue = columnValue.get(execution).toString();
+									if(columnValue != null)
+										dataValue = columnValue.get(execution).toString();
+									else 
+										dataValue = null;
 								}
-								Reporter.log("column value======" + dataValue);
-								inputValue.append("~").append(testDataArray[1]).append(" : ").append(dataValue);
+								if(dataValue != null) {
+									Reporter.log("column value======" + dataValue);
+									inputValue.append("~").append(testDataArray[1]).append(" : ").append(dataValue);
+								}
 								//Reporter.log("column value size==========="+ columnValue.size());
 								try {
 									//Reporter.log("testCaseExecution======================"+ noOfExecution);
@@ -230,12 +237,14 @@ public class ExcelAction {
 									statusInfo.put("objectLocators", objectLocators);
 									testCaseStatus.put(temp.getTestCaseName(), statusInfo);*/
 								} catch (Exception e) {
-									Reporter.log("Process failed for this test record : " + dataValue);
-									tempResultMap.put("FailedTestData", "methodType: "+methodTypeTemp+", actionType: "+actionType + ", InputValue: "+ dataValue);
-									tempResultMap.put("TestOutput","F");
-									tempResultMap.put("TestEndDate", df.format(calobj.getTime()));
-									tempResultMap.put("InputValue",inputValue.toString());
-									testResultMap.put(tcName, tempResultMap);
+									if(dataValue != null) {
+										Reporter.log("Process failed for this test record : " + dataValue);
+										tempResultMap.put("FailedTestData", "methodType: "+methodTypeTemp+", actionType: "+actionType + ", InputValue: "+ dataValue);
+										tempResultMap.put("TestOutput","F");
+										tempResultMap.put("TestEndDate", df.format(calobj.getTime()));
+										tempResultMap.put("InputValue",inputValue.toString());
+										testResultMap.put(tcName, tempResultMap);
+									}
 									System.out.println("In Exception....ExcelAction.testSuiteIterate.");
 									fail = "fail";
 									//Assert.fail();
@@ -266,7 +275,7 @@ public class ExcelAction {
 		} else {
 			for (int i = 0; i < testStepId.size(); i++) {
 
-				String methodType = temp.getMethodType().get(i)+ "~" + screenName[1];
+				String methodType = screenName[0] + "~" + temp.getMethodType().get(i)+ "~" + screenName[1];
 				String objectLocators = temp.getObjectNameFromPropertiesFile()
 						.get(i);
 				String actionType = temp.getActionType().get(i);
@@ -308,11 +317,13 @@ public class ExcelAction {
 				.get(testDataArray[0]);
 		String value = null;
 		List coulmnValue = null;
-		if(testDataArray.length > 2) {
-			value =  dataSheet.get(testDataArray[1]).toString().replace("[", "").replace("]", "").concat(",").concat(dataSheet.get(testDataArray[3]).toString().replace("[", "").replace("]", ""));
-			coulmnValue =  Arrays.asList(value);
-		}else {
-			coulmnValue = (ArrayList) dataSheet.get(testDataArray[1]);
+		if(dataSheet != null) {
+			if(testDataArray.length > 2) {
+				value =  dataSheet.get(testDataArray[1]).toString().replace("[", "").replace("]", "").concat(",").concat(dataSheet.get(testDataArray[2]).toString().replace("[", "").replace("]", ""));
+				coulmnValue =  Arrays.asList(value);
+			}else {
+				coulmnValue = (ArrayList) dataSheet.get(testDataArray[1]);
+			}
 		}
 		return coulmnValue;
 	}
@@ -415,43 +426,53 @@ public class ExcelAction {
 		String testCasePath = dynamicFilePath.toString();
 		String testCaseSheetName = config.getConfigValues(testsheetnme);
 
+		String prevtestCasename="";
 		TestCase tc = null;
 		try {
 			for (int row = 1; row <= ExcelLibrary.getRows(testCaseSheetName,
 					testCasePath); row++) {
 				if(ExcelLibrary.readCell(row, 0, testCaseSheetName,
 						testCasePath) != null) {
+					
+					String testCase=ExcelLibrary.readCell(row, 0, testCaseSheetName, testCasePath);
+					
+					if(testCase.isEmpty()) {
+						testCase = prevtestCasename;
+					}
+					
 					if (!(ExcelLibrary.readCell(row, 0, testCaseSheetName,
 							testCasePath).isEmpty())) {
 	
 						tc = new TestCase();
 						tc.setTestCaseName(ExcelLibrary.readCell(row, 0,testCaseSheetName, testCasePath) + "~" + selectedScreen);
 						tc.setTestStepId(ExcelLibrary.readCell(row, 1,testCaseSheetName, testCasePath));
-						tc.setMethodType(ExcelLibrary.readCell(row, 3,testCaseSheetName, testCasePath));
-						tc.setObjectNameFromPropertiesFile(ExcelLibrary.readCell(row, 4, testCaseSheetName, testCasePath));
-						tc.setActionType(ExcelLibrary.readCell(row, 5,testCaseSheetName, testCasePath));
-						tc.setOnFail(ExcelLibrary.readCell(row, 6,testCaseSheetName, testCasePath));
-						tc.setTestData(ExcelLibrary.readCell(row, 7,testCaseSheetName, testCasePath));
-						tc.setHeaderValue(ExcelLibrary.readCell(row, 8,testCaseSheetName, testCasePath));
+						tc.setMethodType(ExcelLibrary.readCell(row, 1,testCaseSheetName, testCasePath));
+						tc.setObjectNameFromPropertiesFile(ExcelLibrary.readCell(row, 1, testCaseSheetName, testCasePath));
+						tc.setActionType(ExcelLibrary.readCell(row, 2,testCaseSheetName, testCasePath));
+						//tc.setOnFail(ExcelLibrary.readCell(row, 3,testCaseSheetName, testCasePath));
+						tc.setTestData(testCase + "_DS." + 
+																			ExcelLibrary.readCell(row, 1,testCaseSheetName, testCasePath));
+						tc.setHeaderValue(ExcelLibrary.readCell(row, 3,testCaseSheetName, testCasePath));
 						testCaseSheet.put(ExcelLibrary.readCell(row, 0,testCaseSheetName, testCasePath) + "~" + selectedScreen, tc);
 					} else {
 	
 						tc.setTestStepId(ExcelLibrary.readCell(row, 1,
 								testCaseSheetName, testCasePath));
-						tc.setMethodType(ExcelLibrary.readCell(row, 3,
-								testCaseSheetName, testCasePath));
+						tc.setMethodType(ExcelLibrary.readCell(row, 1,testCaseSheetName, testCasePath));
 						tc.setObjectNameFromPropertiesFile(ExcelLibrary.readCell(
-								row, 4, testCaseSheetName, testCasePath));
-						tc.setActionType(ExcelLibrary.readCell(row, 5,
+								row, 1, testCaseSheetName, testCasePath));
+						tc.setActionType(ExcelLibrary.readCell(row, 2,
 								testCaseSheetName, testCasePath));
-						tc.setOnFail(ExcelLibrary.readCell(row, 6,
-								testCaseSheetName, testCasePath));
-						tc.setTestData(ExcelLibrary.readCell(row, 7,
-								testCaseSheetName, testCasePath));
-						tc.setHeaderValue(ExcelLibrary.readCell(row, 8,
+						/*
+						 * tc.setOnFail(ExcelLibrary.readCell(row, 3, testCaseSheetName, testCasePath));
+						 */
+						tc.setTestData(testCase+ "_DS." + 
+								ExcelLibrary.readCell(row, 1,testCaseSheetName, testCasePath));
+						tc.setHeaderValue(ExcelLibrary.readCell(row, 3,
 								testCaseSheetName, testCasePath));
 						System.out.println("TestCase Details..else..."+row);
 					}
+					prevtestCasename = testCase; 
 				}
 			System.out.println("TestCase Details..else..."+testCaseSheet.size());
 			}
@@ -498,61 +519,67 @@ public class ExcelAction {
 			MainTestNG.LOGGER.info("total rows=" + totrows);
 
 			String prevPagename="";
+			String prevtestCasename="";
 			Map<String, Object> pageInfo = null; 
 			for (int j = 1; j <= totrows; j++) {
-				String pagename = ExcelLibrary.readCell(j, 0, testSheetName,
+				String pagename = ExcelLibrary.readCell(j, 1, testSheetName,
 						testCasePath);
-			
+				String testCase=ExcelLibrary.readCell(j, 0,testSheetName, testCasePath);
 				
-				if(prevPagename.equals(pagename)){
-					
-					String page=ExcelLibrary.readCell(j, 0,testSheetName, testCasePath);
-					String name=ExcelLibrary.readCell(j, 1,
-							testSheetName, testCasePath);
-					String property=ExcelLibrary.readCell(j, 2,
-							testSheetName, testCasePath);
-					String value=ExcelLibrary.readCell(j, 3,
-							testSheetName, testCasePath);
-					
-					CapturedObjectPropModel capModel = new CapturedObjectPropModel();
-					capModel.setPage(page+ "~" + selectedScreen);
-					capModel.setName(name);
-					capModel.setProperty(property);
-					capModel.setValue(value);
-					MainTestNG.LOGGER.info(capModel.getPage()+"  "+capModel.getName()+"  "+capModel.getValue()+"  "+capModel.getProperty());
-					pageInfo.put(name, capModel);
-					actionName = name;
-					
-				}else{
-					if(prevPagename!=null){
-						capObjPropSheet.put(prevPagename+ "~" + selectedScreen, pageInfo);
-					}
-					pageInfo=new HashMap<String, Object>();
-					String page=ExcelLibrary.readCell(j, 0,
-							testSheetName, testCasePath);
-					String name=ExcelLibrary.readCell(j, 1,
-							testSheetName, testCasePath);
-					String property=ExcelLibrary.readCell(j, 2,
-							testSheetName, testCasePath);
-					String value=ExcelLibrary.readCell(j, 3,
-							testSheetName, testCasePath);
-					
-					CapturedObjectPropModel capModel = new CapturedObjectPropModel();
-					capModel.setPage(pagename+ "~" + selectedScreen);
-					capModel.setName(name);
-					capModel.setProperty(property);
-					capModel.setValue(value);
-					MainTestNG.LOGGER.info(capModel.getPage()+"  "+capModel.getName()+"  "+capModel.getValue()+"  "+capModel.getProperty());
-					
-					pageInfo.put(name, capModel);
-					prevPagename=pagename;
-					actionName = name;
+				if(testCase.isEmpty()) {
+					testCase = prevtestCasename;
 				}
-				
+				if(pagename != null) {
+					if(prevPagename.equals(pagename)){
+						String page=ExcelLibrary.readCell(j, 1,testSheetName, testCasePath);
+						String name=ExcelLibrary.readCell(j, 1,
+								testSheetName, testCasePath);
+						String property=ExcelLibrary.readCell(j, 2,
+								testSheetName, testCasePath);
+						String value=ExcelLibrary.readCell(j, 3,
+								testSheetName, testCasePath);
+						
+						CapturedObjectPropModel capModel = new CapturedObjectPropModel();
+						capModel.setPage(testCase + "~" +  page+ "~" + selectedScreen);
+						capModel.setName(name);
+						capModel.setProperty(property);
+						capModel.setValue(value);
+						MainTestNG.LOGGER.info(capModel.getPage()+"  "+capModel.getName()+"  "+capModel.getValue()+"  "+capModel.getProperty());
+						pageInfo.put(name, capModel);
+						actionName = name;
+						
+					}else{
+						if(prevPagename!=null){
+							capObjPropSheet.put(testCase + "~" +  prevPagename+ "~" + selectedScreen, pageInfo);
+						}
+						pageInfo=new HashMap<String, Object>();
+						/*
+						 * String page=ExcelLibrary.readCell(j, 1, testSheetName, testCasePath);
+						 */
+						String name=ExcelLibrary.readCell(j, 1,
+								testSheetName, testCasePath);
+						String property=ExcelLibrary.readCell(j, 2,
+								testSheetName, testCasePath);
+						String value=ExcelLibrary.readCell(j, 3,
+								testSheetName, testCasePath);
+						
+						CapturedObjectPropModel capModel = new CapturedObjectPropModel();
+						capModel.setPage(testCase + "~" + pagename+ "~" + selectedScreen);
+						capModel.setName(name);
+						capModel.setProperty(property);
+						capModel.setValue(value);
+						MainTestNG.LOGGER.info(capModel.getPage()+"  "+capModel.getName()+"  "+capModel.getValue()+"  "+capModel.getProperty());
+						
+						pageInfo.put(name, capModel);
+						prevPagename=pagename;
+						actionName = name;
+					}
+				}
 				
 				if(prevPagename!=null){
-					capObjPropSheet.put(prevPagename+ "~" + selectedScreen, pageInfo);
+					capObjPropSheet.put(testCase + "~" + prevPagename+ "~" + selectedScreen, pageInfo);
 				}
+				prevtestCasename = testCase; 
 			}
 			
 

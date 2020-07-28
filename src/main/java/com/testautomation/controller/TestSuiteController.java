@@ -115,4 +115,24 @@ public class TestSuiteController {
 		}
 
 	}
+	
+	@RequestMapping(value = "/downloadTestCaseTemplate")
+	public void downloadTemplate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		File templateFile = new File(Paths.get("").toAbsolutePath().toString() + File.separator + "src"
+	            + File.separator + "main" + File.separator + "webapp" + File.separator + "WEB-INF" + File.separator + "template" + File.separator + "TestCase_Project_Screen.xlsx");
+	            
+		if (templateFile.exists()) {
+			String mimeType = URLConnection.guessContentTypeFromName(templateFile.getName());
+			if (mimeType == null) {
+				mimeType = "application/octet-stream";
+			}
+			response.setContentType(mimeType);
+			response.setHeader("Content-Disposition",
+					String.format("inline; filename=\"" + templateFile.getName() + "\""));
+			response.setContentLength((int) templateFile.length());
+			InputStream inputStream = new BufferedInputStream(new FileInputStream(templateFile));
+			FileCopyUtils.copy(inputStream, response.getOutputStream());
+		}
+	}
 }

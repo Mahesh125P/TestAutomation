@@ -15,6 +15,7 @@ import com.testautomation.MainTestNG;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -173,9 +174,14 @@ public class ExcelLibrary {
 		if (row != null) {
 			Cell cell = row.getCell(colNum);
 			if (cell != null) {
-				DataFormatter dataFormatter = new DataFormatter();
-				String data = dataFormatter.formatCellValue(cell);
-				cellValue = data;
+				if (cell.getCellType() == CellType.FORMULA) {
+					String data = cell.getStringCellValue();
+					cellValue = data;
+				} else {
+					DataFormatter dataFormatter = new DataFormatter();
+					String data = dataFormatter.formatCellValue(cell);
+					cellValue = data;
+				}
 			}
 		}
 	//	System.out.println("Cellvalue..."+cellValue);
