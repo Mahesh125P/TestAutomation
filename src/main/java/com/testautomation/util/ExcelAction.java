@@ -94,7 +94,7 @@ public class ExcelAction {
             dynamicFilePath.append(testcasesprojectfilePath).append(selectedApplication).append("\\").append("TestCase_");
         }
         
-        dynamicFilePath.append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
+        dynamicFilePath.append(selectedApplication).append("_").append(selectedScreen).append(".xlsm");
         
 		
 		String pathOFFile = dynamicFilePath.toString();
@@ -355,7 +355,7 @@ public class ExcelAction {
 			if(selectedComponent != null && !selectedComponent.isEmpty()) {
                 dynamicFilePath.append(testsuitprojectfilePath)
                 .append(selectedApplication).append("\\").append("Automatic").append("\\").append(selectedComponent).append("\\")
-                .append("TestSuite_").append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
+                .append("TestSuite_").append(selectedApplication).append("_").append(selectedScreen).append(".xlsm");
             } else {
                 dynamicFilePath.append(testsuitprojectfilePath)
                 .append(selectedApplication).append("\\").append("TestSuite_")
@@ -421,7 +421,7 @@ public class ExcelAction {
         } else {
             dynamicFilePath.append(testcasesprojectfilePath).append(selectedApplication).append("\\").append("TestCase_");
         }        
-        dynamicFilePath.append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
+        dynamicFilePath.append(selectedApplication).append("_").append(selectedScreen).append(".xlsm");
         
 		String testCasePath = dynamicFilePath.toString();
 		String testCaseSheetName = config.getConfigValues(testsheetnme);
@@ -510,7 +510,7 @@ public class ExcelAction {
         } else {
             dynamicFilePath.append(testcasesprojectfilePath).append(selectedApplication).append("\\").append("TestCase_");
         }        
-        dynamicFilePath.append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
+        dynamicFilePath.append(selectedApplication).append("_").append(selectedScreen).append(".xlsm");
         
 		String testCasePath = dynamicFilePath.toString();
 		MainTestNG.LOGGER.info("testCasePath=="+testCasePath);
@@ -526,7 +526,7 @@ public class ExcelAction {
 						testCasePath);
 				String testCase=ExcelLibrary.readCell(j, 0,testSheetName, testCasePath);
 				
-				if(testCase.isEmpty()) {
+				if(testCase == null || testCase.isEmpty()) {
 					testCase = prevtestCasename;
 				}
 				if(pagename != null) {
