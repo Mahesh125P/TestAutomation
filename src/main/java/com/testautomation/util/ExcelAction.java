@@ -355,7 +355,7 @@ public class ExcelAction {
 			if(selectedComponent != null && !selectedComponent.isEmpty()) {
                 dynamicFilePath.append(testsuitprojectfilePath)
                 .append(selectedApplication).append("\\").append("Automatic").append("\\").append(selectedComponent).append("\\")
-                .append("TestSuite_").append(selectedApplication).append("_").append(selectedScreen).append(".xlsm");
+                .append("TestSuite_").append(selectedApplication).append("_").append(selectedScreen).append(".xlsx");
             } else {
                 dynamicFilePath.append(testsuitprojectfilePath)
                 .append(selectedApplication).append("\\").append("TestSuite_")
